@@ -2,7 +2,9 @@
 # Script to look at some basics of ChemPhys data
 #-----------------------------------------------#
 
-# 1. N ####
+source('Data/CALL_DATA_LIB.R')
+
+# 1. N below detection ####
 n_chemphys <- ChemPhys |>
   select(StationID, WaterbodyName, ShortName_Revised, Year, BelowDet) |>
   group_by(StationID, WaterbodyName, ShortName_Revised) |>
@@ -14,7 +16,8 @@ n_chemphys <- ChemPhys |>
   add_count() |>
   rename(TotalCollYear = n) |>
   mutate(BelowDetectionYear = sum(BelowDet)) |>
-  distinct()
+  distinct()|>
+  ungroup()
 
 total_belowDet <- n_chemphys |>  
   mutate(belowDET_perc = BelowDetectionSite/TotalCollSite * 100) |>
