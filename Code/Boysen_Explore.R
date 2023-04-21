@@ -4,35 +4,53 @@
 
 source('Data/CALL_DATA_LIB.R')
 
+params <- unique(ChemPhys$ShortName_Revised) # which parameters are available in this dataset? 
+params
 
 # 1. Prep data for plotting ####
 BoysenChemPhys <- ChemPhys |>
   select(-ChemSampID) |>
   filter(grepl('Boysen', WaterbodyName)) |> # keep only Boysen 
+  mutate(WaterbodyName = sub("^[^,]*,", "", WaterbodyName)) |> # shorten names since we know its Boysen
+  mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  #select(1:2,4:7, 12:16, 20, 23) |> # keep just what is interesting now
-  distinct() |> # remove duplicates 
-  group_by(StationID, WaterbodyName, CollDate, Param, SampleDepth) |>
+  select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  filter(ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N")) |> # for now just keep at the nutrients and chlorophyll
+  distinct() |>  # remove duplicates 
+  group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct() |>
-  # pivot_wider( names_from = 'Param', values_from = 'ChemValue') |> # make each param a column for plotting
-  # rename(# most names need to be fixed
-  #   Chla_Phyto_ugL = Chlorophyll_a_phytoplankton_µg_l,
-  #   Cond = Conductance_µS_cm,
-  #   NO3_NO2_N_mgL = Nitrate_plus_Nitrite_as_N_mg_l,
-  #   DO_mgL = DO_mg_L_mg_l,
-  #   pH = pH_SU,
-  #   NH4_N_mgL = Total_Ammonia_as_N_mg_l,
-  #   TP_mgL = Phosphorus_as_P_total_mg_l,
-  #   TN_mgL = Total_Nitrogen_unfiltered_mg_l,
-  #   Ortho_P_mgL = Orthophosphate_as_P_total_mg_l) |>
-  filter(BelowDet == 0) # remove low values for now
-  
+  distinct()
 
-BoysenEpiChemPhys <- BoysenChemPhys |>
-  filter(SampleDepth <= 3 | SampleDepth <= Secchi_Depth_m)
+## how many of each parameter are below detection at each location? ####
+n_belowDet <- BoysenChemPhys |>
+  group_by(WaterbodyName, ShortName_Revised) |>
+  add_count() |>
+  mutate(range = paste(min(ChemValue), max(ChemValue), sep='-')) |>
+  ungroup() |>
+  select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
+  group_by(WaterbodyName, ShortName_Revised, n, range) |>
+  summarise(belowDet = sum(BelowDet),
+            percLow = belowDet/n *100) |>
+  distinct()
 
-ggplot(BoysenEpiChemPhys)
+# 2. Basic timeseries! ####
+params <- unique(BoysenChemPhys$ShortName_Revised)
+
+for(p in 1:length(params)) {
+
+    ggplot(BoysenChemPhys |> filter(ShortName_Revised==params[p])) + 
+      geom_point(aes(CollDate, SampleDepth, color=ChemValue)) +
+      labs(y='Sample depth (m)', x='', title=params[p]) +
+      scale_y_reverse() +
+      facet_wrap(~WaterbodyName, scales='free_y') +
+      scale_color_viridis_c(paste(params[p],unique((BoysenChemPhys |> filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' ')) +
+      theme_classic() 
+    ggsave(paste0('Figures/Boysen_explore/',params[p],'.png'),width=10, height=8, units='in')
   
+}
+
+
+
+
