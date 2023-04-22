@@ -45,10 +45,23 @@ for(p in 1:length(params)) {
       labs(y='Sample depth (m)', x='', title=params[p]) +
       scale_y_reverse() +
       facet_wrap(~WaterbodyName, scales='free_y') +
-      scale_color_viridis_c(paste(params[p],unique((BoysenChemPhys |> filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' ')) +
+      scale_color_viridis_c(paste(params[p],unique((BoysenChemPhys |>
+                                                      filter(ShortName_Revised==params[p]))$ChemUnits), 
+                                  sep = ' ')) +
       theme_classic() 
-    ggsave(paste0('Figures/Boysen_explore/',params[p],'.png'),width=10, height=8, units='in')
+    ggsave(paste0('Figures/Boysen_explore/',params[p],'_depth.png'),width=10, height=8, units='in')
   
+    ggplot(BoysenChemPhys |> filter(ShortName_Revised==params[p],
+                                    SampleDepth <= 3)) + 
+      geom_point(aes(CollDate, ChemValue)) +
+      labs(y=paste(params[p],unique((BoysenChemPhys |> 
+                                       filter(ShortName_Revised==params[p]))$ChemUnits), 
+                   sep = ' '), x='') +
+      scale_y_reverse() +
+      facet_wrap(~WaterbodyName, scales='free_y') +
+      theme_classic() 
+    ggsave(paste0('Figures/Boysen_explore/',params[p],'_epi.png'),width=10, height=8, units='in')
+    
 }
 
 

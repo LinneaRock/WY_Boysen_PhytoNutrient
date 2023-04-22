@@ -32,3 +32,41 @@ parameterCd <- c('00010', '00095', '00400','00600', '00605', '00608', '00631', '
 
 chemdata <- readWQPqw(paste0("USGS-", site_ids), parameterCd,
                      startDate = '2002-01-01')
+
+
+
+# rename everything to match DEQ data
+BoysenTribs <-discharge |>
+              select(site_no, dateTime, X_00060_00003) |>
+              mutate(ChemUnits='ft/s',
+                     ShortName_Revised='Discharge')|>
+              rename(ChemValue=X_00060_00003) |>
+  bind_rows(chemdata |> 
+              select(ActivityStartDate, MonitoringLocationIdentifier,CharacteristicName, ResultSampleFractionText, ResultMeasureValue, ResultMeasure.MeasureUnitCode) |>
+              mutate(MonitoringLocationIdentifier = sub("^[^,]*-", "", MonitoringLocationIdentifier))|>
+              unite(ShortName_Revised, ResultSampleFractionText, CharacteristicName, sep=' ') |>
+              rename(dateTime=ActivityStartDate,
+                     site_no=MonitoringLocationIdentifier,
+                     ChemValue=ResultMeasureValue,
+                     ChemUnits=ResultMeasure.MeasureUnitCode)) |>
+  left_join(sitedata |>
+               select(site_no, station_nm, dec_lat_va, dec_long_va, dec_coord_datum_cd, drain_area_va)) |>
+  rename(StationID=site_no,
+         WaterbodyName=station_nm,
+         Latitude=dec_lat_va,
+         Longitude=dec_long_va,
+         DrainageArea=drain_area_va,
+         CollDate=dateTime) |>
+  group_by(StationID, CollDate, ChemUnits, ShortName_Revised, WaterbodyName, Latitude, Longitude, dec_coord_datum_cd, DrainageArea) |>
+  summarise(ChemValue=mean(ChemValue)) |> # average any replicates
+  ungroup() |>
+  distinct() |>
+  filter(ChemValue>=0) |>
+  mutate(ShortName_Revised=case_when(ShortName_Revised =='Total Specific conductance' ~ 'Conductance',
+                                     ShortName_Revised =='Total Phosphorus' ~ 'Phosphorus as P (total)',
+                                     ShortName_Revised =='Total pH' ~ 'pH',
+                                     ShortName_Revised == 'Total Nitrogen, mixed forms (NH3), (NH4), organic, (NO2) and (NO3)', 'Total Nitrogen (unfiltered)')) |>
+  filter(ShortName_Revised != 'Total Organic Nitrogen')
+
+write.csv(BoysenTribs, 'Data/BoysenTribs.csv')
+
