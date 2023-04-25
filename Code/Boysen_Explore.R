@@ -57,13 +57,110 @@ for(p in 1:length(params)) {
       labs(y=paste(params[p],unique((BoysenChemPhys |> 
                                        filter(ShortName_Revised==params[p]))$ChemUnits), 
                    sep = ' '), x='') +
-      scale_y_reverse() +
       facet_wrap(~WaterbodyName, scales='free_y') +
       theme_classic() 
     ggsave(paste0('Figures/Boysen_explore/',params[p],'_epi.png'),width=10, height=8, units='in')
     
 }
 
+# 3. Nutrient timeseries including all nuts ####
+# epilimnion only
+ggplot(BoysenChemPhys |> filter(SampleDepth <= 3,
+                                ShortName_Revised != 'Chlorophyll a (phytoplankton)')) + 
+  geom_point(aes(CollDate, ChemValue, color=ShortName_Revised)) +
+  facet_wrap(~WaterbodyName, scales='free_y') +
+  theme_classic() 
+
+# 4. What frequency are the data collected at each location? ####
+boysensites <- unique(BoysenChemPhys$WaterbodyName) # total of 13 sites 
+
+Annualfreq <- BoysenChemPhys |>
+  filter(ShortName_Revised != 'Total Kjeldahl Nitrogen (unfiltered)') |>
+  group_by(WaterbodyName, Latitude, Longitude, year(CollDate)) |>
+  add_count() |>
+  ungroup() |>
+  select(-StationID, -BelowDet, -ChemValue, -ChemUnits, -SampleDepth, -CollDate,-ShortName_Revised) |>
+  unique()
+
+SiteVisitsMonthly <- BoysenChemPhys |>
+  filter(ShortName_Revised != 'Total Kjeldahl Nitrogen (unfiltered)') |>
+  select(-StationID, -Latitude, -Longitude, -BelowDet, -ChemValue, -ChemUnits, -SampleDepth) |>
+  mutate(year = year(CollDate),
+         month = month(CollDate, label=TRUE, abbr=TRUE)) |>
+  select(-CollDate) |>
+  distinct() |>
+  group_by(year, month, ShortName_Revised) |>
+  add_count() |>
+  ungroup() |>
+  distinct() |>
+  select(-ShortName_Revised, -WaterbodyName) |>
+  distinct()
+
+### many sites per monthly visit over time ####
+ggplot(SiteVisitsMonthly, aes(month, year, fill=n)) +
+  theme_bw() +
+  geom_tile(color='white') +
+  scale_fill_viridis_c('',direction=-1) +
+  labs(x='',y='') +
+  coord_equal(ratio=0.8) +
+  scale_y_continuous(breaks=seq(2002,2021,by=2))
+# total of 13 sites
+# in 2020-2021, 7 sites were visited over the year 
+ggsave('Figures/Boysen_explore/Visits_moyr.png', height = 6.25, width=4.25, units='in')
 
 
+### GIF! map with data frequency yearly ####
+library(sf)
+library(nhdplusTools)
+start_point <- sf::st_as_sf(data.frame(x = -108.1847, y = 43.25167), 
+                            coords = c("x", "y"), crs = 4326)
+plot_nhdplus(start_point)
 
+
+tmp <- Annualfreq |>
+  filter(Latitude < 44)
+
+Annualfreq.sf <- st_as_sf(tmp, coords=c('Longitude','Latitude'), crs=4269)
+
+
+mapview::mapview(Annualfreq.sf)
+ggplot(Annualfreq.sf) +
+  geom_sf(aes(size=n))
+
+# above is not working well
+  
+### Get NHD data! ####
+library(rgdal)
+library(raster)
+## Flowlines
+NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+class(NHDflowline) # sf, df
+crs(NHDflowline) # NAD83
+
+## waterbody outlines
+NHDwaterbody <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
+class(NHDwaterbody)# sf, df
+crs(NHDwaterbody) # NAD83
+
+boysen <- st_crop(NHDwaterbody, xmin=-108.339946,ymin=43.142254,xmax=-108.039283,ymax=43.427151)
+boysentribs <- st_crop(NHDflowline, xmin=-108.339946,ymin=43.142254,xmax=-108.039283,ymax=43.427151)
+
+crs(Annualfreq.sf) == crs(boysen)
+
+
+p<- ggplot() +
+  geom_sf(boysentribs, mapping=aes(),color='cornflowerblue', alpha=0.5) +
+  geom_sf(boysen, mapping=aes(),color='blue4', fill='cornflowerblue') +
+  geom_sf(Annualfreq.sf |> filter(WaterbodyName != 'Muddy Creek Inlet'), 
+          mapping=aes(size=n, group=`year(CollDate)`)) +
+  theme_bw()
+
+ggsave(p,'Figures/Bosyen_explore/alltimeMap.png', height=4.25, width=6.25, units='in')
+
+
+# animating the map -- there is a bug in the package
+library(gganimate)
+library(transformr)
+p
+p.anim = p + transition_time(`year(CollDate)`)
+animate(p.anim)
