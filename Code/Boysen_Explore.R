@@ -254,3 +254,12 @@ for(p in 1:length(params)) {
   
   ggsave(paste0('Figures/Boysen_explore/tribs',params[p],'_2020-2021.png'),width=8, height=6, units='in')
 }
+
+
+# 7. Phytos ####
+BoysenPhytos_20_21 <- BoysenChemPhys |>
+  select(StationID) |>
+  left_join(Phytoplankton_2013_2021) |>
+  drop_na(CollDate) |>
+  filter(Year >= 2020) |>
+  unique()
