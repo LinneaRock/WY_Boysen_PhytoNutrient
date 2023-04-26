@@ -35,6 +35,18 @@ n_belowDet <- BoysenChemPhys |>
             percLow = belowDet/n *100) |>
   distinct()
 
+## how many are below detection in just 2020-2021? ####
+n_belowDet_sub <- BoysenChemPhys |>
+  filter(year(CollDate) >= 2020) |>
+  group_by(WaterbodyName, ShortName_Revised) |>
+  add_count() |>
+  mutate(range = paste(min(ChemValue), max(ChemValue), sep='-')) |>
+  select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
+  group_by(WaterbodyName, ShortName_Revised, n, range) |>
+  summarise(belowDet = sum(BelowDet),
+            percLow = belowDet/n *100) |>
+  distinct()
+
 # 2. Basic timeseries! ####
 params <- unique(BoysenChemPhys$ShortName_Revised)
 
@@ -55,8 +67,7 @@ for(p in 1:length(params)) {
                                     SampleDepth <= 3)) + 
       geom_point(aes(CollDate, ChemValue)) +
       labs(y=paste(params[p],unique((BoysenChemPhys |> 
-                                       filter(ShortName_Revised==params[p]))$ChemUnits), 
-                   sep = ' '), x='') +
+                                       filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' '), x='') +
       facet_wrap(~WaterbodyName, scales='free_y') +
       theme_classic() 
     ggsave(paste0('Figures/Boysen_explore/',params[p],'_epi.png'),width=10, height=8, units='in')
@@ -123,10 +134,9 @@ tmp <- Annualfreq |>
 Annualfreq.sf <- st_as_sf(tmp, coords=c('Longitude','Latitude'), crs=4269)
 
 
-mapview::mapview(Annualfreq.sf)
-ggplot(Annualfreq.sf) +
-  geom_sf(aes(size=n))
-
+# mapview::mapview(Annualfreq.sf)
+# ggplot(Annualfreq.sf) +
+#   geom_sf(aes(size=n))
 # above is not working well
   
 ### Get NHD data! ####
@@ -159,8 +169,88 @@ ggsave(p,'Figures/Boysen_explore/alltimeMap.png', height=4.25, width=6.25, units
 
 
 # animating the map -- there is a bug in the package
-library(gganimate)
-library(transformr)
-p
-p.anim = p + transition_time(`year(CollDate)`)
-animate(p.anim)
+# library(gganimate)
+# library(transformr)
+# p
+# p.anim = p + transition_time(`year(CollDate)`)
+# animate(p.anim)
+
+
+# The conclusion of section 4 is that we should focus on years 2020-2021 and the 7 sites that were frequently sampled then-- at least for now. There's potential for some historical trends using July samples from a few of the sites as well... though I need to look into this more closely to determine which, if any of the sites were consistently sampled throughout that timeframe
+
+# 5. 2020-2021 timeseries within lake ####
+# limit the data to 2020-2021, restrict it to epilimnion, and get rid of parameters that have a high proportion below detection
+
+Boysen20_21 <- BoysenChemPhys |>
+  filter(year(CollDate) >= 2020) |>
+  filter(!ShortName_Revised %in% c('Nitrate plus Nitrite as N', 
+                                   'Total Ammonia as N')) |>
+  mutate(fakedate = as.Date(paste('1993', month(CollDate), day(CollDate), sep='-')))  |>
+  mutate(ChemValue = ifelse(ShortName_Revised=='Orthophosphate as P (total)' &
+                              BelowDet==1,'0.01',ChemValue),
+         ChemValue = as.numeric(ChemValue))
+
+params <- unique(Boysen20_21$ShortName_Revised)
+  
+for(p in 1:length(params)) {
+ggplot(Boysen20_21 |> 
+         filter(ShortName_Revised==params[p])) +
+  geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                 shape=as.factor(BelowDet), color=WaterbodyName)) +
+  geom_smooth(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
+                color=WaterbodyName)) +
+  theme_classic() +
+  scale_shape_manual('Below detection',values=c(0,4)) +
+  labs(x='', y=paste(params[p],unique((BoysenChemPhys |> 
+                                         filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' '))
+  
+  ggsave(paste0('Figures/Boysen_explore/',params[p],'_2020-2021.png'),width=6.25, height=4.25, units='in')
+}
+
+# 6. 2020-2021 timeseries within tribs ####
+# limit the data to 2020-2021 and just look at the parameters we are putting together for DEQ meeting 4/27
+
+tribs20_21 <-BoysenTribs |>
+  filter(between(year(CollDate), 2020, 2021)) |>
+  filter(ShortName_Revised %in% c('Total Nitrogen (unfiltered)', 'Phosphorus as P (total)', 'Discharge')) |>
+  mutate(fakedate = as.Date(paste('1993', month(CollDate), day(CollDate), sep='-')))
+library(scales)
+### discharge plot ####
+ggplot(tribs20_21 |>
+         filter(ShortName_Revised=='Discharge')) +
+  geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                 color=WaterbodyName)) +
+  geom_line(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
+                  color=WaterbodyName)) +
+  theme_classic() +
+  labs(x='', y='Daily Average Discharge cms') 
+ggsave('Figures/Boysen_explore/dischargeall_2020-2021.png',width=8, height=6, units='in')
+
+ggplot(tribs20_21 |>
+         filter(ShortName_Revised=='Discharge',
+                WaterbodyName != 'WIND RIVER AB BOYSEN RESERVOIR, NR SHOSHONI, WY')) +
+  geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                 color=WaterbodyName)) +
+  geom_line(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
+                color=WaterbodyName)) +
+  theme_classic() +
+  labs(x='', y='Daily Average Discharge cms')
+ggsave('Figures/Boysen_explore/dischargeMinortribs_2020-2021.png',width=8, height=6, units='in')
+
+## other params in tribs ####
+params <- unique((tribs20_21 |>
+                    filter(ShortName_Revised != 'Discharge'))$ShortName_Revised)
+
+for(p in 1:length(params)) {
+  ggplot(tribs20_21  |> 
+           filter(ShortName_Revised==params[p])) +
+    geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                   color=WaterbodyName)) +
+    geom_smooth(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
+                    color=WaterbodyName),se=FALSE) +
+    theme_classic() +
+    labs(x='', y=paste(params[p],unique((BoysenChemPhys |> 
+                                           filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' '))
+  
+  ggsave(paste0('Figures/Boysen_explore/tribs',params[p],'_2020-2021.png'),width=8, height=6, units='in')
+}

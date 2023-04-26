@@ -26,9 +26,20 @@ discharge <- readNWISdata(siteNumbers = c("06258000", "06253000", "06236100", '0
   #                         param_cd == '00665',
   #                         param_cd == '00671'))
 
+# 00060 = discharge cfs
+# 00010 = Water Temp degC
+# 00095 = Spc uS/cm
+# 00400 = pH
+# 00600 = TN unfiltered mg/L
+# 00605 = TON mg/L
+# 00608 = Dissolved ammonia as N mg/L
+# 00631 = Dissolved NO3 + NO2 as N mg/L
+# 00665 = TP mg/L unfiltered
+# 00674 = Dissolved orthophosphate as P mg/L
+# 70507 = Total orthophosphate as P mg/L
 
 site_ids <- c("06258000", "06253000", "06236100", '06259000')
-parameterCd <- c('00010', '00095', '00400','00600', '00605', '00608', '00631', '00665','00671')
+parameterCd <- c('00095', '00400','00600','00665','00671', '70507')
 
 chemdata <- readWQPqw(paste0("USGS-", site_ids), parameterCd,
                      startDate = '2002-01-01')
@@ -65,8 +76,17 @@ BoysenTribs <-discharge |>
   mutate(ShortName_Revised=case_when(ShortName_Revised =='Total Specific conductance' ~ 'Conductance',
                                      ShortName_Revised =='Total Phosphorus' ~ 'Phosphorus as P (total)',
                                      ShortName_Revised =='Total pH' ~ 'pH',
-                                     ShortName_Revised == 'Total Nitrogen, mixed forms (NH3), (NH4), organic, (NO2) and (NO3)', 'Total Nitrogen (unfiltered)')) |>
-  filter(ShortName_Revised != 'Total Organic Nitrogen')
+                                     ShortName_Revised == 'Total Nitrogen, mixed forms (NH3), (NH4), organic, (NO2) and (NO3)'~ 'Total Nitrogen (unfiltered)',
+                                     ShortName_Revised == 'Dissolved Orthophosphate'~'Dissolved Orthophosphate',
+                                     ShortName_Revised=='Discharge'~'Discharge')) |>
+  mutate(ChemUnits = case_when(ShortName_Revised=='Conductance'~'µS/cm',
+                               ShortName_Revised=='Phosphorus as P (total)'~'mg/l',
+                               ShortName_Revised=='pH'~'SU',
+                               ShortName_Revised=='Total Nitrogen (unfiltered)'~'mg/l',
+                               ShortName_Revised=='Dissolved Orthophosphate'~'mg/l',
+                               ShortName_Revised=='Discharge'~'cms')) |>
+  mutate(ChemValue=ifelse(ShortName_Revised=='Discharge', ChemValue*0.02831685, ChemValue)) # convert cfs to cms
 
 write.csv(BoysenTribs, 'Data/BoysenTribs.csv')
+
 
