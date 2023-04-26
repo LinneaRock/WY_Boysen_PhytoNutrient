@@ -258,8 +258,21 @@ for(p in 1:length(params)) {
 
 # 7. Phytos ####
 BoysenPhytos_20_21 <- BoysenChemPhys |>
-  select(StationID) |>
+  select(StationID, WaterbodyName) |>
+  rename(chemName = WaterbodyName) |>
   left_join(Phytoplankton_2013_2021) |>
   drop_na(CollDate) |>
   filter(Year >= 2020) |>
-  unique()
+  mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
+  unique() |>
+  group_by(StationID, WaterbodyName, month, Year, `Genus/Species/Variety`) |>
+  summarise(indsum = sum(`Individuals (Raw Cnt)`)) |>
+  ungroup() |>
+  group_by(StationID, WaterbodyName, month, Year) |>
+  mutate(totaln=sum(indsum)) |>
+  ungroup() |>
+  mutate(perc = paste0((indsum/totaln)*100))
+
+ggplot(BoysenPhytos_20_21) +
+  geom_bar(aes(month, perc, fill=`Genus/Species/Variety`), stat='identity') +
+  facet_wrap(WaterbodyName~Year)
