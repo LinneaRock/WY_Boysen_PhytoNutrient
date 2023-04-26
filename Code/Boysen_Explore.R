@@ -155,7 +155,7 @@ p<- ggplot() +
           mapping=aes(size=n, group=`year(CollDate)`)) +
   theme_bw()
 
-ggsave(p,'Figures/Bosyen_explore/alltimeMap.png', height=4.25, width=6.25, units='in')
+ggsave(p,'Figures/Boysen_explore/alltimeMap.png', height=4.25, width=6.25, units='in')
 
 
 # animating the map -- there is a bug in the package
