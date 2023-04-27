@@ -9,13 +9,13 @@ params
 
 # 1. Prep data for plotting ####
 BoysenChemPhys <- ChemPhys |>
-  select(-ChemSampID) |>
+  dplyr::select(-ChemSampID) |>
   filter(grepl('Boysen', WaterbodyName)) |> # keep only Boysen 
   mutate(WaterbodyName = sub("^[^,]*,", "", WaterbodyName)) |> # shorten names since we know its Boysen
   mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
   filter(ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N")) |> # for now just keep at the nutrients and chlorophyll
   distinct() |>  # remove duplicates 
   group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
@@ -29,7 +29,7 @@ n_belowDet <- BoysenChemPhys |>
   add_count() |>
   mutate(range = paste(min(ChemValue), max(ChemValue), sep='-')) |>
   ungroup() |>
-  select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
+  dplyr::select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
   group_by(WaterbodyName, ShortName_Revised, n, range) |>
   summarise(belowDet = sum(BelowDet),
             percLow = belowDet/n *100) |>
@@ -41,7 +41,7 @@ n_belowDet_sub <- BoysenChemPhys |>
   group_by(WaterbodyName, ShortName_Revised) |>
   add_count() |>
   mutate(range = paste(min(ChemValue), max(ChemValue), sep='-')) |>
-  select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
+  dplyr::select(WaterbodyName, ShortName_Revised, BelowDet, n, range) |>
   group_by(WaterbodyName, ShortName_Revised, n, range) |>
   summarise(belowDet = sum(BelowDet),
             percLow = belowDet/n *100) |>
@@ -90,7 +90,7 @@ Annualfreq <- BoysenChemPhys |>
   group_by(WaterbodyName, Latitude, Longitude, year(CollDate)) |>
   add_count() |>
   ungroup() |>
-  select(-StationID, -BelowDet, -ChemValue, -ChemUnits, -SampleDepth, -CollDate,-ShortName_Revised) |>
+  dplyr::select(-StationID, -BelowDet, -ChemValue, -ChemUnits, -SampleDepth, -CollDate,-ShortName_Revised) |>
   unique()
 
 SiteVisitsMonthly <- BoysenChemPhys |>
@@ -98,13 +98,13 @@ SiteVisitsMonthly <- BoysenChemPhys |>
   select(-StationID, -Latitude, -Longitude, -BelowDet, -ChemValue, -ChemUnits, -SampleDepth) |>
   mutate(year = year(CollDate),
          month = month(CollDate, label=TRUE, abbr=TRUE)) |>
-  select(-CollDate) |>
+  dplyr::select(-CollDate) |>
   distinct() |>
   group_by(year, month, ShortName_Revised) |>
   add_count() |>
   ungroup() |>
   distinct() |>
-  select(-ShortName_Revised, -WaterbodyName) |>
+  dplyr::select(-ShortName_Revised, -WaterbodyName) |>
   distinct()
 
 ### many sites per monthly visit over time ####
@@ -143,17 +143,17 @@ Annualfreq.sf <- st_as_sf(tmp, coords=c('Longitude','Latitude'), crs=4269)
 library(rgdal)
 library(raster)
 ## Flowlines
-NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 class(NHDflowline) # sf, df
 crs(NHDflowline) # NAD83
 
 ## waterbody outlines
-NHDwaterbody <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
+NHDwaterbody <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
 class(NHDwaterbody)# sf, df
 crs(NHDwaterbody) # NAD83
 
 boysen <- st_crop(NHDwaterbody, xmin=-108.339946,ymin=43.142254,xmax=-108.039283,ymax=43.427151)
-boysentribs <- st_crop(NHDflowline, xmin=-108.339946,ymin=43.142254,xmax=-108.039283,ymax=43.427151)
+boysentribs <- st_crop(NHDflowline, xmin=-108.339946,ymin=43.12895,xmax=-108.039283,ymax=43.427151)
 
 crs(Annualfreq.sf) == crs(boysen)
 
@@ -198,7 +198,7 @@ ggplot(Boysen20_21 |>
   geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
                  shape=as.factor(BelowDet), color=WaterbodyName)) +
   geom_smooth(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
-                color=WaterbodyName)) +
+                color=WaterbodyName), se=FALSE, method='lm') +
   theme_classic() +
   scale_shape_manual('Below detection',values=c(0,4)) +
   labs(x='', y=paste(params[p],unique((BoysenChemPhys |> 
@@ -207,13 +207,35 @@ ggplot(Boysen20_21 |>
   ggsave(paste0('Figures/Boysen_explore/',params[p],'_2020-2021.png'),width=6.25, height=4.25, units='in')
 }
 
+
+### chla in lake vs nutrient ####
+chlavsnut <- Boysen20_21 |>
+  dplyr::select(-BelowDet) |>
+  filter(ShortName_Revised %in% c('Phosphorus as P (total)', 'Total Nitrogen (unfiltered)', 'Chlorophyll a (phytoplankton)')) |>
+  pivot_wider(id_cols = c('WaterbodyName', CollDate),names_from = 'ShortName_Revised', values_from = 'ChemValue') |>
+  pivot_longer(cols=c('Phosphorus as P (total)', 'Total Nitrogen (unfiltered)'), names_to = 'Nutrient', values_to = 'Nutrient_conc') |>
+  rename(Chla = `Chlorophyll a (phytoplankton)`)
+
+
+ggplot(chlavsnut) +
+  geom_point(aes(log10(Nutrient_conc), log10(Chla))) +
+  geom_smooth(aes(log10(Nutrient_conc), log10(Chla)), method='lm') +
+  facet_wrap(~Nutrient, scales='free_x') +
+  theme_classic()
+
+
 # 6. 2020-2021 timeseries within tribs ####
 # limit the data to 2020-2021 and just look at the parameters we are putting together for DEQ meeting 4/27
 
 tribs20_21 <-BoysenTribs |>
   filter(between(year(CollDate), 2020, 2021)) |>
   filter(ShortName_Revised %in% c('Total Nitrogen (unfiltered)', 'Phosphorus as P (total)', 'Discharge')) |>
-  mutate(fakedate = as.Date(paste('1993', month(CollDate), day(CollDate), sep='-')))
+  mutate(fakedate = as.Date(paste('1993', month(CollDate), day(CollDate), sep='-'))) |>
+  mutate(WaterbodyName = ifelse(WaterbodyName=='FIVEMILE CREEK NEAR SHOSHONI, WY', 'Fivemile Creek',
+                                ifelse(WaterbodyName == 'MUDDY CREEK NEAR SHOSHONI, WY', 'Muddy Creek',
+                                       ifelse(WaterbodyName == 'WIND RIVER BELOW BOYSEN RESERVOIR, WY', 'Wind River outlet', 'Wind River inlet'))))
+
+
 library(scales)
 ### discharge plot ####
 ggplot(tribs20_21 |>
@@ -223,18 +245,20 @@ ggplot(tribs20_21 |>
   geom_line(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
                   color=WaterbodyName)) +
   theme_classic() +
-  labs(x='', y='Daily Average Discharge cms') 
+  labs(x='', y='Daily Average Discharge cms')   +
+  scale_x_date(labels=date_format('%b'))
 ggsave('Figures/Boysen_explore/dischargeall_2020-2021.png',width=8, height=6, units='in')
 
 ggplot(tribs20_21 |>
          filter(ShortName_Revised=='Discharge',
-                WaterbodyName != 'WIND RIVER AB BOYSEN RESERVOIR, NR SHOSHONI, WY')) +
+                WaterbodyName != 'Wind River inlet')) +
   geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
                  color=WaterbodyName)) +
   geom_line(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
                 color=WaterbodyName)) +
   theme_classic() +
-  labs(x='', y='Daily Average Discharge cms')
+  labs(x='', y='Daily Average Discharge cms') +
+  scale_x_date(labels=date_format('%b'))
 ggsave('Figures/Boysen_explore/dischargeMinortribs_2020-2021.png',width=8, height=6, units='in')
 
 ## other params in tribs ####
@@ -243,24 +267,121 @@ params <- unique((tribs20_21 |>
 
 for(p in 1:length(params)) {
   ggplot(tribs20_21  |> 
-           filter(ShortName_Revised==params[p])) +
+           filter(ShortName_Revised==params[p]) |>
+           filter(month(CollDate) %in% c(5,6,7,8,9,10))) +
     geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
                    color=WaterbodyName)) +
     geom_smooth(aes(fakedate, ChemValue, linetype=as.factor(year(CollDate)), 
-                    color=WaterbodyName),se=FALSE) +
+                    color=WaterbodyName),se=FALSE, method='lm') +
     theme_classic() +
     labs(x='', y=paste(params[p],unique((BoysenChemPhys |> 
-                                           filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' '))
+                                           filter(ShortName_Revised==params[p]))$ChemUnits), sep = ' '))  +
+    scale_x_date(labels=date_format('%b'))
   
   ggsave(paste0('Figures/Boysen_explore/tribs',params[p],'_2020-2021.png'),width=8, height=6, units='in')
 }
 
 
-# 7. Phytos ####
+
+
+# 7. What frequency are the data collected at tributaries? ####
+
+Annualfreqtribs <- tribs20_21 |>
+  filter(ShortName_Revised != 'Discharge') |>
+  group_by(WaterbodyName, Latitude, Longitude, year(CollDate)) |>
+  add_count() |>
+  ungroup() |>
+  dplyr::select(-StationID, -ChemValue, -ChemUnits, 
+                -CollDate,-ShortName_Revised) |>
+  unique()
+
+SiteVisitsMonthlyTribs <- tribs20_21 |>
+  filter(ShortName_Revised != 'Discharge') |>
+  dplyr::select(-StationID, -Latitude, -Longitude, -ChemValue, -ChemUnits) |>
+  mutate(year = year(CollDate),
+         month = month(CollDate, label=TRUE, abbr=TRUE)) |>
+  dplyr::select(-CollDate) |>
+  distinct() |>
+  group_by(year, month, ShortName_Revised) |>
+  add_count() |>
+  ungroup() |>
+  distinct() |>
+  dplyr::select(-ShortName_Revised, -WaterbodyName) |>
+  distinct()
+
+### how many sites per monthly visit over time ####
+ggplot(SiteVisitsMonthlyTribs, aes(month, year, fill=n)) +
+  theme_bw() +
+  geom_tile(color='white') +
+  scale_fill_viridis_c('',direction=-1) +
+  labs(x='',y='') +
+  coord_equal(ratio=0.8) +
+  scale_y_continuous(breaks=seq(2020,2021,by=1))
+# total of 13 sites
+# in 2020-2021, 7 sites were visited over the year 
+ggsave('Figures/Boysen_explore/Visits_moyrtribs.png', height = 4.25, width=6.25, units='in')
+
+
+
+
+Annualfreqtribs.sf <- st_as_sf(Annualfreqtribs, coords=c('Longitude','Latitude'), crs=4269)
+
+
+ggplot() +
+  geom_sf(boysentribs, mapping=aes(),color='cornflowerblue', alpha=0.5) +
+  geom_sf(boysen, mapping=aes(),color='blue4', fill='cornflowerblue') +
+  geom_sf(Annualfreqtribs.sf, 
+          mapping=aes(color=WaterbodyName),size=3) +
+  theme_bw()
+
+ggsave('Figures/Boysen_explore/tribsMap.png', height=4.25, width=6.25, units='in')
+
+
+# 8. in lake vs trib timeseries ####
+all_nutrient <- bind_rows(Boysen20_21 |>
+                            mutate(eco = 'in-lake'), tribs20_21 |> 
+                            mutate(StationID = as.character(StationID),
+                                   eco = ifelse(WaterbodyName=='Wind River outlet', 'outlet', 'tributary'))) 
+
+
+library(scales)
+ggplot(all_nutrient  |> 
+         filter(ShortName_Revised=='Phosphorus as P (total)')) +
+  geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                 color=eco)) +
+  geom_smooth(aes(fakedate, ChemValue, color = eco,
+                  linetype=as.factor(year(CollDate)))
+              ,se=FALSE) +
+  theme_classic() +
+  labs(x='', y='TP concentration'~(mg*L^-1)) +
+  scale_x_date(labels=date_format('%b'))
+
+ggsave('Figures/Boysen_explore/TP_all.png',width=6.25,height=4.25,units='in',dpi=1200)
+
+
+ggplot(all_nutrient  |> 
+         filter(ShortName_Revised=='Phosphorus as P (total)',
+                month(CollDate) %in% c(5:10)) |>
+         mutate(eco = factor(eco,
+                             levels = c('tributary', 'in-lake', 'outlet')))) +
+  geom_point(aes(fakedate, ChemValue, group=year(CollDate), 
+                 color=WaterbodyName)) +
+  geom_smooth(aes(fakedate, ChemValue, color = WaterbodyName,
+                  linetype=as.factor(year(CollDate))),
+              se=FALSE, method='lm') +
+  theme_classic() +
+  facet_wrap(~eco, scales='free') +
+  labs(x='', y='TP concentration'~(mg*L^-1)) +
+  scale_x_date(labels=date_format('%b'))
+
+ggsave('Figures/Boysen_explore/TP_all_facet.png',width=10,height=6,units='in',dpi=1200)
+
+
+# 9. Phytos ####
 BoysenPhytos_20_21 <- BoysenChemPhys |>
-  select(StationID, WaterbodyName) |>
-  rename(chemName = WaterbodyName) |>
-  left_join(Phytoplankton_2013_2021) |>
+  dplyr::select(StationID, WaterbodyName)  |>
+  left_join(Phytoplankton_2013_2021|>
+              rename(chemName = WaterbodyName)) |>
   drop_na(CollDate) |>
   filter(Year >= 2020) |>
   mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
@@ -271,8 +392,14 @@ BoysenPhytos_20_21 <- BoysenChemPhys |>
   group_by(StationID, WaterbodyName, month, Year) |>
   mutate(totaln=sum(indsum)) |>
   ungroup() |>
-  mutate(perc = paste0((indsum/totaln)*100))
+  mutate(perc =(indsum/totaln)*100) |>
+  group_by(StationID, month, Year) |>
+  mutate(check = sum(perc)) |>
+  ungroup()
 
 ggplot(BoysenPhytos_20_21) +
   geom_bar(aes(month, perc, fill=`Genus/Species/Variety`), stat='identity') +
   facet_wrap(WaterbodyName~Year)
+
+
+
