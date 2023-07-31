@@ -1,0 +1,838 @@
+ChemSampID,StationID,WaterbodyName,CommonName,Latitude,Longitude,WaterbodySize_Acres,HUC12,Section,Quarter,Range,Town,Elevation,CollDate,ShortName_Revised,BelowDet,ChemValue,ChemUnits,Comments,SurfaceBottom,MaximumDepth,SampleDepth,WBTypeID,RepNum
+69816,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Chlorophyll a (phytoplankton),0,4.8,µg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Alkalinity,0,167,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Conductance,0,615.1,µS/cm,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, mg/L",0,11.37,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,pH,0,8.1,SU,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Temp,0,9.8,°C,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, %",0,119.3,%,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Secchi Depth,0,4.1,m,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Phosphorus as P (total),0,0.1,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LL,0
+69817,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LL,0
+69818,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Chlorophyll a (phytoplankton),0,4.3,µg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Alkalinity,0,166,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Conductance,0,601.1,µS/cm,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,"DO, mg/L",0,11.13,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,pH,0,8.21,SU,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Temp,0,8.92,°C,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,"DO, %",0,114.5,%,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Secchi Depth,0,1.85,m,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Total Nitrogen (unfiltered),0,0.02,mg/l,,,,0.5,LT,0
+69819,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69820,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Chlorophyll a (phytoplankton),0,4.7,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Alkalinity,0,168,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Chlorides,0,10,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Conductance,0,613.9,µS/cm,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Hardness,0,211,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, mg/L",0,11.07,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,pH,0,8.2,SU,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Temp,0,9.11,°C,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Aluminum,0,62,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, %",0,114.6,%,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Secchi Depth,0,2.4,m,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Dissolved Calcium,0,55,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Dissolved Magnesium,0,18,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Phosphorus as P (total),0,0.01,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Dissolved Potassium,0,3,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Dissolved Sodium,0,52,µg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Sulfates as SO4,0,148,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69821,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Bicarbonate,0,142,mg/l,,,,0.5,LT,0
+69824,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Chlorophyll a (phytoplankton),0,4.5,µg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Alkalinity,0,172,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Conductance,0,652.5,µS/cm,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, mg/L",0,10.49,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,pH,0,8.01,SU,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Temp,0,10.4,°C,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,"DO, %",0,112.1,%,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Orthophosphate as P (total),1,0.1,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Secchi Depth,0,0.7,m,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Phosphorus as P (total),0,0.02,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LR,0
+69825,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69826,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Chlorophyll a (phytoplankton),0,5.2,µg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Alkalinity,0,170,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Conductance,0,509.6,µS/cm,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,"DO, mg/L",0,10.9,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,pH,0,8.12,SU,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Temp,0,9.4,°C,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,"DO, %",0,114,%,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Orthophosphate as P (total),1,0.1,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Secchi Depth,0,0.6,m,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Phosphorus as P (total),0,0.01,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69827,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69828,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Chlorophyll a (phytoplankton),0,2,µg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Alkalinity,0,168,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Conductance,0,617.5,µS/cm,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,"DO, mg/L",0,11.4,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,pH,0,8.1,SU,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Temp,0,10,°C,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,"DO, %",0,120.2,%,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Orthophosphate as P (total),1,0.1,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Secchi Depth,0,2.4,m,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69829,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69830,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Chlorophyll a (phytoplankton),0,6.1,µg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Alkalinity,0,168,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Conductance,0,597.6,µS/cm,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,"DO, mg/L",0,11.4,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,pH,0,8.2,SU,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Temp,0,10.4,°C,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,"DO, %",0,121.8,%,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Orthophosphate as P (total),1,0.1,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Secchi Depth,0,2.3,m,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69831,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,5/10/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69832,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Chlorophyll a (phytoplankton),0,3.6,µg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Alkalinity,0,155,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Conductance,0,577.3,µS/cm,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, mg/L",0,8.6,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,pH,0,9.2,SU,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Temp,0,16.1,°C,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, %",0,103.8,%,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Secchi Depth,0,2.2,m,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LL,0
+69833,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LL,0
+69834,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Chlorophyll a (phytoplankton),0,2.6,µg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Alkalinity,0,157,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Conductance,0,582.6,µS/cm,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,"DO, mg/L",0,8.6,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,pH,0,8.2,SU,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Temp,0,15.4,°C,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,"DO, %",0,102.5,%,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Secchi Depth,0,2.35,m,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LT,0
+69835,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69838,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Chlorophyll a (phytoplankton),1,0.5,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Alkalinity,0,120,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Chlorides,0,6,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Conductance,0,443.8,µS/cm,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Hardness,0,149,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, mg/L",0,7.9,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,pH,0,8.1,SU,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Temp,0,14.9,°C,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Aluminum,0,3369,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, %",0,93.2,%,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Secchi Depth,0,0.33,m,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Dissolved Calcium,0,40,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Dissolved Magnesium,0,12,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Phosphorus as P (total),0,0.06,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Dissolved Potassium,0,2,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Dissolved Sodium,0,31,µg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Sulfates as SO4,0,95,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69839,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Bicarbonate,0,120,mg/l,,,,0.5,LT,0
+69840,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Chlorophyll a (phytoplankton),1,0.7,µg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Alkalinity,0,100,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Conductance,0,281.4,µS/cm,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, mg/L",0,7.7,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,pH,0,7.6,SU,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Temp,0,15,°C,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,"DO, %",0,91.6,%,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Secchi Depth,0,0.25,m,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Phosphorus as P (total),0,0.09,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,LR,0
+69841,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69842,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Chlorophyll a (phytoplankton),1,1,µg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Alkalinity,0,84,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Conductance,0,244,µS/cm,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,"DO, mg/L",0,8,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,pH,0,7.7,SU,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Temp,0,14,°C,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,"DO, %",0,92.4,%,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Secchi Depth,0,0.63,m,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Phosphorus as P (total),0,0.12,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69843,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69844,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Chlorophyll a (phytoplankton),1,0.4,µg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Alkalinity,0,113,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Conductance,0,423.2,µS/cm,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,"DO, mg/L",0,7.8,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,pH,0,8,SU,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Temp,0,15.3,°C,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,"DO, %",0,93.5,%,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Secchi Depth,0,0.25,m,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Phosphorus as P (total),0,0.06,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69845,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69846,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Chlorophyll a (phytoplankton),1,0.4,µg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Alkalinity,0,121,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Conductance,0,452.2,µS/cm,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,"DO, mg/L",0,8.1,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,pH,0,8,SU,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Temp,0,16.2,°C,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,"DO, %",0,97.9,%,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Secchi Depth,0,0.57,m,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Phosphorus as P (total),0,0.03,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69847,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,6/15/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69848,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Chlorophyll a (phytoplankton),0,2.9,µg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Alkalinity,0,131,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Conductance,0,474.3,µS/cm,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, mg/L",0,7.2,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,pH,0,7.9,SU,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Temp,0,20.1,°C,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, %",0,94.1,%,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Secchi Depth,0,5,m,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,LL,0
+69849,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LL,0
+69850,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Chlorophyll a (phytoplankton),1,0.2,µg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Alkalinity,0,135,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Conductance,0,475.7,µS/cm,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,"DO, mg/L",0,7.4,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,pH,0,8,SU,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Temp,0,20.9,°C,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,"DO, %",0,98.5,%,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Secchi Depth,0,3.55,m,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,LT,0
+69851,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69852,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Chlorophyll a (phytoplankton),0,3.1,µg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Alkalinity,0,120,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Conductance,0,413.6,µS/cm,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, mg/L",0,7.2,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,pH,0,8,SU,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Temp,0,21.9,°C,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, %",0,97.9,%,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Secchi Depth,0,3.58,m,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,LT,0
+69853,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69856,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Chlorophyll a (phytoplankton),0,4.4,µg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Alkalinity,0,111,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Conductance,0,368.5,µS/cm,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, mg/L",0,7.1,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,pH,0,7.8,SU,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Temp,0,21.8,°C,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,"DO, %",0,95.5,%,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Secchi Depth,0,2.4,m,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Phosphorus as P (total),0,0.01,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,LR,0
+69857,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69858,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Chlorophyll a (phytoplankton),0,4.8,µg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Alkalinity,0,105,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Conductance,0,315.6,µS/cm,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,"DO, mg/L",0,7.1,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,pH,0,7.9,SU,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Temp,0,23.4,°C,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,"DO, %",0,99.8,%,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Secchi Depth,0,1.02,m,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Phosphorus as P (total),0,0.03,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69859,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69860,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Chlorophyll a (phytoplankton),0,2,µg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Alkalinity,0,123,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Conductance,0,446,µS/cm,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,"DO, mg/L",0,7.6,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,pH,0,8,SU,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Temp,0,22.3,°C,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,"DO, %",0,103.2,%,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Secchi Depth,0,3.55,m,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69861,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69862,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Chlorophyll a (phytoplankton),0,2,µg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Alkalinity,0,127,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Conductance,0,464.3,µS/cm,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,"DO, mg/L",0,7.5,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,pH,0,8.1,SU,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Temp,0,21.3,°C,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,"DO, %",0,101,%,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Secchi Depth,0,5.08,m,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,L,0
+69863,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69864,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Chlorophyll a (phytoplankton),0,6.6,µg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Alkalinity,0,133,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Conductance,0,479.2,µS/cm,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, mg/L",0,6.8,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,pH,0,8.5,SU,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Temp,0,21.7,°C,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, %",0,91.1,%,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Secchi Depth,0,6.15,m,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LL,0
+69865,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LL,0
+69866,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Chlorophyll a (phytoplankton),0,3.2,µg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Alkalinity,0,133,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Conductance,0,477.5,µS/cm,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,"DO, mg/L",0,6.8,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,pH,0,8.5,SU,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Temp,0,22.1,°C,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,"DO, %",0,91.6,%,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Secchi Depth,0,1.4,m,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,0.5,LT,0
+69867,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69870,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Chlorophyll a (phytoplankton),0,8.4,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Alkalinity,0,136,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Chlorides,0,6,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Conductance,0,484.6,µS/cm,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Hardness,0,156,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, mg/L",0,6.9,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,pH,0,8.6,SU,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Temp,0,22.5,°C,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Aluminum,1,50,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, %",0,93.9,%,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Secchi Depth,0,2,m,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Dissolved Calcium,0,41,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Dissolved Magnesium,0,13,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Phosphorus as P (total),0,0.01,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Dissolved Potassium,0,2,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Dissolved Sodium,0,37,µg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Sulfates as SO4,0,113,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69871,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Bicarbonate,0,97,mg/l,,,,0.5,LT,0
+69872,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Chlorophyll a (phytoplankton),0,33,µg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Alkalinity,0,137,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Conductance,0,487.2,µS/cm,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, mg/L",0,7.1,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,pH,0,8.7,SU,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Temp,0,22.4,°C,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,"DO, %",0,97.1,%,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Secchi Depth,0,1.45,m,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Phosphorus as P (total),0,0.01,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LR,0
+69873,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69874,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Chlorophyll a (phytoplankton),0,130,µg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Alkalinity,0,138,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Conductance,0,482.2,µS/cm,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,"DO, mg/L",0,8.4,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,pH,0,9.2,SU,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Temp,0,22.3,°C,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,"DO, %",0,114,%,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Orthophosphate as P (total),0,0.01,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Secchi Depth,0,0.68,m,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Phosphorus as P (total),0,0.03,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69875,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69876,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Chlorophyll a (phytoplankton),0,11,µg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Alkalinity,0,134,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Conductance,0,480.2,µS/cm,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,"DO, mg/L",0,6.7,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,pH,0,8.5,SU,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Temp,0,22.3,°C,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,"DO, %",0,91,%,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Secchi Depth,0,3.3,m,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Phosphorus as P (total),0,0.02,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69877,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69878,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Chlorophyll a (phytoplankton),0,6.1,µg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Alkalinity,0,133,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Conductance,0,477.8,µS/cm,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,"DO, mg/L",0,7.2,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,pH,0,8.7,SU,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Temp,0,22.4,°C,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,"DO, %",0,98.2,%,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Orthophosphate as P (total),1,0.01,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Secchi Depth,0,5.6,m,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,0.5,L,0
+69879,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,8/29/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69880,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Chlorophyll a (phytoplankton),1,0.2,µg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Alkalinity,0,140,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Conductance,0,495.6,µS/cm,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, mg/L",0,6,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,pH,0,7.6,SU,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Temp,0,18,°C,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, %",0,74.5,%,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Orthophosphate as P (total),0,0.03,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Secchi Depth,0,4.24,m,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,LL,0
+69881,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LL,0
+69884,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Chlorophyll a (phytoplankton),0,35,µg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Alkalinity,0,139,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Conductance,0,489.4,µS/cm,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,"DO, mg/L",0,7.8,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,pH,0,7.9,SU,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Temp,0,18.2,°C,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,"DO, %",0,98,%,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Secchi Depth,0,4.1,m,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Total Nitrogen (unfiltered),0,0.4,mg/l,,,,0.5,LT,0
+69885,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69886,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Chlorophyll a (phytoplankton),0,13,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Alkalinity,0,138,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Chlorides,0,7,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Conductance,0,490.1,µS/cm,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Hardness,0,170,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, mg/L",0,7.1,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,pH,0,7.9,SU,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Temp,0,18,°C,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Aluminum,1,50,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Organic Carbon,0,3.347,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, %",0,88.1,%,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Secchi Depth,0,3.15,m,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Calcium,0,45,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Magnesium,0,14,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Potassium,0,2,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Dissolved Sodium,0,40,µg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Sulfates as SO4,0,117,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69887,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Bicarbonate,0,138,mg/l,,,,0.5,LT,0
+69888,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Chlorophyll a (phytoplankton),0,9.2,µg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Alkalinity,0,139,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Conductance,0,491.7,µS/cm,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, mg/L",0,7.7,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,pH,0,7.9,SU,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Temp,0,17.9,°C,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,"DO, %",0,95.4,%,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Secchi Depth,0,2.38,m,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LR,0
+69889,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69890,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Chlorophyll a (phytoplankton),0,8.4,µg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Alkalinity,0,140,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Conductance,0,491.7,µS/cm,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,"DO, mg/L",0,7.7,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,pH,0,7.9,SU,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Temp,0,17.9,°C,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,"DO, %",0,95.4,%,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Secchi Depth,0,1.48,m,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69891,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69892,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Chlorophyll a (phytoplankton),0,27,µg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Alkalinity,0,138,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Conductance,0,490.2,µS/cm,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,"DO, mg/L",0,8.2,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,pH,0,8,SU,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Temp,0,18.4,°C,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,"DO, %",0,103,%,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Secchi Depth,0,3.25,m,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69893,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69894,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Chlorophyll a (phytoplankton),0,15,µg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Alkalinity,0,138,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Conductance,0,491.3,µS/cm,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,"DO, mg/L",0,7.7,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,pH,0,7.9,SU,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Temp,0,18.4,°C,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,"DO, %",0,96.9,%,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Orthophosphate as P (total),0,0.03,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Secchi Depth,0,3.93,m,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69895,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,9/27/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69896,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Chlorophyll a (phytoplankton),0,4,µg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Alkalinity,0,144,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Conductance,0,497.4,µS/cm,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, mg/L",0,7.2,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,pH,0,8,SU,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Temp,0,15.3,°C,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, %",0,84.4,%,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Orthophosphate as P (total),0,0.03,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Secchi Depth,0,4.4,m,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Phosphorus as P (total),0,0.05,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,LL,0
+69897,WYDEQ_RES_71,"Boysen Reservoir, Lacustrine Pelagic: Dam",Boysen Reservoir,43.411997,-108.1767444,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Nitrate plus Nitrite as N,0,0.08,mg/l,,,,0.5,LL,0
+69898,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Chlorophyll a (phytoplankton),0,8,µg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Alkalinity,0,494.1,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Conductance,0,495.2,µS/cm,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,"DO, mg/L",0,8.6,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,pH,0,7.9,SU,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Temp,0,15.1,°C,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,"DO, %",0,99.9,%,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Secchi Depth,0,4.1,m,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,LT,0
+69899,WYDEQ_RES_68,"Boysen Reservoir Transitional Embayment, Cottonwood Creek Bay",Boysen Reservoir,43.346903,-108.2127722,18534.250437,100800050507,,,,,4726.47998,10/19/2022,Nitrate plus Nitrite as N,0,0.05,mg/l,,,,0.5,LT,0
+69900,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Chlorophyll a (phytoplankton),0,7.7,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Alkalinity,0,145,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Chlorides,0,7,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Conductance,0,498.1,µS/cm,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Hardness,0,170,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, mg/L",0,9,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,pH,0,7.9,SU,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Temp,0,14.8,°C,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Aluminum,1,50,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Organic Carbon,0,3,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, %",0,104.4,%,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Carbonate,0,36,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Secchi Depth,0,4.5,m,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Calcium,0,45,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Magnesium,0,14,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Potassium,0,3,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Dissolved Sodium,0,41,µg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Sulfates as SO4,0,121,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LT,0
+69901,WYDEQ_RES_67,"Boysen Reservoir, Transitional Pelagic: Sand Mesa",Boysen Reservoir,43.302967,-108.2018361,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Bicarbonate,0,109,mg/l,,,,0.5,LT,0
+69902,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Chlorophyll a (phytoplankton),0,4.2,µg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Alkalinity,0,146,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Conductance,0,501.5,µS/cm,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, mg/L",0,9.1,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,pH,0,8,SU,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Temp,0,14.5,°C,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,"DO, %",0,104.5,%,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Secchi Depth,0,4.9,m,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Phosphorus as P (total),0,0.03,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,LR,0
+69903,WYDEQ_RES_64,"Boysen Reservoir, Riverine Pelagic: Freemont 1",Boysen Reservoir,43.277556,-108.1862972,18534.250437,100800050501,,,,,4726.47998,10/19/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,LR,0
+69904,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Chlorophyll a (phytoplankton),1,8.5,µg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Alkalinity,0,147,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Conductance,0,505.7,µS/cm,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,"DO, mg/L",0,9.3,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,pH,0,8.3,SU,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Temp,0,14.3,°C,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,"DO, %",0,107.2,%,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Secchi Depth,0,3.2,m,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,0.5,L,0
+69905,WYDEQ_RES_303,"Boysen Reservoir, Fremont Bay",Boysen Reservoir,43.251675,-108.184722,18534.250437,100800050501,8,NESE,6,3,4726.48,10/19/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69906,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Chlorophyll a (phytoplankton),0,5.5,µg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Alkalinity,0,146,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Conductance,0,500.9,µS/cm,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,"DO, mg/L",0,8.5,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,pH,0,7.9,SU,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Temp,0,14.6,°C,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,"DO, %",0,98.5,%,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Orthophosphate as P (total),0,0.02,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Secchi Depth,0,3.5,m,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69907,WYDEQ_RES_304,"Boysen Reservoir, Tough Creek Campground",Boysen Reservoir,43.325483,-108.16,18534.250437,100800050501,15,SWNW,6,4,4726.48,10/19/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.5,L,0
+69908,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Chlorophyll a (phytoplankton),0,5.4,µg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Alkalinity,0,144,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Conductance,0,495.2,µS/cm,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,"DO, mg/L",0,8.1,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,pH,0,7.8,SU,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Temp,0,15.3,°C,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,"DO, %",0,94.9,%,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Orthophosphate as P (total),0,0.03,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Secchi Depth,0,4,m,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Phosphorus as P (total),0,0.04,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Total Nitrogen (unfiltered),0,0.3,mg/l,,,,0.5,L,0
+69909,WYDEQ_RES_305,"Boysen Reservoir, East Shore",Boysen Reservoir,43.365706,-108.148611,18534.250437,100800050501,8,SWNW,94,39,4726.48,10/19/2022,Nitrate plus Nitrite as N,0,0.07,mg/l,,,,0.5,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Alkalinity,0,38,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Conductance,0,95.7,µS/cm,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,"DO, mg/L",0,8.79,mg/l,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,pH,0,6.65,SU,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Temp,0,15.8,°C,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,"DO, %",0,114.7,%,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Total Ammonia as N,1,0.05,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Secchi Depth,0,2.9,m,,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Phosphorus as P (total),1,0.01,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,1.45,L,0
+69912,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,6/20/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,1.45,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Alkalinity,0,85,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Conductance,0,204.2,µS/cm,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,"DO, mg/L",0,7.64,mg/l,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,pH,0,7.85,SU,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Temp,0,19.6,°C,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,"DO, %",0,104.8,%,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Total Ammonia as N,1,0.05,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Secchi Depth,0,0.98,m,,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Phosphorus as P (total),1,0.01,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,0.5,L,0
+69914,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,6/20/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,TE - Sample was received above the recommended temperature. The samples were received on ice and may not have had sufficient time to get to the required temperature. All data should be considered acceptable for use with a qualifier.,,,0.5,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Alkalinity,0,11,mg/l,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Conductance,0,18.3,µS/cm,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,"DO, mg/L",0,8.4,mg/l,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,pH,0,6.2,SU,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Temp,0,15.2,°C,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,"DO, %",0,113,%,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Total Ammonia as N,1,0.05,mg/l,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Secchi Depth,0,4.38,m,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,2,L,0
+69915,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Alkalinity,0,11,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Conductance,0,17.9,µS/cm,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,"DO, mg/L",0,9.4,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,pH,0,6,SU,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Temp,0,10.3,°C,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,"DO, %",0,113.7,%,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Total Ammonia as N,1,0.05,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Secchi Depth,0,4.13,m,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,2,L,0
+69916,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Alkalinity,0,36,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Chlorides,0,4,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Conductance,0,84,µS/cm,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Hardness,0,35,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,"DO, mg/L",0,8.1,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,pH,0,6.8,SU,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Temp,0,18.5,°C,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Total Aluminum,1,50,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Organic Carbon,0,23.28,mg/l,H - The EPA recommended holding time was exceeded.,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,"DO, %",0,111.3,%,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Carbonate,1,10,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Turbidity (mg/L),0,36,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Secchi Depth,0,4.5,m,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Calcium,0,10.9,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Cadmium,1,0.1,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Magnesium,0,1.9,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Potassium,0,1,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Dissolved Sodium,0,2.8,µg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Sulfates as SO4,0,4,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,,,,2.25,L,0
+69917,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2.25,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Alkalinity,0,72,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Chlorides,0,7,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Conductance,0,168.6,µS/cm,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Hardness,0,73,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,"DO, mg/L",0,6.8,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,pH,0,7.7,SU,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Temp,0,21.6,°C,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Total Aluminum,0,175,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Organic Carbon,0,21.24,mg/l,H - The EPA recommended holding time was exceeded.,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,"DO, %",0,96,%,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Carbonate,1,10,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Turbidity (mg/L),0,72,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Secchi Depth,0,1.31,m,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Calcium,0,23.8,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Magnesium,0,3.4,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Potassium,0,1.7,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Dissolved Sodium,0,4.9,µg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Sulfates as SO4,0,6,mg/l,,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Total Nitrogen (unfiltered),0,0.2,mg/l,R - The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. The presence or absence of the analyte cannot be verified.There is a value of the Nitrogen wet digest result (0.2mg/L) ,,,0.655,L,0
+69918,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Nitrate plus Nitrite as N,0,0.58,mg/l,R - The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. The presence or absence of the analyte cannot be verified.,,,0.655,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Alkalinity,0,12,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Chlorides,1,1,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Conductance,0,22.1,µS/cm,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Hardness,1,10,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,"DO, mg/L",0,7,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,pH,0,6.05,SU,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Temp,0,19.5,°C,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Total Aluminum,1,50,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Organic Carbon,0,15.52,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,"DO, %",0,102.4,%,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Carbonate,1,10,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Turbidity (mg/L),0,12,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Total Ammonia as N,1,0.05,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Secchi Depth,0,5.15,m,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Calcium,0,2,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Cadmium,1,0.1,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Magnesium,1,0.5,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Potassium,1,0.5,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Dissolved Sodium,0,1,µg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Sulfates as SO4,1,1,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,2.575,L,0
+69919,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2.575,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Alkalinity,0,12,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Chlorides,1,1,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Conductance,0,21.4,µS/cm,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Hardness,1,10,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,"DO, mg/L",0,7.1,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,pH,0,5.9,SU,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Temp,0,19.9,°C,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Total Aluminum,1,50,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Organic Carbon,0,16.55,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,"DO, %",0,105.8,%,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Carbonate,1,10,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Turbidity (mg/L),0,12,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Total Ammonia as N,1,0.05,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Secchi Depth,0,6.25,m,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Calcium,0,2,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Cadmium,1,0.1,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Magnesium,0,0.5,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Phosphorus as P (total),1,0.01,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Potassium,1,0.5,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Dissolved Sodium,0,1,µg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Sulfates as SO4,1,1,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,3,L,0
+69920,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,3,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Alkalinity,0,34,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Chlorides,0,4,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Conductance,0,74.3,µS/cm,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Hardness,0,33,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,"DO, mg/L",0,7.6,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,pH,0,6.58,SU,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Temp,0,18.5,°C,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Total Aluminum,1,50,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Organic Carbon,0,5.1,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,"DO, %",0,103.4,%,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Carbonate,1,10,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Turbidity (mg/L),0,34,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Total Ammonia as N,1,0.05,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Secchi Depth,0,4.75,m,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Calcium,0,10.4,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Cadmium,1,0.1,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Magnesium,0,1.8,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Potassium,0,0.9,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Dissolved Sodium,0,2.7,µg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Sulfates as SO4,0,3,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,2.375,L,0
+69921,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2.375,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Alkalinity,0,93,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Chlorides,0,5,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Conductance,0,179.7,µS/cm,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Hardness,0,92,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,"DO, mg/L",0,7,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,pH,0,7.68,SU,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Temp,0,20.1,°C,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Total Aluminum,0,115,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Organic Carbon,0,5,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,"DO, %",0,96.5,%,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Carbonate,1,10,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Turbidity (mg/L),0,93,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Total Ammonia as N,1,0.05,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Secchi Depth,0,1.05,m,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Calcium,0,29.8,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Cadmium,1,0.1,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Magnesium,0,4.2,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Phosphorus as P (total),1,0.01,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Potassium,0,2.1,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Dissolved Sodium,0,5.4,µg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Sulfates as SO4,0,7,mg/l,,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Total Nitrogen (unfiltered),0,0.1,mg/l,Q - Laboratory duplicate analysis not within control limits.,,,0.525,L,0
+69922,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,0.525,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Alkalinity,0,12,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Chlorides,1,1,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Conductance,0,19,µS/cm,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Hardness,1,10,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,"DO, mg/L",0,6,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,pH,0,6.5,SU,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Temp,0,15.8,°C,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Total Aluminum,1,50,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Organic Carbon,0,3.3,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,"DO, %",0,81.7,%,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Carbonate,1,10,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Turbidity (mg/L),0,12,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Total Ammonia as N,1,0.05,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Secchi Depth,0,5.75,m,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Calcium,0,2,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Cadmium,1,0.1,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Magnesium,0,0.5,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Phosphorus as P (total),1,0.01,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Potassium,1,0.5,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Dissolved Sodium,0,1,µg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Sulfates as SO4,1,1,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,2.875,L,0
+69924,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,2.875,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Alkalinity,0,12,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Chlorides,1,1,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Conductance,0,21,µS/cm,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Hardness,1,10,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,"DO, mg/L",0,6.8,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,pH,0,5.8,SU,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Temp,0,17.6,°C,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Total Aluminum,1,50,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Organic Carbon,0,3.7,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,"DO, %",0,96.3,%,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Carbonate,1,10,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Turbidity (mg/L),0,12,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Total Ammonia as N,1,0.05,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Secchi Depth,0,6.38,m,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Calcium,0,2,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Cadmium,1,0.1,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Magnesium,0,0.5,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Phosphorus as P (total),1,0.01,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Potassium,1,0.5,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Dissolved Sodium,0,1,µg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Sulfates as SO4,1,1,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Total Nitrogen (unfiltered),1,0.1,mg/l,,,,3.19,L,0
+69925,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Nitrate plus Nitrite as N,1,0.05,mg/l,,,,3.19,L,0
+69929,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,6/30/2022,Chlorophyll a (phytoplankton),1,0.2,µg/l,D - Reporting Limit (RL) increased due to sample matrix ; ,,,2,L,0
+69930,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,6/30/2022,Chlorophyll a (phytoplankton),1,0.2,µg/l,D - Reporting Limit (RL) increased due to sample matrix,,,2,L,0
+69931,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,7/12/2022,Chlorophyll a (phytoplankton),0,3.4,µg/l,D - Reporting Limit (RL) increased due to sample matrix; TE - Sample was received above the recommended temperature.; R - The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. T,,,2.25,L,0
+69932,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,7/12/2022,Chlorophyll a (phytoplankton),0,3.3,µg/l,D - Reporting Limit (RL) increased due to sample matrix; TE - Sample was received above the recommended temperature.; R -  The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. ,,,0.65,L,0
+69933,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,7/20/2022,Chlorophyll a (phytoplankton),0,1.3,µg/l,TE - Sample was received above the recommended temperature.; R - The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. The presence or absence of the analyte cannot be verified.,,,2.57,L,0
+69935,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,7/20/2022,Chlorophyll a (phytoplankton),0,1.3,µg/l,TE - Sample was received above the recommended temperature.; R - The sample results are rejected due to serious deficiencies in the ability to analyze the sample and meet quality control criteria. The presence or absence of the analyte cannot be verified.,,,3.1,L,0
+69936,WYDEQ_RES_397,Crystal Reservoir - D,Crystal Reservoir,41.156758,-105.200058,130,101900090101,26,SWNE,70W,14N,6972,8/30/2022,Chlorophyll a (phytoplankton),0,6.9,µg/l,D - Reporting Limit (RL) increased due to sample matrix,,,2.375,L,0
+69937,WYDEQ_RES_398,Lake Absarraca - D,Lake Absarraca,41.161372,-104.838275,26,101900090109,24,SWSE,67W,14N,6161,8/30/2022,Chlorophyll a (phytoplankton),0,8.2,µg/l,D - Reporting Limit (RL) increased due to sample matrix,,,0.525,L,0
+69939,WYDEQ_RES_399,Hog Park Reservoir - RTPD,Hog Park Reservoir,41.036335,-106.87838,522,101800020404,6,NWSE,84W,12N,8461,8/31/2022,Chlorophyll a (phytoplankton),0,2.8,µg/l,D - Reporting Limit (RL) increased due to sample matrix,,,2.875,L,0
+69940,WYDEQ_RES_400,Hog Park Reservoir - LPD,Hog Park Reservoir,41.03301,-106.864529,522,101800020404,5,SESW,84W,12N,8461,8/31/2022,Chlorophyll a (phytoplankton),0,3,µg/l,D - Reporting Limit (RL) increased due to sample matrix,,,3.19,L,0
