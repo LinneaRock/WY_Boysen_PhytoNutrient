@@ -143,12 +143,12 @@ Annualfreq.sf <- st_as_sf(tmp, coords=c('Longitude','Latitude'), crs=4269)
 library(rgdal)
 library(raster)
 ## Flowlines
-NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 class(NHDflowline) # sf, df
 crs(NHDflowline) # NAD83
 
 ## waterbody outlines
-NHDwaterbody <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
+NHDwaterbody <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
 class(NHDwaterbody)# sf, df
 crs(NHDwaterbody) # NAD83
 
@@ -402,4 +402,15 @@ ggplot(BoysenPhytos_20_21) +
   facet_wrap(WaterbodyName~Year)
 
 
+# 10. All sampling locations map ####
 
+ggplot() +
+  geom_sf(boysentribs, mapping=aes(),color='cornflowerblue', alpha=0.5) +
+  geom_sf(boysen, mapping=aes(),color='blue4', fill='cornflowerblue') +
+  geom_sf(Annualfreqtribs.sf, 
+          mapping=aes(color='Stream sites'),size=3) +
+  geom_sf(Annualfreq.sf |> filter(n > 30), 
+          size=3, mapping=aes(color='In-reservoir sites')) +
+  scale_color_manual('', values=c('#FEFFBF','#F498C2')) +
+  theme_bw()
+ggsave('Figures/Boysen_explore/allSites.png', height=6.25, width=8.25, units='in', dpi=1200)
