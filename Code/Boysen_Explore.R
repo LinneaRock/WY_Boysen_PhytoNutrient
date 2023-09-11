@@ -414,3 +414,9 @@ ggplot() +
   scale_color_manual('', values=c('#FEFFBF','#F498C2')) +
   theme_bw()
 ggsave('Figures/Boysen_explore/allSites.png', height=6.25, width=8.25, units='in', dpi=1200)
+
+
+ggplot() +
+  geom_sf(boysentribs |> filter(GNIS_Name %in% c('Wind River', 'Fivemile Creek', 'Muddy Creek')), mapping=aes(),color='#476ba1', alpha=0.5) +
+  geom_sf(boysen |> filter(GNIS_Name == 'Boysen Reservoir'), mapping=aes(),color='#476ba1', fill='#476ba1') +
+  theme_classic()
