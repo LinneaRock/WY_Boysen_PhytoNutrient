@@ -140,15 +140,16 @@ Annualfreq.sf <- st_as_sf(tmp, coords=c('Longitude','Latitude'), crs=4269)
 # above is not working well
   
 ### Get NHD data! ####
+library(sf)
 library(rgdal)
 library(raster)
 ## Flowlines
-NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 class(NHDflowline) # sf, df
 crs(NHDflowline) # NAD83
 
 ## waterbody outlines
-NHDwaterbody <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
+NHDwaterbody <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDWaterbody')
 class(NHDwaterbody)# sf, df
 crs(NHDwaterbody) # NAD83
 
@@ -417,6 +418,6 @@ ggsave('Figures/Boysen_explore/allSites.png', height=6.25, width=8.25, units='in
 
 
 ggplot() +
-  geom_sf(boysentribs |> filter(GNIS_Name %in% c('Wind River', 'Fivemile Creek', 'Muddy Creek')), mapping=aes(),color='#476ba1', alpha=0.5) +
-  geom_sf(boysen |> filter(GNIS_Name == 'Boysen Reservoir'), mapping=aes(),color='#476ba1', fill='#476ba1') +
+  geom_sf(boysentribs |> filter(GNIS_Name %in% c('Wind River', 'Fivemile Creek', 'Muddy Creek')), mapping=aes(),color='#476ba1', alpha=0.8) +
+  geom_sf(boysen |> filter(GNIS_Name == 'Boysen Reservoir'), mapping=aes(),color='#476ba1', fill='#476ba1', alpha=0.8) +
   theme_classic()
