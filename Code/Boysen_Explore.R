@@ -416,6 +416,30 @@ ggplot() +
   theme_bw()
 ggsave('Figures/Boysen_explore/allSites.png', height=6.25, width=8.25, units='in', dpi=1200)
 
+library(ggdark)
+ggplot() +
+  geom_sf(boysentribs, mapping=aes(),color='cornflowerblue', alpha=0.5, linewidth=1) +
+  geom_sf(boysen, mapping=aes(),color='blue4', fill='cornflowerblue') +
+  geom_sf(Annualfreqtribs.sf, 
+          mapping=aes(color='Stream sites'),size=3) +
+  geom_sf(Annualfreq.sf |> filter(n > 30), 
+          size=3, mapping=aes(color='In-reservoir sites')) +
+  scale_color_manual('', values=c('#FEFFBF','#F498C2')) +
+  dark_theme_bw()
+ggsave('Figures/DarkThemeFigs/allSites_dark.png', height=6.25, width=8.25, units='in', dpi=1200)
+
+ggplot() +
+ # geom_sf(boysentribs, mapping=aes(), alpha=0.05, linewidth=1) +
+  geom_sf(boysen, mapping=aes(), alpha=0) +
+  geom_sf(Annualfreqtribs.sf, 
+          mapping=aes(fill='Stream sites'),size=3,shape=21,color='black') +
+  geom_sf(Annualfreq.sf |> filter(n > 30), 
+          size=3,shape=21,color='black', mapping=aes(fill='In-reservoir sites')) +
+  scale_fill_manual('', values=c('#FEFFBF','#F498C2')) +
+  dark_theme_bw()
+ggsave('Figures/DarkThemeFigs/transparaentLake.png', height=6.25, width=8.25, units='in', dpi=1200)
+invert_geom_defaults()
+
 
 ggplot() +
   geom_sf(boysentribs |> filter(GNIS_Name %in% c('Wind River', 'Fivemile Creek', 'Muddy Creek')), mapping=aes(),color='#476ba1', alpha=0.8) +
