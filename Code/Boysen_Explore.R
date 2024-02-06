@@ -381,7 +381,7 @@ ggsave('Figures/Boysen_explore/TP_all_facet.png',width=10,height=6,units='in',dp
 # 9. Phytos ####
 BoysenPhytos_20_21 <- BoysenChemPhys |>
   dplyr::select(StationID, WaterbodyName)  |>
-  left_join(Phytoplankton_2013_2021|>
+  left_join(Phyto|>
               rename(chemName = WaterbodyName)) |>
   drop_na(CollDate) |>
   filter(Year >= 2020) |>
