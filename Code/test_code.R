@@ -1,5 +1,5 @@
 #-----------------------------------------------#
-# PCA attempts
+# copying Kelsey's code
 #-----------------------------------------------#
 
 source('Data/CALL_DATA_LIB.R')
@@ -53,3 +53,32 @@ n_phyto <- BoysenPhyto |>
   select(`Genus/Species/Variety`) |>
   distinct()
 
+
+# library(phytotraitr)
+# spp <- Edwards_nutrient_traits
+
+
+#BETA DIVERSITY ANALYSIS
+#PERMANOVA with adonis or adonis2
+#can help test relationships between water quality values (for example) and community composition 
+library(vegan)
+
+dist_data <- BoysenPhyto |>
+  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
+  select(Group, `Genus/Species/Variety`, indsum) |>
+  pivot_wider(id_cols = Group, names_from = `Genus/Species/Variety`, values_from = indsum) |>
+  as.data.frame()
+
+# create matrix 
+rownames(dist_data) <- dist_data$Group
+dist_data <- dist_data[,-1]
+dist_data <- as.matrix(dist_data)
+dist_data <- replace(dist_data, is.na(dist_data), 0)
+
+dist <- vegdist(dist_data, method = 'bray')
+nmds <- metaMDS(dist)
+
+scores(nmds) |>
+  as_tibble(rownames='Group') |>
+  ggplot(aes(x=NMDS1, y=NMDS2)) +
+  geom_point()
