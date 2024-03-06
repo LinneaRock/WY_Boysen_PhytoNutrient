@@ -54,45 +54,110 @@ n_phyto <- BoysenPhyto |>
   distinct()
 
 
-# library(phytotraitr)
-# spp <- Edwards_nutrient_traits
-
-
-#BETA DIVERSITY ANALYSIS
+# 2. BETA DIVERSITY ANALYSIS ####
 #PERMANOVA with adonis or adonis2
 #can help test relationships between water quality values (for example) and community composition 
 library(vegan)
 
-dist_data <- BoysenPhyto |>
+
+# I need all my other variables with a Grouping variable column to match with the dist data
+sd_data <- BoysenChemPhys |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, `Genus/Species/Variety`, indsum) |>
-  pivot_wider(id_cols = Group, names_from = `Genus/Species/Variety`, values_from = indsum) |>
-  as.data.frame()
+  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
+                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
+                                       ShortName_Revised=='Phosphorus as P (total)'~'TP',
+                                       ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
+                                       ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
+                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
+  select(Group, WaterbodyName, CollDate, Latitude, Longitude, ShortName_Revised, ChemValue) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue)
 
-# create matrix 
-rownames(dist_data) <- dist_data$Group
-dist_data <- dist_data[,-1]
-dist_data <- as.matrix(dist_data)
-dist_data <- replace(dist_data, is.na(dist_data), 0)
+phyto_data <- BoysenPhyto |>
+  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
+  select(Group, `Genus/Species/Variety`, indsum, WaterbodyName, CollDate, Year, month) |>
+  left_join(sd_data) |>
+  pivot_wider(names_from = `Genus/Species/Variety`, values_from = indsum) |>
+  as.data.frame() 
 
-dist <- vegdist(dist_data, method = 'bray')
+# create metadata 
+sd_phyto <- phyto_data |>
+  select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, PO4, NH4,TP, TN, NO3, CHLA)
+
+# create distance matrix
+dist_phyto <- phyto_data |>
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA)
+rownames(dist_phyto) <- dist_phyto$Group
+dist_phyto <- dist_phyto[,-1]
+dist_phyto <- as.matrix(dist_phyto)
+dist_phyto <- replace(dist_phyto, is.na(dist_phyto), 0)
+
+dist <- vegdist(dist_phyto, method = 'bray')
 
 dist
 
-adonis2()
+adonis2(dist~Latitude, sd_phyto)
+adonis2(dist~WaterbodyName, sd_phyto, strata=sd_phyto$CollDate) #??
+adonis2(dist~CHLA, sd_phyto) # chla not collected 2021-05-18
+adonis2(dist~TN, sd_phyto)
+adonis2(dist~TP, sd_phyto)
+adonis2(dist~TN + TP, sd_phyto) # ??
+adonis2(dist~NO3, sd_phyto)
+adonis2(dist~NH4, sd_phyto)
+adonis2(dist~PO4, sd_phyto)
 
-# ordiplot()
 
-# NMDS
+
+# 3. NMDS ####
 nmds <- metaMDS(dist)
 
-scores(nmds) |>
+scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
-  ggplot(aes(x=NMDS1, y=NMDS2)) +
-  geom_point()
+  left_join(sd_phyto)
 
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=WaterbodyName))
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=as.character(Year)))
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=month))
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=CHLA)) +
+  scale_color_viridis_c()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=TN)) +
+  scale_color_viridis_c()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=TP)) +
+  scale_color_viridis_c()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=PO4)) +
+  scale_color_viridis_c()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=NO3)) +
+  scale_color_viridis_c()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=NH4)) +
+  scale_color_viridis_c()
+
+
+# from Jordy 
+# check out ordiplot()
 # i can use lines to connect my points in nmds by site and time
-ggsave('Figures/test.png')
+
+
+# 4. BETA DIVERSITY DISPERSION ####
+#beta Dispersion plot
+
+#transformation.. a critical 1st step before looking at beta diversity.. Need to account for differences in the number of counts in each sample before doing any distance matrices. 
 
 
 
@@ -135,33 +200,4 @@ ggsave('Figures/test.png')
 
 
 
-data(dune)
-data(dune.env)
-## default test by terms
-adonis2(dune ~ Management*A1, data = dune.env)
-## overall tests
-adonis2(dune ~ Management*A1, data = dune.env, by = NULL)
-
-### Example of use with strata, for nested (e.g., block) designs.
-dat <- expand.grid(rep=gl(2,1), NO3=factor(c(0,10)),field=gl(3,1) )
-dat
-Agropyron <- with(dat, as.numeric(field) + as.numeric(NO3)+2) +rnorm(12)/2
-Schizachyrium <- with(dat, as.numeric(field) - as.numeric(NO3)+2) +rnorm(12)/2
-total <- Agropyron + Schizachyrium
-total
-dotplot(total ~ NO3, dat, jitter.x=TRUE, groups=field,
-        type=c('p','a'), xlab="NO3", auto.key=list(columns=3, lines=TRUE) )
-
-Y <- data.frame(Agropyron, Schizachyrium)
-mod <- metaMDS(Y, trace = FALSE)
-plot(mod)
-### Ellipsoid hulls show treatment
-with(dat, ordiellipse(mod, field, kind = "ehull", label = TRUE))
-### Spider shows fields
-with(dat, ordispider(mod, field, lty=3, col="red"))
-
-### Incorrect (no strata)
-adonis2(Y ~ NO3, data = dat, permutations = 199)
-## Correct with strata
-with(dat, adonis2(Y ~ NO3, data = dat, permutations = 199, strata = field))
 
