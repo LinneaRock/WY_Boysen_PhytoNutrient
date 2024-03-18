@@ -85,7 +85,7 @@ sd_phyto <- phyto_data |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA)
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -Year, -month)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -110,6 +110,8 @@ adonis2(dist~PO4, sd_phyto)
 # 3. NMDS ####
 nmds <- metaMDS(dist)
 
+nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good
+
 scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
   left_join(sd_phyto)
@@ -120,9 +122,6 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=as.character(Year)))
-
-ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=month))
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=CHLA)) +
@@ -149,10 +148,30 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   scale_color_viridis_c()
 
 
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=month, shape=as.character(Year))) +
+  geom_line(aes(group=WaterbodyName), alpha=0.25)
+
+#You can also investigate the species which may be driving the site distribution pattern, referred to as intrinsic variables.
+spp.fit <- envfit(nmds, dist_phyto, permutations=999)
+head(spp.fit)
+
 # from Jordy 
 # check out ordiplot()
 # i can use lines to connect my points in nmds by site and time
 
+
+ordiplot(nmds, type='n', main='intrinsic species')
+plot(spp.fit, p.max = 0.01, col = "black", cex = 0.7) # change the significance level of species shown with p.max
+
+# Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables of which there is only one (A1) in this dataset.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
+
+env.fit <- envfit(nmds, sd_phyto, permutations=999, na.rm=TRUE)
+head(env.fit)
+
+ordiplot(nmds, type='n', main='extrinsic factors')
+plot(env.fit, p.max = 0.01, col = "black", cex = 0.7) 
 
 # 4. BETA DIVERSITY DISPERSION ####
 #beta Dispersion plot
