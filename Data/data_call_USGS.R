@@ -2,6 +2,22 @@
 library(tidyverse)
 library(dataRetrieval)
 
+# outlet discharge downloaded from Bureau of Reclamation
+ ## Observed Daily Average Lake/Reservoir Release - Total (cfs)
+out_discharge <- read.csv('Data/boysen_outlet_discharge_BOR.csv', skip=7) |>
+  mutate(CollDate = as.Date(Datetime..UTC.)) |>
+  # average the twice daily measurements on some days
+  group_by(CollDate) |>
+  summarise(ChemValue = mean(Result)*28.316846592) |> # cfs to L/s
+  ungroup() |>
+  # rename things for consistency with DEQ data
+  mutate(WaterbodyName = 'WIND RIVER BELOW BOYSEN RESERVOIR, WY',
+         ShortName_Revised='Discharge',
+         ChemUnits='l/s',
+         Year=year(CollDate))
+  
+
+
 # What data are available at each site? ####
 muddycrkparams <- whatNWISdata(siteNumber = "06258000")
 fivemilecrkparams <- whatNWISdata(siteNumber = "06253000")
@@ -14,7 +30,7 @@ sitedata <- readNWISsite(siteNumbers = c("06258000", "06253000", "06236100", '06
 # Load parameters we want ####
 discharge <- readNWISdata(siteNumbers = c("06258000", "06253000", "06236100", '06259000'),
                            parameterCd = '00060',
-                           startDate = '2002-01-01')
+                           startDate = '1980-01-01')
 # chemdat <- readNWISqw(siteNumbers = c("06258000", "06253000", "06236100", '06259000'),
 #                           parameterCd = c('00600', '00605', '00608', '00631', '00665','00671'),
 #                           startDate = '2002-01-01') #|> readNWISqw will be removed. Need to use the code below to get water qual data from wqp:
@@ -35,14 +51,14 @@ discharge <- readNWISdata(siteNumbers = c("06258000", "06253000", "06236100", '0
 # 00608 = Dissolved ammonia as N mg/L
 # 00631 = Dissolved NO3 + NO2 as N mg/L
 # 00665 = TP mg/L unfiltered
-# 00674 = Dissolved orthophosphate as P mg/L
+# 00671 = Dissolved orthophosphate as P mg/L
 # 70507 = Total orthophosphate as P mg/L
 
 site_ids <- c("06258000", "06253000", "06236100", '06259000')
-parameterCd <- c('00095', '00400','00600','00665','00671', '70507')
+parameterCd <- c('00095', '00400','00600', '00608', '00631', '00665','00671', '70507')
 
 chemdata <- readWQPqw(paste0("USGS-", site_ids), parameterCd,
-                     startDate = '2002-01-01')
+                     startDate = '1980-01-01')
 
 
 
@@ -78,15 +94,26 @@ BoysenTribs <-discharge |>
                                      ShortName_Revised =='Total pH' ~ 'pH',
                                      ShortName_Revised == 'Total Nitrogen, mixed forms (NH3), (NH4), organic, (NO2) and (NO3)'~ 'Total Nitrogen (unfiltered)',
                                      ShortName_Revised == 'Dissolved Orthophosphate'~'Dissolved Orthophosphate',
-                                     ShortName_Revised=='Discharge'~'Discharge')) |>
+                                     ShortName_Revised=='Discharge'~'Discharge',
+                                     ShortName_Revised=='Dissolved Inorganic nitrogen (nitrate and nitrite)'~'Nitrate plus Nitrite as N',
+                                     ShortName_Revised=='Dissolved Ammonia and ammonium'~'Total Ammonia as N')) |> # not actually total, but dissolved
   mutate(ChemUnits = case_when(ShortName_Revised=='Conductance'~'µS/cm',
                                ShortName_Revised=='Phosphorus as P (total)'~'mg/l',
                                ShortName_Revised=='pH'~'SU',
                                ShortName_Revised=='Total Nitrogen (unfiltered)'~'mg/l',
                                ShortName_Revised=='Dissolved Orthophosphate'~'mg/l',
-                               ShortName_Revised=='Discharge'~'cms')) |>
-  mutate(ChemValue=ifelse(ShortName_Revised=='Discharge', ChemValue*0.02831685, ChemValue)) # convert cfs to cms
+                               ShortName_Revised=='Discharge'~'l/s',
+                               ShortName_Revised=='Nitrate plus Nitrite as N'~'mg/l',
+                               ShortName_Revised=='Total Ammonia as N'~'mg/l')) |>
+  mutate(ChemValue=ifelse(ShortName_Revised=='Discharge', ChemValue*28.316846592, ChemValue)) |> # convert cfs to L/s 
+bind_rows(out_discharge) |>
+  mutate(Latitude=ifelse(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY',43.42496, Latitude),
+         Longitude=ifelse(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY',-108.179, Longitude),
+         DrainageArea=ifelse(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY', 7701, DrainageArea))
 
 write.csv(BoysenTribs, 'Data/BoysenTribs.csv')
+
+rm(list=c('BoysenTribs', 'chemdata', 'discharge','site_ids', 'parameterCd','windrvroutletparams','windrvrparams','fivemilecrkparams','muddycrkparams'))
+
 
 

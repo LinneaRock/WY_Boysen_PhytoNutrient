@@ -5,23 +5,9 @@
 source('Data/CALL_DATA_LIB.R')
 
 # 1. Prep data for plotting ####
-BoysenChemPhys <- ChemPhys |>
-  dplyr::select(-ChemSampID) |>
-  filter(grepl('Boysen', WaterbodyName)) |> # keep only Boysen 
-  mutate(WaterbodyName = sub("^[^,]*,", "", WaterbodyName)) |> # shorten names since we know its Boysen
-  mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
-  # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
-  # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
-  filter(ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N")) |> # for now just keep at the nutrients and chlorophyll
-  distinct() |>  # remove duplicates 
-  group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
-  mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
-  ungroup() |>
-  distinct() |>
-  mutate(Year = year(CollDate)) |>
-  filter(Year >= 2020) |>
-  mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) 
+head(BoysenChemPhys)
+head(BoysenPhyto) 
+head(BoysenTribs)
 
 phyto_class <- read.csv('Data/phyto_class.csv') |>
   rename(cat=Class) 
@@ -29,21 +15,9 @@ phyto_class <- read.csv('Data/phyto_class.csv') |>
 phyto_class$cat <- sub('^$', 'unknown', phyto_class$cat)
 
 
-BoysenPhytoA <- BoysenChemPhys |>
-  dplyr::select(StationID, WaterbodyName)  |>
-  left_join(Phyto|>
-              rename(chemName = WaterbodyName,
-            Genus.Species.Variety = `Genus/Species/Variety`)) |>
-  drop_na(CollDate) |>
-  filter(Year >= 2020) |>
-  mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
-  unique() |>
-  left_join(phyto_class) 
-  
 
-
-
-BoysenPhyto <- BoysenPhytoA |>
+BoysenPhyto_A <- BoysenPhyto |>
+  left_join(phyto_class)  |>
   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
   distinct()|>
   group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
@@ -62,7 +36,7 @@ BoysenPhyto <- BoysenPhytoA |>
 
 
 
-BoysenPhyto_cat <- BoysenPhytoA |>
+BoysenPhyto_cat <- BoysenPhyto |>
   filter(RepNum == 0) |>
   left_join(BoysenPhyto |> select(WaterbodyName, Year, month, totaln)) |>
   distinct() |>
@@ -82,7 +56,7 @@ BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
 
 
 
-ggplot(BoysenPhyto) +
+ggplot(BoysenPhyto_A) +
   geom_bar(aes(month, perc, fill=Genus.Species.Variety), stat='identity') +
   facet_wrap(WaterbodyName~Year)
 
@@ -113,7 +87,7 @@ sd_data <- BoysenChemPhys |>
 
 
 # match up data for later
-phyto_data <- BoysenPhyto |>
+phyto_data <- BoysenPhyto_A |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
   select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month) |>
   left_join(sd_data) |>
@@ -128,6 +102,7 @@ rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
 dist_phyto <- replace(dist_phyto, is.na(dist_phyto), 0)
+
 
 dist <- vegdist(dist_phyto, method = 'bray')
 
@@ -147,7 +122,8 @@ adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 
 
 
-# 3. NMDS ####
+# 3. NMDS and 4. BETA DIVERSITY DISPERSION ####
+#beta Dispersion plot --- I think these are the NMDS plots?????? 
 nmds <- metaMDS(dist)
 
 nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good
@@ -229,8 +205,6 @@ ggplot() +
 
 
 
-
-
 # Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables of which there is only one (A1) in this dataset.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
 
 env.fit <- envfit(nmds, sd_data, permutations=999, na.rm=TRUE)
@@ -259,14 +233,52 @@ ggplot() +
 
 
 
-# 4. BETA DIVERSITY DISPERSION ####
-#beta Dispersion plot --- I think these are the NMDS plots??????
 
 
-
-# 5. #ALPHA DIVERSITY ####
+# 5. ALPHA DIVERSITY ####
 #Taxonomy Line Plot
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
+
+phyto_rel_abund <- phyto_data |>
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -Year, -month, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate) |>
+  pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
+  group_by(Group) |>
+  mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
+  ungroup() |>
+  select(-count) |>
+  left_join(sd_data) |>
+  group_by(Group, WaterbodyName, taxa) |>
+  summarize(rel_abund = 100*sum(rel_abund), .groups="drop") |>
+  ungroup() |>
+  group_by(WaterbodyName, taxa) #|>
+#   summarise(rel_abund = mean(rel_abund, na.rm=TRUE), .groups='drop')  |>
+# ungroup()  
+  
+
+taxon_pool <- phyto_rel_abund |>
+  group_by(WaterbodyName, taxa) |>
+  summarise(mean=mean(rel_abund,na.rm=TRUE), groups='drop') |>
+  ungroup() |>
+  group_by(taxa) |>
+  summarize(pool = max(mean) < 3,
+            mean = mean(mean),
+            .groups="drop")
+
+abundances <- inner_join(phyto_rel_abund, taxon_pool) |>
+  mutate(taxa = if_else(pool, "Other", taxa)) |>
+  group_by(Group, WaterbodyName, taxa) |>
+  summarise(rel_abund=sum(rel_abund),
+            mean = min(mean),
+            .groups="drop")
+  
+
+ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
+  stat_summary(fun.data=median_hilow, geom = "pointrange",
+               fun.args=list(conf.int=0.5),
+               position = position_dodge(width=0.6)) +
+  theme_minimal() +
+  labs(y=NULL,
+       x="Relative Abundance (%)")
 
 
 # 7. %cyano plot from Smith 1983 ####
@@ -287,27 +299,92 @@ ggplot(NP_cyano) +
   
 
 # 8. Tributary Budget Plots ####
-bud <- BoysenTribs |>
-  select(-X) |>
-  mutate(month=month(CollDate, label=TRUE, abbr=TRUE),
-         Year=year(CollDate)) |>
-  filter(Year>=2020) |>
-  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
-                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
+
+# monthly time interval
+q_interval <- 2.628e+6 # seconds/month
+
+pre_bud <- BoysenTribs |>
+  mutate(month=month(CollDate, label=TRUE, abbr=TRUE)) |>
+  filter(between(Year, 2020,2022)) |>
+  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN', 
+                                       ShortName_Revised=='Total Ammonia as N'~'NH4', 
                                        ShortName_Revised=='Phosphorus as P (total)'~'TP',
                                        ShortName_Revised=='Dissolved Orthophosphate'~'PO4',
                                        ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
-                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA',
-                                       ShortName_Revised==''))
-  pivot_wider(idcols=c(WaterbodyName, CollDate),names_from = ShortName_Revised, values_from = ChemValue)
-  
+                                       ShortName_Revised=='Discharge'~'Discharge')) |>
+  drop_na(ShortName_Revised) |> # removing pH and SpC for now
+  select(- ChemUnits) |> # all nutrients mg/L, Discharge L/s
+  pivot_wider(names_from = ShortName_Revised, values_from = ChemValue) |>
+  filter(Year < 2023) 
+
+chems_bud <- pre_bud |>
+  select(CollDate, WaterbodyName, Year, month, TN, NH4, NO3, PO4, TP) 
+# get rid of rows where all are empty
+chems_bud$chk_row <- rowSums(chems_bud[,5:9], na.rm=TRUE)
+chems_bud <- chems_bud |>
+  filter(chk_row>0) |>
+  select(-chk_row)
+
+dis_bud <- pre_bud |>
+  select(CollDate, WaterbodyName, Year, month, Discharge) |>
+  drop_na(Discharge)  |>
+  mutate(date_minus3 = CollDate - days(3),
+         date_plus3 = CollDate + days(3))
+
+library(fuzzyjoin)
+
+bud <- fuzzy_left_join(chems_bud, dis_bud,
+                       by=c("WaterbodyName"="WaterbodyName",
+                            'CollDate'="date_minus3",
+                            "CollDate"="date_plus3"),
+                       match_fun=list(`==`, `>`, `<`)) |>
+  select(CollDate.x, WaterbodyName.y, Year.x, month.x, TN,NH4,NO3,PO4,TP,Discharge) |>
+  rename(CollDate = CollDate.x,
+         WaterbodyName = WaterbodyName.y,
+         Year = Year.x,
+         month = month.x) |>
+  drop_na(WaterbodyName) |>
+  # because of the fuzzy join, multiple days joined in cases where discharge was collected daily - averaging to get around that
+  group_by(CollDate, WaterbodyName, Year, month) |>
+  summarise(TN=mean(TN),
+            NH4=mean(NH4),
+            NO3=mean(NO3),
+            PO4=mean(PO4),
+            TP=mean(TP),
+            Discharge=mean(Discharge)) |>
+  ungroup() |>
+  # get monthly mass loading for each parameter 
+  mutate(TN_load_Mg = TN*Discharge*q_interval/1e-9,
+         NH4_load_Mg = NH4*Discharge*q_interval/1e-9,
+         NO3_load_Mg = NO3*Discharge*q_interval/1e-9,
+         PO4_load_Mg = PO4*Discharge*q_interval/1e-9,
+         TP_load_Mg = TP*Discharge*q_interval/1e-9) |>
+  pivot_longer(cols=c(TN_load_Mg, 
+                      NH4_load_Mg,
+                      NO3_load_Mg,
+                      PO4_load_Mg,
+                      TP_load_Mg), values_to = 'monthly_mass_Mg', names_to = "load_type") |>
+  mutate(monthly_mass_Mg = ifelse(WaterbodyName=='Wind River Outlet', monthly_mass_Mg*-1, monthly_mass_Mg))
 
 
+ggplot(bud) +
+  geom_bar(aes(fill = WaterbodyName, x = month, y = monthly_mass_Mg), position = "stack", stat = "identity") +
+  scale_fill_viridis_d(option = "inferno", direction = -1) +
+  theme_minimal() +
+  labs(y = "Mass Loading (Mg)", x = "") +
+  facet_wrap(~load_type*Year, scales='free_y', ncol=3) +
+  #scale_x_date(date_breaks = "3 months", date_labels = "%b %Y") +
+  scale_y_continuous(n.breaks = 5)
 
 
+# 9. tributary and outlet N and P timeseries ####
+ggplot(BoysenTribs |>filter(!ShortName_Revised%in%c('Discharge', 'pH', 'Conductance')), aes(CollDate,ChemValue,group=WaterbodyName, color=WaterbodyName)) +
+  geom_point() +
+  geom_smooth(method='gam') +
+  facet_wrap(~ShortName_Revised, scales='free_y')
 
 
-
+# 10.   
 
 
 
