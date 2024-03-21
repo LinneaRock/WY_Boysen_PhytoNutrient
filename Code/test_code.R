@@ -17,6 +17,9 @@ phyto_class$cat <- sub('^$', 'unknown', phyto_class$cat)
 
 
 BoysenPhyto_A <- BoysenPhyto |>
+  # get rid of the zoops
+  filter(Division != 'Copepoda',
+         Genus.Species.Variety != 'Daphnia') |>
   left_join(phyto_class)  |>
   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
   distinct()|>
@@ -37,8 +40,12 @@ BoysenPhyto_A <- BoysenPhyto |>
 
 
 BoysenPhyto_cat <- BoysenPhyto |>
+  # get rid of the zoops
+  filter(Division != 'Copepoda',
+         Genus.Species.Variety != 'Daphnia') |>
   filter(RepNum == 0) |>
-  left_join(BoysenPhyto |> select(WaterbodyName, Year, month, totaln)) |>
+  left_join(phyto_class)  |>
+  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, month, totaln)) |>
   distinct() |>
   group_by(WaterbodyName, CollDate, month, Year, cat, totaln) |>
   summarise(catsum = sum(`Individuals (Raw Cnt)`)) |>
@@ -54,13 +61,11 @@ BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
 
 
 
-
-
 ggplot(BoysenPhyto_A) +
   geom_bar(aes(month, perc, fill=Genus.Species.Variety), stat='identity') +
   facet_wrap(WaterbodyName~Year)
 
-n_phyto <- BoysenPhyto |>
+n_phyto <- BoysenPhyto_A |>
   select(Genus.Species.Variety) |>
   distinct()
 
@@ -83,7 +88,11 @@ sd_data <- BoysenChemPhys |>
                                        ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
                                        ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
   select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`, unknown, Crustacean, Cyanobacteria, Dinoflagellate) |>
-  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue)
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
+  mutate(TN.TP = (TN/TP)*2.11306,
+         NO3.PO4 = (NO3/PO4)*2.11306,
+         NH4.PO4 = (NH4/PO4)*2.11306,
+         IN.PO4 = ((NH4+NO3)/PO4)*2.11306)
 
 
 # match up data for later
@@ -114,11 +123,16 @@ adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in ter
 adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
 adonis2(dist~TN, sd_data)
 adonis2(dist~TP, sd_data)
-adonis2(dist~TN * TP, sd_data) 
+adonis2(dist~TN*TP, sd_data)
+adonis2(dist~TN.TP, sd_data)
 adonis2(dist~NO3, sd_data)
 adonis2(dist~NH4, sd_data) # produces significant result
 adonis2(dist~PO4, sd_data) # produces significant result
+adonis2(dist~NO3.PO4, sd_data) # sig
+adonis2(dist~NH4.PO4, sd_data) # sig
+adonis2(dist~IN.PO4, sd_data) # sig
 adonis2(dist~Cyanobacteria, sd_data) # produces significant result
+adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
 
 
 
@@ -233,6 +247,55 @@ ggplot() +
 
 
 
+# 3a - cluster beta diversity of other variables ####
+# from Jordy but I'm not sure if like this approach....
+
+# cluster::daisy ---- Compute all the pairwise dissimilarities (distances) between observations in the data set. The original variables may be of mixed types. In that case, or whenever metric = "gower" is set, a generalization of Gower's formula is used
+
+# “Gower's distance” is chosen by metric "gower" or automatically if some columns of x are not numeric. Also known as Gower's coefficient (1971), expressed as a dissimilarity, this implies that a particular standardisation will be applied to each variable, and the “distance” between two units is the sum of all the variable-specific distances
+
+# The original version of daisy is fully described in chapter 1 of Kaufman and Rousseeuw (1990). Compared to dist whose input must be numeric variables, the main feature of daisy is its ability to handle other variable types as well (e.g. nominal, ordinal, (a)symmetric binary) even when different types occur in the same data set.
+
+
+# calculating beta diversity for the other variables in the dataset -- basically, how different are sites based on their environmental variables? 
+
+# create matrix for metadat
+daisy_sd_data <- sd_data |>
+  select(-Group, -WaterbodyName, -CollDate, -Year, -month, -Latitude, -Longitude, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate) |>
+  as.data.frame()
+rownames(daisy_sd_data) <- sd_data$Group
+daisy_sd_data  <- daisy_sd_data[,-1]
+daisy_sd_data  <- as.matrix(daisy_sd_data)
+daisy_sd_data  <- replace(daisy_sd_data , is.na(daisy_sd_data ), 0)
+ 
+library(cluster)
+daisy.mat <- as.matrix(daisy(scale(daisy_sd_data), metric="gower"))
+
+daisy.mat[upper.tri(daisy.mat, diag = T)] <- NA
+
+library(reshape2)
+env_daisy<-melt(daisy.mat, na.rm=TRUE) |>
+  left_join(sd_data |> select(Group,WaterbodyName, Year, month),
+            by=c('Var1'='Group')) |>
+  rename(Var1_WBN = WaterbodyName,
+         Var1_Yr = Year,
+         Var1_mon = month) |>
+  left_join(sd_data |> select(Group,WaterbodyName, Year, month),
+            by=c('Var2'='Group')) |>
+  rename(Var2_WBN = WaterbodyName,
+         Var2_Yr = Year,
+         Var2_mon = month)
+
+ggplot(env_daisy) +
+  geom_histogram(aes(value))
+
+# how different is the lake across years and months (sames sites)?
+same_sites_daisy <- env_daisy |>
+  filter(Var1_WBN == Var2_WBN)
+
+ggplot(same_sites_daisy) +
+  geom_point(aes(Var1_mon, value, shape=as.character(Var1_Yr), color=Var2_mon)) +
+  facet_wrap(~Var1_WBN*Var2_Yr)
 
 
 # 5. ALPHA DIVERSITY ####
@@ -269,7 +332,8 @@ abundances <- inner_join(phyto_rel_abund, taxon_pool) |>
   group_by(Group, WaterbodyName, taxa) |>
   summarise(rel_abund=sum(rel_abund),
             mean = min(mean),
-            .groups="drop")
+            .groups="drop") |>
+  drop_na(taxa)
   
 
 ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
@@ -285,10 +349,6 @@ ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
 
 # multiply N:P mass by 2.11306 to get molar
 NP_cyano <- sd_data |>
-  mutate(TN.TP = (TN/TP)*2.11306,
-         NO3.PO4 = (NO3/PO4)*2.11306,
-         NH4.PO4 = (NH4/PO4)*2.11306,
-         IN.PO4 = ((NH4+NO3)/PO4)*2.11306) |>
   pivot_longer(cols=c(TN.TP, NO3.PO4, NH4.PO4, IN.PO4), names_to = 'NP_type')
 
 ggplot(NP_cyano) +
@@ -384,8 +444,13 @@ ggplot(BoysenTribs |>filter(!ShortName_Revised%in%c('Discharge', 'pH', 'Conducta
   facet_wrap(~ShortName_Revised, scales='free_y')
 
 
-# 10.   
-
+# 10. Boysen storage  ####
+read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+  mutate(date = as.Date(Datetime..UTC.)) |>
+  ggplot() +
+  geom_line(aes(date, Result)) +
+  theme_minimal() +
+  labs(x='',y='Reservoir storage (acre-ft)')
 
 
 
