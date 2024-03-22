@@ -5,7 +5,7 @@
 source('Data/CALL_DATA_LIB.R')
 
 # 1. Prep data for plotting ####
-head(BoysenChemPhys)
+head(BoysenNutrient)
 head(BoysenPhyto) 
 head(BoysenTribs)
 
@@ -78,7 +78,7 @@ library(vegan)
 
 # I need all my other variables with a Grouping variable column to match with the dist data
 # create metadata 
-sd_data <- BoysenChemPhys |>
+sd_data <- BoysenNutrient |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
   mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
@@ -106,7 +106,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -Year, -month, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate)
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -132,7 +132,7 @@ adonis2(dist~NO3.PO4, sd_data) # sig
 adonis2(dist~NH4.PO4, sd_data) # sig
 adonis2(dist~IN.PO4, sd_data) # sig
 adonis2(dist~Cyanobacteria, sd_data) # produces significant result
-adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
+#adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
 
 
 
@@ -247,8 +247,8 @@ ggplot() +
 
 
 
-# 3a - cluster beta diversity of other variables ####
-# from Jordy but I'm not sure if like this approach....
+# 3a - Pairwise beta diversity metrics!! ####
+# from Jordy 
 
 # cluster::daisy ---- Compute all the pairwise dissimilarities (distances) between observations in the data set. The original variables may be of mixed types. In that case, or whenever metric = "gower" is set, a generalization of Gower's formula is used
 
@@ -296,6 +296,72 @@ same_sites_daisy <- env_daisy |>
 ggplot(same_sites_daisy) +
   geom_point(aes(Var1_mon, value, shape=as.character(Var1_Yr), color=Var2_mon)) +
   facet_wrap(~Var1_WBN*Var2_Yr)
+
+date_distance_daisy <- env_daisy |>
+  mutate(Var1_fakedate = as.Date(paste0(Var1_Yr,'-',Var1_mon,'-01'), format='%Y-%b-%d'),
+         Var2_fakedate = as.Date(paste0(Var2_Yr,'-',Var2_mon,'-01'), format='%Y-%b-%d'),
+         date_distance = Var2_fakedate-Var1_fakedate)
+
+### 3aA comparisons by temporal distance ####
+
+ggplot(date_distance_daisy, aes(date_distance, value)) +
+  geom_jitter()
+
+
+
+### 3aB get geodistances between points ####
+
+# get distance between sites from Jordy code: https://github.com/jvoneggers/WYLakeSedMicrobes/blob/main/VonEggers_WYMountainLakeSedimentMicrobes_DataAnalysis_Jan2024.Rmd
+#Lat&lon to distance in meters
+library(geosphere)
+xy <- sd_data |> select(Longitude, Latitude) |> as.data.frame()
+rownames(xy)<-sd_data$Group
+dist_m_output<-distm(xy)/1000 # convert m to km
+rownames(dist_m_output)<-rownames(xy)
+names(dist_m_output)<-rownames(xy)
+dist_m_output<-as.dist(dist_m_output)
+
+#transform all distance matrices into dataframes with pairwise comparisons
+coord.dist.ls<-as.matrix(dist_m_output)
+coord.dist.ls[upper.tri(coord.dist.ls, diag = T)] <- NA
+coord.dist.ls<-reshape2::melt(coord.dist.ls, na.rm=T)
+
+
+
+
+
+# now look at pairwise comparisons of phyto communities using bray-curtis
+
+# 0 is similar
+comm.dist <- dist 
+
+#pull out metadata
+metadata<-sd_data[order(match(rownames(sd_data),rownames(comm.dist))),]
+
+comm.dist.ls<-as.matrix(comm.dist)
+comm.dist.ls[upper.tri(comm.dist.ls, diag = T)] <- NA
+comm.dist.ls<-reshape2::melt(comm.dist.ls, na.rm=T)
+
+
+combo_phyto_env_kmdist <- left_join((comm.dist.ls |> rename(phyto_dist = value)), 
+                             (env_daisy |> rename(env_dist = value))) |>
+  left_join(coord.dist.ls |> rename(site_dist_km = value))
+
+
+
+
+### 3aC comparisons by distance!!!####
+ggplot(combo_phyto_env_kmdist, aes(env_dist, phyto_dist, color=site_dist_km)) +
+  geom_point() +
+  scale_color_viridis_c()
+
+ggplot(combo_phyto_env_kmdist, aes(site_dist_km, env_dist)) +
+  geom_point() 
+
+ggplot(combo_phyto_env_kmdist, aes(site_dist_km, phyto_dist)) +
+  geom_point() 
+
+
 
 
 # 5. ALPHA DIVERSITY ####
@@ -451,6 +517,7 @@ read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   geom_line(aes(date, Result)) +
   theme_minimal() +
   labs(x='',y='Reservoir storage (acre-ft)')
+
 
 
 
