@@ -81,7 +81,7 @@ Phyto <- read_csv("Data/RawData_WYDEQ/Phytoplankton_2013-2021.csv",
 
 
 # filter for Boysen phyto data
-BoysenPhyto <- BoysenChemPhys |>
+BoysenPhyto <- BoysenNutrient |>
   dplyr::select(StationID, WaterbodyName)  |>
   left_join(Phyto|>
               rename(chemName = WaterbodyName,
@@ -91,3 +91,14 @@ BoysenPhyto <- BoysenChemPhys |>
   mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
   unique()
 
+
+
+
+# get profile data and do annoying things to get names right
+BoysenProfile <- read.csv('Data/profiles.csv') |>
+  mutate(CollDate=as.Date(CollDate)) 
+annoyingworkaroundfornames <- sub('.', '', BoysenProfile$WaterbodyName)
+BoysenProfile <- BoysenProfile |>
+  select(-X,-X.1,-WaterbodyName) |>
+  mutate(WaterbodyName=annoyingworkaroundfornames)
+  
