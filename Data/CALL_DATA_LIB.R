@@ -4,6 +4,7 @@
 
 library(tidyverse)
 library(lubridate)
+library(patchwork)
 
 # all WY chem data
 ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv', 
@@ -96,9 +97,10 @@ BoysenPhyto <- BoysenNutrient |>
 
 # get profile data and do annoying things to get names right
 BoysenProfile <- read.csv('Data/profiles.csv') |>
-  mutate(CollDate=as.Date(CollDate)) 
+  mutate(CollDate=as.Date(CollDate, format='%m/%d/%Y'))
+#there's a space at the beginning of all the waterbody names :( 
 annoyingworkaroundfornames <- sub('.', '', BoysenProfile$WaterbodyName)
 BoysenProfile <- BoysenProfile |>
-  select(-X,-X.1,-WaterbodyName) |>
+  select(-WaterbodyName) |>
   mutate(WaterbodyName=annoyingworkaroundfornames)
   

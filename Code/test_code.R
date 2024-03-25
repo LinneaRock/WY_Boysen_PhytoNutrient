@@ -1,5 +1,5 @@
 #-----------------------------------------------#
-# copying Kelsey's code
+# copying Kelsey's code and Jordy's code and doing other things
 #-----------------------------------------------#
 
 source('Data/CALL_DATA_LIB.R')
@@ -519,33 +519,20 @@ read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   labs(x='',y='Reservoir storage (acre-ft)')
 
 
+# 11. Profiles of WQ data ####
+plot_profile_points <- function(param,paramname) {
+  ggplot(BoysenProfile) +
+    geom_point(aes(CollDate, depth_m, color=param)) +
+    facet_wrap(~WaterbodyName, scales='free_y') +
+    scale_color_viridis_c('') +
+    scale_y_reverse() +
+    theme_minimal() +
+    labs(x='', y='Depth (m)', title=paramname)
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+plot_profile_points(BoysenProfile$temp_C, 'Temp')
+plot_profile_points(BoysenProfile$pH, 'pH')
+plot_profile_points(BoysenProfile$cond_ugL, 'SpC')
+plot_profile_points(BoysenProfile$DO_mgL, 'DO')
+plot_profile_points(BoysenProfile$DO_percent, 'DO %')
+plot_profile_points(BoysenProfile$ORP, 'ORP')
