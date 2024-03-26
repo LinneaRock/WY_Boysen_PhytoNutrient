@@ -536,3 +536,92 @@ plot_profile_points(BoysenProfile$cond_ugL, 'SpC')
 plot_profile_points(BoysenProfile$DO_mgL, 'DO')
 plot_profile_points(BoysenProfile$DO_percent, 'DO %')
 plot_profile_points(BoysenProfile$ORP, 'ORP')
+
+
+
+
+# 12. Nutrient timeseries ####
+
+nutrient_forms <- BoysenNutrient|>
+  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
+                                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
+                                                       ShortName_Revised=='Phosphorus as P (total)'~'TP',
+                                                       ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
+                                                       ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
+                                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
+  mutate(form = ifelse(ShortName_Revised %in% c('TP', 'PO4'), 'P', 
+                       ifelse(ShortName_Revised %in% c('TN', 'NO3', 'NH4'), 'N', NA))) |>
+  mutate(BelowDet = ifelse(BelowDet==1, 'Below detection', 'Result fine'))
+
+ 
+ggplot(nutrient_forms |> 
+         filter(ShortName_Revised=='CHLA'),
+       aes(CollDate, ChemValue, shape=BelowDet)) +
+  geom_point() +
+  facet_wrap(~WaterbodyName, scales='free_y') +
+  scale_shape_manual('', values=c(3,16)) +
+  theme_minimal() +
+  labs(x='', y='Surface Chlorophyll-a Concentration'~(mu*g~L^-1))
+
+
+
+ggplot(nutrient_forms |> 
+         filter(form=='N'),
+       aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+  geom_jitter() +
+  facet_wrap(~WaterbodyName, scales='free_y') +
+  scale_shape_manual('', values=c(3,16)) +
+  scale_color_viridis_d('', option='plasma') +
+  theme_minimal() +
+  labs(x='', y='Surface Concentration'~(mg~L^-1))
+
+
+ggplot(nutrient_forms |> 
+         filter(form=='P'),
+       aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+  geom_jitter() +
+  facet_wrap(~WaterbodyName, scales='free_y') +
+  scale_shape_manual('', values=c(3,16))  +
+  scale_color_viridis_d('', option='mako') +
+  theme_minimal() +
+  labs(x='', y='Surface Concentration'~(mg~L^-1))
+
+
+
+ggplot(BoysenChem |> 
+         filter(ShortName_Revised=='Secchi Depth'),
+       aes(CollDate, ChemValue, color = WaterbodyName)) +
+  geom_point() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='', y='Secchi depth (m)')
+
+
+
+
+ggplot(BoysenChem |> 
+         filter(ShortName_Revised=='Conductance'),
+       aes(CollDate, ChemValue, color = WaterbodyName)) +
+  geom_point() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='', y='Surface SpC'~(µS~cm^-1))
+
+
+
+ggplot(BoysenChem |> 
+         filter(ShortName_Revised=='pH'),
+       aes(CollDate, ChemValue, color = WaterbodyName)) +
+  geom_point() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='', y='Surface pH')
+
+
+ggplot(BoysenChem |> 
+         filter(ShortName_Revised=='DO, mg/L'),
+       aes(CollDate, ChemValue, color = WaterbodyName)) +
+  geom_point() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='', y='Surface DO'~(mg~L^-1))
