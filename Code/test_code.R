@@ -79,6 +79,7 @@ library(vegan)
 # I need all my other variables with a Grouping variable column to match with the dist data
 # create metadata 
 sd_data <- BoysenNutrient |>
+  rbind(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
   mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
@@ -86,7 +87,11 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised=='Phosphorus as P (total)'~'TP',
                                        ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
                                        ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
-                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
+                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA',
+                                       ShortName_Revised == 'Secchi Depth' ~'Secchi',
+                                       ShortName_Revised=='pH'~'pH',
+                                       ShortName_Revised=='DO, mg/L'~'DO')) |>
+  filter(!is.na(ShortName_Revised)) |>
   select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`, unknown, Crustacean, Cyanobacteria, Dinoflagellate) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(TN.TP = (TN/TP)*2.11306,
@@ -509,9 +514,18 @@ ggplot(BoysenTribs |>filter(!ShortName_Revised%in%c('Discharge', 'pH', 'Conducta
   geom_smooth(method='gam') +
   facet_wrap(~ShortName_Revised, scales='free_y')
 
+BoysenTribs |> 
+  filter(!ShortName_Revised%in%c('Discharge', 'pH', 'Conductance')) |>
+           filter(between(year(CollDate), 2020, 2022)) |>
+  ggplot(aes(CollDate,ChemValue,group=WaterbodyName, color=WaterbodyName)) +
+  geom_point() +
+  facet_wrap(~ShortName_Revised, scales='free_y') +
+  theme_minimal() +
+  labs(x='', y='Concentration'~(mg~L^-1))
+
 
 # 10. Boysen storage  ####
-read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+storage<- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   mutate(date = as.Date(Datetime..UTC.)) |>
   ggplot() +
   geom_line(aes(date, Result)) +
@@ -582,7 +596,7 @@ ggplot(nutrient_forms |>
   geom_jitter() +
   facet_wrap(~WaterbodyName, scales='free_y') +
   scale_shape_manual('', values=c(3,16))  +
-  scale_color_viridis_d('', option='mako') +
+  scale_color_viridis_d('', option='plasma') +
   theme_minimal() +
   labs(x='', y='Surface Concentration'~(mg~L^-1))
 

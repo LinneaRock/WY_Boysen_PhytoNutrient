@@ -104,3 +104,4 @@ BoysenProfile <- BoysenProfile |>
   select(-WaterbodyName) |>
   mutate(WaterbodyName=annoyingworkaroundfornames)
   
+rm(annoyingworkaroundfornames)
