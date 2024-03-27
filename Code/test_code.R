@@ -19,7 +19,7 @@ phyto_class$cat <- sub('^$', 'unknown', phyto_class$cat)
 BoysenPhyto_A <- BoysenPhyto |>
   # get rid of the zoops
   filter(Division != 'Copepoda',
-         Genus.Species.Variety != 'Daphnia') |>
+         !Genus.Species.Variety %in% c('Daphnia','Cladocera')) |>
   left_join(phyto_class)  |>
   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
   distinct()|>
@@ -153,7 +153,12 @@ scores <- scores(nmds) |>
 
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=WaterbodyName))
+  geom_point(aes(color=WaterbodyName)) +
+  theme_minimal()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=month)) +
+  theme_minimal()
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=as.character(Year)))
@@ -172,20 +177,29 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=PO4)) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  theme_minimal()
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=NO3)) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  theme_minimal()
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=NH4)) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  theme_minimal()
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=IN.PO4)) +
+  scale_color_viridis_c() +
+  theme_minimal()
 
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=Cyanobacteria)) +
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  theme_minimal()
 
 # from Jordy 
 # check out ordiplot()
@@ -357,7 +371,7 @@ combo_phyto_env_kmdist <- left_join((comm.dist.ls |> rename(phyto_dist = value))
 
 ### 3aC comparisons by distance!!!####
 ggplot(combo_phyto_env_kmdist, aes(env_dist, phyto_dist, color=site_dist_km)) +
-  geom_point() +
+  geom_point() +   
   scale_color_viridis_c()
 
 ggplot(combo_phyto_env_kmdist, aes(site_dist_km, env_dist)) +
