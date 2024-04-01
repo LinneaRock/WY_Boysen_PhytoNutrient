@@ -19,40 +19,51 @@ phyto_class$cat <- sub('^$', 'unknown', phyto_class$cat)
 BoysenPhyto_A <- BoysenPhyto |>
   # get rid of the zoops
   filter(Division != 'Copepoda',
-         !Genus.Species.Variety %in% c('Daphnia','Cladocera')) |>
+         !Genus.Species.Variety %in% c('Daphnia','Cladocera', '	
+Copepoda: nauplius')) |>
   left_join(phyto_class)  |>
   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
   distinct()|>
   group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
-  mutate(indsum = sum(`Individuals (Raw Cnt)`)) |>
+  mutate(indsum = sum(`Individuals (Raw Cnt)`),
+         biovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
   ungroup() |>
   distinct() |>
   group_by(WaterbodyName, month, Year) |>
-  mutate(totaln=sum(indsum)) |>
+  mutate(totaln=sum(indsum),
+         totalbiovolume_cellsL=sum(biovolumeSum_cellsL)) |>
   ungroup() |>
   distinct() |>
-  mutate(perc =(indsum/totaln)*100) |>
+  mutate(percCount =(indsum/totaln)*100,
+         percBiovolume=(biovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
   group_by(WaterbodyName, month, Year) |>
-  mutate(check = sum(perc)) |>
+  mutate(checkn = sum(percCount),
+         checkbv=sum(percBiovolume)) |>
   ungroup() |>
-  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, perc, check)
+  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv)
+# percent biovolume = percent count -- duh but needed to verify
 
 
 
 BoysenPhyto_cat <- BoysenPhyto |>
   # get rid of the zoops
   filter(Division != 'Copepoda',
-         Genus.Species.Variety != 'Daphnia') |>
+         !Genus.Species.Variety %in% c('Daphnia','Cladocera', '	
+Copepoda: nauplius')) |>
   filter(RepNum == 0) |>
   left_join(phyto_class)  |>
-  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, month, totaln)) |>
+  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, month, totaln, totalbiovolume_cellsL)) |>
   distinct() |>
-  group_by(WaterbodyName, CollDate, month, Year, cat, totaln) |>
-  summarise(catsum = sum(`Individuals (Raw Cnt)`)) |>
+  group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL) |>
+  summarise(catsum = sum(`Individuals (Raw Cnt)`),
+            CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
   ungroup() |>
-  mutate(Catperc =(catsum/totaln)*100) |>
+  mutate(Catperc =(catsum/totaln)*100,
+         CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
   group_by(WaterbodyName, month, Year) |>
-  mutate(checkCat = sum(Catperc)) |>
+  mutate(checkCat = sum(Catperc),
+         checkbv=sum(CATpercBiovolume)) |>
+  # percent biovolume = percent count -- duh but needed to verify
   ungroup() |>
   select(WaterbodyName, month, Year, cat, Catperc) |>
   distinct() |>
@@ -62,12 +73,12 @@ BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
 
 
 ggplot(BoysenPhyto_A) +
-  geom_bar(aes(month, perc, fill=Genus.Species.Variety), stat='identity') +
+  geom_bar(aes(month, percCount, fill=Genus.Species.Variety), stat='identity') +
   facet_wrap(WaterbodyName~Year)
 
 n_phyto <- BoysenPhyto_A |>
   select(Genus.Species.Variety) |>
-  distinct()
+  distinct() # 71 species found
 
 
 # 2. BETA DIVERSITY ANALYSIS ####
@@ -92,7 +103,7 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised=='pH'~'pH',
                                        ShortName_Revised=='DO, mg/L'~'DO')) |>
   filter(!is.na(ShortName_Revised)) |>
-  select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`, unknown, Crustacean, Cyanobacteria, Dinoflagellate) |>
+  select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(TN.TP = (TN/TP)*2.11306,
          NO3.PO4 = (NO3/PO4)*2.11306,
@@ -111,7 +122,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate)
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -238,7 +249,7 @@ ggplot() +
 
 
 
-# Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables of which there is only one (A1) in this dataset.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
+# Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
 
 env.fit <- envfit(nmds, sd_data, permutations=999, na.rm=TRUE)
 head(env.fit)
@@ -539,8 +550,9 @@ BoysenTribs |>
 
 
 # 10. Boysen storage  ####
-storage<- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   mutate(date = as.Date(Datetime..UTC.)) |>
+  filter(between(year(date), 2020,2022)) |>
   ggplot() +
   geom_line(aes(date, Result)) +
   theme_minimal() +
@@ -653,3 +665,64 @@ ggplot(BoysenChem |>
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='', y='Surface DO'~(mg~L^-1))
+
+
+
+
+# 13. storage-discharge relationships ? ####
+storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+  mutate(date = as.Date(Datetime..UTC.))
+
+
+
+
+# 14. basic cyano plots ####
+ggplot(sd_data, aes(month, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='',y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+ggplot(sd_data, aes(TN, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='TN concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+ggplot(sd_data, aes(NO3, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='Nitrate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+ggplot(sd_data, aes(NH4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='Ammonium concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+ggplot(sd_data, aes(TP, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='TP concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+ggplot(sd_data, aes(PO4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='Phosphate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year) 
+
+

@@ -1,9 +1,9 @@
-Genus/Species/Variety,Class,FunFacts
+Genus/Species/Variety,Class,FunFacts_notes
 Actinastrum,Green algae,
 Amphora sp.,Diatom,
 Aulacoseira sp.,Diatom,
 Cocconeis sp.,Diatom,
-Cryptomonas,,
+Cryptomonas,Diatom,function like Diatoms'
 Cymatopleura,Diatom,
 Cymbella,Diatom,
 Diatoma sp.,Diatom,
@@ -15,7 +15,7 @@ Gomphonema,Diatom,
 Melosira sp.,Diatom,
 Navicula sp.,Diatom,keystone species providing staple in aquatic diets
 Nitzschia sp.,Diatom,
-Phacus,,may be indicative of high organic matter pollution
+Phacus,Flagellate,"may be indicative of high organic matter pollution, don't know how to characterize"
 Pinnularia sp.,Diatom,
 Planktosphaeria,Green algae,
 Rhoicosphenia,Diatom,
@@ -47,7 +47,7 @@ Reimeria,Diatom,
 Caloneis,Diatom,
 Closterium,Green algae,
 Elakatothrix,Green algae,
-Dinobryon,,
+Dinobryon,Golden algae,
 Aphanothece,Cyanobacteria,
 Eudorina,Green algae,
 Microcystis,Cyanobacteria,
@@ -55,8 +55,8 @@ Volvox,Green algae,
 Gomphoneis,Diatom,
 Ankistrodesmus,Green algae,one of the most common types of phytos in the world
 Cosmarium,Green algae,
-Euglena,,
-Trachelomonas,,
+Euglena,Flagellate,don't know how to characterize
+Trachelomonas,Flagellate,don't know how to characterize
 Copepoda,Crustacean,
 Phormidium,Cyanobacteria,
 Placoneis sp.,Diatom,
@@ -71,8 +71,8 @@ Hippodonta sp.,Diatom,
 Geitlerinema,Cyanobacteria,
 Planothidium,Diatom,
 Sellaphora sp.,Diatom,
-unknown genus,,
-Uroglena,,
+unknown genus,unknown,
+Uroglena,Golden algae,
 Undetermined Chlorophyte,Green algae,
 Rhopalodia sp.,Diatom,
 Cladocera,Crustacean,water fleas - daphnia
