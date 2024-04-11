@@ -676,8 +676,7 @@ storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   rename(Storage_AF = Result)
 
 storage_discharge <- BoysenTribs |>
-  filter(#WaterbodyName == 'Wind River Outlet',
-         ShortName_Revised == 'Discharge') |>
+  filter(ShortName_Revised == 'Discharge') |>
   left_join(storage |> select(CollDate, Storage_AF))
 
 ggplot(storage_discharge,aes(Storage_AF, ChemValue)) +
