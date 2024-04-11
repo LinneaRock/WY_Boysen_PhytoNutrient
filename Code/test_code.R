@@ -670,8 +670,32 @@ ggplot(BoysenChem |>
 
 
 # 13. storage-discharge relationships ? ####
+## not good -- all have really bad R2. Data don't even look linear when plotted. This just won't work unfortunately 
 storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
-  mutate(date = as.Date(Datetime..UTC.))
+  mutate(CollDate = as.Date(Datetime..UTC.)) |>
+  rename(Storage_AF = Result)
+
+storage_discharge <- BoysenTribs |>
+  filter(#WaterbodyName == 'Wind River Outlet',
+         ShortName_Revised == 'Discharge') |>
+  left_join(storage |> select(CollDate, Storage_AF))
+
+ggplot(storage_discharge,aes(Storage_AF, ChemValue)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  facet_wrap(~WaterbodyName, scales='free')
+
+WR_out_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Outlet'))
+summary(WR_out_lm)
+
+WR_in_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Inlet'))
+summary(WR_in_lm)
+
+MC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Muddy Creek'))
+summary(MC_lm)
+
+FMC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Fivemile Creek'))
+summary(FMC_lm)
 
 
 
