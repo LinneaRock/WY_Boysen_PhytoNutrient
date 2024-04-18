@@ -307,7 +307,7 @@ ggplot() +
 
 # create matrix for metadata
 daisy_sd_data <- sd_data |>
-  select(-Group, -WaterbodyName, -CollDate, -Year, -month, -Latitude, -Longitude, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate) |>
+  select(-Group, -WaterbodyName, -CollDate, -Year, -month, -Latitude, -Longitude,-Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate) |>
   as.data.frame()
 rownames(daisy_sd_data) <- sd_data$Group
 daisy_sd_data  <- daisy_sd_data[,-1]
@@ -340,18 +340,29 @@ same_sites_daisy <- env_daisy |>
   filter(Var1_WBN == Var2_WBN)
 
 ggplot(same_sites_daisy) +
-  geom_point(aes(Var1_mon, value, shape=as.character(Var1_Yr), color=Var2_mon)) +
+  geom_jitter(aes(Var1_mon, value, shape=as.character(Var1_Yr), color=Var2_mon)) +
   facet_wrap(~Var1_WBN*Var2_Yr)
 
-date_distance_daisy <- env_daisy |>
-  mutate(Var1_fakedate = as.Date(paste0(Var1_Yr,'-',Var1_mon,'-01'), format='%Y-%b-%d'),
-         Var2_fakedate = as.Date(paste0(Var2_Yr,'-',Var2_mon,'-01'), format='%Y-%b-%d'),
-         date_distance = Var2_fakedate-Var1_fakedate)
 
 ### 3aA comparisons by temporal distance ####
+date_distance_daisy_env <- env_daisy |>
+  mutate(Var1_fakedate = as.Date(paste0(Var1_Yr,'-',Var1_mon,'-01'), format='%Y-%b-%d'),
+         Var2_fakedate = as.Date(paste0(Var2_Yr,'-',Var2_mon,'-01'), format='%Y-%b-%d'),
+         date_distance = Var2_fakedate-Var1_fakedate)|>
+  mutate(matchyear=case_when(Var1_Yr==2020 & Var2_Yr==2020~2020,
+                             Var1_Yr==2021 & Var2_Yr==2021~2021,
+                             Var1_Yr==2022 & Var2_Yr==2022~2022))
 
-ggplot(date_distance_daisy, aes(date_distance, value)) +
+
+ggplot(date_distance_daisy_env, aes(date_distance, value)) +
   geom_jitter()
+
+# within years 
+ggplot(date_distance_daisy_env |> filter(!is.na(matchyear)), aes(date_distance, value)) +
+  geom_jitter() +
+  facet_wrap(~matchyear)
+
+
 
 
 
@@ -391,7 +402,10 @@ comm.dist.ls<-reshape2::melt(comm.dist.ls, na.rm=T)
 
 combo_phyto_env_kmdist <- left_join((comm.dist.ls |> rename(phyto_dist = value)), 
                              (env_daisy |> rename(env_dist = value))) |>
-  left_join(coord.dist.ls |> rename(site_dist_km = value))
+  left_join(coord.dist.ls |> rename(site_dist_km = value)) |>
+  mutate(matchyear=case_when(Var1_Yr==2020 & Var2_Yr==2020~2020,
+                             Var1_Yr==2021 & Var2_Yr==2021~2021,
+                             Var1_Yr==2022 & Var2_Yr==2022~2022))
 
 
 
@@ -399,7 +413,16 @@ combo_phyto_env_kmdist <- left_join((comm.dist.ls |> rename(phyto_dist = value))
 ### 3aC comparisons by distance!!!####
 ggplot(combo_phyto_env_kmdist, aes(env_dist, phyto_dist, color=site_dist_km)) +
   geom_point() +   
-  scale_color_viridis_c()
+  scale_color_viridis_c() +
+  xlim(0,1) +
+  geom_abline(slope=1,intercept = 0) +
+  theme_minimal() +
+  labs(x='Environmental dissimilarity',
+       y='Community dissimilarity') +
+  scale_color_viridis_c('Distance between
+sites (km)') +
+  theme(legend.position = c(0.70,0.25))
+  
 
 ggplot(combo_phyto_env_kmdist, aes(site_dist_km, env_dist)) +
   geom_point() 
@@ -407,6 +430,42 @@ ggplot(combo_phyto_env_kmdist, aes(site_dist_km, env_dist)) +
 ggplot(combo_phyto_env_kmdist, aes(site_dist_km, phyto_dist)) +
   geom_point() 
 
+
+ggplot(combo_phyto_env_kmdist |> filter(!is.na(matchyear)), aes(site_dist_km, env_dist)) +
+  geom_point() +
+  facet_wrap(~matchyear)
+
+ggplot(combo_phyto_env_kmdist |> filter(!is.na(matchyear)), aes(site_dist_km, phyto_dist)) +
+  geom_point() +
+  facet_wrap(~matchyear)
+
+### 3aD Community comparisons by temporal distance ####
+date_distance_daisy <- comm.dist.ls |>
+  left_join(sd_data |> select(Group,WaterbodyName, Year, month),
+            by=c('Var1'='Group')) |>
+  rename(Var1_WBN = WaterbodyName,
+         Var1_Yr = Year,
+         Var1_mon = month) |>
+  left_join(sd_data |> select(Group,WaterbodyName, Year, month),
+            by=c('Var2'='Group')) |>
+  rename(Var2_WBN = WaterbodyName,
+         Var2_Yr = Year,
+         Var2_mon = month)|>
+  mutate(Var1_fakedate = as.Date(paste0(Var1_Yr,'-',Var1_mon,'-01'), format='%Y-%b-%d'),
+         Var2_fakedate = as.Date(paste0(Var2_Yr,'-',Var2_mon,'-01'), format='%Y-%b-%d'),
+         date_distance = Var2_fakedate-Var1_fakedate) |>
+  mutate(matchyear=case_when(Var1_Yr==2020 & Var2_Yr==2020~2020,
+                             Var1_Yr==2021 & Var2_Yr==2021~2021,
+                             Var1_Yr==2022 & Var2_Yr==2022~2022))
+
+
+ggplot(date_distance_daisy, aes(date_distance, value)) +
+  geom_jitter()
+
+# within years 
+ggplot(date_distance_daisy |> filter(!is.na(matchyear)), aes(date_distance, value)) +
+  geom_jitter() +
+  facet_wrap(~matchyear)
 
 
 
