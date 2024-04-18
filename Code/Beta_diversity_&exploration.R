@@ -40,8 +40,14 @@ Copepoda: nauplius')) |>
   mutate(checkn = sum(percCount),
          checkbv=sum(percBiovolume)) |>
   ungroup() |>
-  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv)
+  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
 # percent biovolume = percent count -- duh but needed to verify
+
+# Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
+  group_by(WaterbodyName, CollDate) |>
+  mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln))))
+
+
 
 
 
@@ -52,20 +58,20 @@ BoysenPhyto_cat <- BoysenPhyto |>
 Copepoda: nauplius')) |>
   filter(RepNum == 0) |>
   left_join(phyto_class)  |>
-  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, month, totaln, totalbiovolume_cellsL)) |>
+  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
   distinct() |>
-  group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL) |>
+  group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL, H) |>
   summarise(catsum = sum(`Individuals (Raw Cnt)`),
             CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
   ungroup() |>
   mutate(Catperc =(catsum/totaln)*100,
          CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
-  group_by(WaterbodyName, month, Year) |>
+  group_by(WaterbodyName, month, Year,H) |>
   mutate(checkCat = sum(Catperc),
          checkbv=sum(CATpercBiovolume)) |>
   # percent biovolume = percent count -- duh but needed to verify
   ungroup() |>
-  select(WaterbodyName, month, Year, cat, Catperc) |>
+  select(WaterbodyName, month, Year, H, cat, Catperc) |>
   distinct() |>
   pivot_wider(names_from = cat, values_from = Catperc) 
 BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
@@ -79,6 +85,20 @@ ggplot(BoysenPhyto_A) +
 n_phyto <- BoysenPhyto_A |>
   select(Genus.Species.Variety) |>
   distinct() # 71 species found
+
+
+
+ggplot(BoysenPhyto_A) +
+  geom_boxplot(aes(month, H)) +
+  geom_point(aes(month, H, color=WaterbodyName)) +
+  scale_color_viridis_d('', option='turbo') +
+  theme_bw() +
+  facet_wrap(~Year) +
+  labs(x='',y='H diversity index')
+
+
+ggplot(BoysenPhyto_A) +
+  geom_boxplot(aes(month, H)) 
 
 
 # 2. BETA DIVERSITY ANALYSIS ####
@@ -104,7 +124,7 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised=='DO, mg/L'~'DO',
                                        ShortName_Revised=='Conductance'~'SpC')) |>
   filter(!is.na(ShortName_Revised)) |>
-  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate,H) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(TN.TP = (TN/TP)*2.11306,
         # NO3.PO4 = (NO3/PO4)*2.11306,
@@ -115,7 +135,7 @@ sd_data <- BoysenNutrient |>
 # match up data for later
 phyto_data <- BoysenPhyto_A |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month) |>
+  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month, H) |>
   left_join(sd_data) |>
   pivot_wider(names_from = Genus.Species.Variety, values_from = indsum) |>
   as.data.frame() 
@@ -123,7 +143,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -156,6 +176,7 @@ adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
 adonis2(dist~DO, sd_data) # sig
 adonis2(dist~Secchi, sd_data)
+adonis2(dist~H, sd_data)
 
 
 
@@ -225,6 +246,13 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=Cyanobacteria)) +
+  scale_color_viridis_c() +
+  theme_minimal()
+
+
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=H)) +
   scale_color_viridis_c() +
   theme_minimal()
 
@@ -466,6 +494,57 @@ ggplot(date_distance_daisy, aes(date_distance, value)) +
 ggplot(date_distance_daisy |> filter(!is.na(matchyear)), aes(date_distance, value)) +
   geom_jitter() +
   facet_wrap(~matchyear)
+
+
+
+
+# 3b NMDS, beta diversity wq variables ####
+# create distance matrix
+dist_wq <- sd_data |>
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate) |>
+  drop_na() |> # sucks but chla not collected 5/18/2021
+  as.data.frame()
+rownames(dist_wq) <- dist_wq$Group
+dist_wq <- dist_wq[,-1]
+dist_wq <- as.matrix(dist_wq)
+dist_wq <- replace(dist_wq, is.na(dist_wq), 0)
+
+
+wq_dist <- vegdist(dist_wq, method = 'bray')
+
+wq_dist
+
+wq_sd_data <- sd_data |>
+  filter(CollDate != '2021-05-18')
+
+adonis2(wq_dist~Latitude, wq_sd_data) # sig
+adonis2(wq_dist~WaterbodyName, wq_sd_data, strata=wq_sd_data$CollDate) #?? # sig
+adonis2(wq_dist~WaterbodyName, wq_sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
+adonis2(wq_dist~month, wq_sd_data) # sig
+adonis2(wq_dist~julianday, wq_sd_data) # sig
+adonis2(wq_dist~Cyanobacteria, wq_sd_data)
+adonis2(wq_dist~Diatom, wq_sd_data)
+
+wq_nmds <- metaMDS(wq_dist)
+
+wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.08
+
+wq_scores <- scores(wq_nmds) |>
+  as_tibble(rownames='Group') |>
+  left_join(wq_sd_data)
+
+
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=WaterbodyName)) +
+  theme_minimal()
+
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=month)) +
+  theme_minimal()
+
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=julianday)) +
+  theme_minimal()
 
 
 
