@@ -14,7 +14,13 @@ ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv',
   rbind(read.csv('Data/RawData_WYDEQ/ChemPhysData_2022.csv', 
                  fileEncoding="latin1") |>
           mutate(CollDate = as.Date(CollDate, format='%m/%d/%Y'),
-                 Year = year(CollDate)))
+                 Year = year(CollDate))) |>
+  # for all values below detection, make them half the reporting limit. In all cases of below detection, the reported value is the reporting limit. It is not always consistent, sometimes due to sample volume limits, matrix interference, laboratory instrument limitations, etc., the limits for individual analyte results are more or less than standard reporting limits. <- from personal communication with chloe Schaub and Eric Hargett at DEQ April 2024
+  mutate(ChemValue = ifelse(BelowDet==1, ChemValue/2,ChemValue)) |>
+  mutate(Year = year(CollDate)) |>
+  filter(Year >= 2020) |>
+  mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
+  mutate(julianday=yday(CollDate))
 
 # filter for Boysen data
 BoysenNutrient <- ChemPhys |>
@@ -24,17 +30,13 @@ BoysenNutrient <- ChemPhys |>
   mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
   filter(ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N")) |> # for now just keep at the nutrients and chlorophyll
   distinct() |>  # remove duplicates 
   group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct() |>
-  mutate(Year = year(CollDate)) |>
-  filter(Year >= 2020) |>
-  mutate(month = month(CollDate, label=TRUE, abbr=TRUE))
-
+  distinct() 
 
 
 
@@ -45,17 +47,13 @@ BoysenChem <- ChemPhys |>
   mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
   filter(!ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N")) |> # for now just keep at the nutrients and chlorophyll
   distinct() |>  # remove duplicates 
-  group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
+  group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct() |>
-  mutate(Year = year(CollDate)) |>
-  filter(Year >= 2020) |>
-  mutate(month = month(CollDate, label=TRUE, abbr=TRUE))
-
+  distinct() 
 
 
 # tributary and outlet data

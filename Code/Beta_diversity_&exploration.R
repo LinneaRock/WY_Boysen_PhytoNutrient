@@ -1,6 +1,6 @@
-#-----------------------------------------------#
-# copying Kelsey's code and Jordy's code and doing other things
-#-----------------------------------------------#
+#---------------------------------------------------------------------#
+# Running NMDS and other explorations (Kelsey and Jordy code and tips)
+#---------------------------------------------------------------------#
 
 source('Data/CALL_DATA_LIB.R')
 
@@ -101,13 +101,14 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA',
                                        ShortName_Revised == 'Secchi Depth' ~'Secchi',
                                        ShortName_Revised=='pH'~'pH',
-                                       ShortName_Revised=='DO, mg/L'~'DO')) |>
+                                       ShortName_Revised=='DO, mg/L'~'DO',
+                                       ShortName_Revised=='Conductance'~'SpC')) |>
   filter(!is.na(ShortName_Revised)) |>
-  select(Group, WaterbodyName, CollDate, Year, month, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(TN.TP = (TN/TP)*2.11306,
-         NO3.PO4 = (NO3/PO4)*2.11306,
-         NH4.PO4 = (NH4/PO4)*2.11306,
+        # NO3.PO4 = (NO3/PO4)*2.11306,
+        # NH4.PO4 = (NH4/PO4)*2.11306,
          IN.PO4 = ((NH4+NO3)/PO4)*2.11306)
 
 
@@ -122,7 +123,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -136,6 +137,8 @@ dist
 adonis2(dist~Latitude, sd_data)
 adonis2(dist~WaterbodyName, sd_data, strata=sd_data$CollDate) #??
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
+adonis2(dist~month, sd_data) # sig
+adonis2(dist~julianday, sd_data) # sig
 adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
 adonis2(dist~TN, sd_data)
 adonis2(dist~TP, sd_data)
@@ -144,11 +147,16 @@ adonis2(dist~TN.TP, sd_data)
 adonis2(dist~NO3, sd_data)
 adonis2(dist~NH4, sd_data) # produces significant result
 adonis2(dist~PO4, sd_data) # produces significant result
-adonis2(dist~NO3.PO4, sd_data) # sig
-adonis2(dist~NH4.PO4, sd_data) # sig
+#adonis2(dist~NO3.PO4, sd_data) # sig
+#adonis2(dist~NH4.PO4, sd_data) # sig
 adonis2(dist~IN.PO4, sd_data) # sig
 adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 #adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
+adonis2(dist~pH, sd_data)
+adonis2(dist~SpC, sd_data)
+adonis2(dist~DO, sd_data) # sig
+adonis2(dist~Secchi, sd_data)
+
 
 
 
@@ -156,7 +164,7 @@ adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 #beta Dispersion plot --- I think these are the NMDS plots?????? 
 nmds <- metaMDS(dist)
 
-nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good
+nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.16
 
 scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
@@ -169,7 +177,15 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month)) +
-  theme_minimal()
+  theme_bw() +
+  facet_wrap(~Year) +
+  scale_color_viridis_d('')
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=julianday)) +
+  theme_bw() +
+  facet_wrap(~Year) +
+  scale_color_viridis_c('Julian Day')
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=as.character(Year)))
@@ -289,7 +305,7 @@ ggplot() +
 
 # calculating beta diversity for the other variables in the dataset -- basically, how different are sites based on their environmental variables? 
 
-# create matrix for metadat
+# create matrix for metadata
 daisy_sd_data <- sd_data |>
   select(-Group, -WaterbodyName, -CollDate, -Year, -month, -Latitude, -Longitude, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate) |>
   as.data.frame()
@@ -399,7 +415,7 @@ ggplot(combo_phyto_env_kmdist, aes(site_dist_km, phyto_dist)) +
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -Year, -month, -Diatom, -`Green algae`, -unknown, -Crustacean, -Cyanobacteria, -Dinoflagellate) |>
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -409,7 +425,7 @@ phyto_rel_abund <- phyto_data |>
   group_by(Group, WaterbodyName, taxa) |>
   summarize(rel_abund = 100*sum(rel_abund), .groups="drop") |>
   ungroup() |>
-  group_by(WaterbodyName, taxa) #|>
+ # group_by(WaterbodyName, taxa) #|>
 #   summarise(rel_abund = mean(rel_abund, na.rm=TRUE), .groups='drop')  |>
 # ungroup()  
   
@@ -445,11 +461,11 @@ ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
 
 # multiply N:P mass by 2.11306 to get molar
 NP_cyano <- sd_data |>
-  pivot_longer(cols=c(TN.TP, NO3.PO4, NH4.PO4, IN.PO4), names_to = 'NP_type')
+  pivot_longer(cols=c(TN.TP, IN.PO4), names_to = 'NP_type')
 
 ggplot(NP_cyano) +
   geom_point(aes(value, Cyanobacteria, color=NP_type)) +
-  labs(x='N:P molar ratio', y='% Cyanobacteria abundance') +
+  labs(x='N:P molar ratio', y='% Cyanobacteria') +
   geom_vline(xintercept = 29) +
   theme_minimal()
   
@@ -596,10 +612,11 @@ nutrient_forms <- BoysenNutrient|>
  
 ggplot(nutrient_forms |> 
          filter(ShortName_Revised=='CHLA'),
-       aes(CollDate, ChemValue, shape=BelowDet)) +
+       aes(CollDate, ChemValue)) +
+       #aes(CollDate, ChemValue, shape=BelowDet)) +
   geom_point() +
   facet_wrap(~WaterbodyName, scales='free_y') +
-  scale_shape_manual('', values=c(3,16)) +
+ # scale_shape_manual('', values=c(3,16)) +
   theme_minimal() +
   labs(x='', y='Surface Chlorophyll-a Concentration'~(mu*g~L^-1))
 
@@ -607,10 +624,11 @@ ggplot(nutrient_forms |>
 
 ggplot(nutrient_forms |> 
          filter(form=='N'),
-       aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+       #aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+       aes(CollDate, ChemValue, color=ShortName_Revised)) +
   geom_jitter() +
   facet_wrap(~WaterbodyName, scales='free_y') +
-  scale_shape_manual('', values=c(3,16)) +
+ # scale_shape_manual('', values=c(3,16)) +
   scale_color_viridis_d('', option='plasma') +
   theme_minimal() +
   labs(x='', y='Surface Concentration'~(mg~L^-1))
@@ -618,10 +636,12 @@ ggplot(nutrient_forms |>
 
 ggplot(nutrient_forms |> 
          filter(form=='P'),
-       aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+       #aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
+       aes(CollDate, ChemValue, color=ShortName_Revised)) +
+  geom_jitter() +
   geom_jitter() +
   facet_wrap(~WaterbodyName, scales='free_y') +
-  scale_shape_manual('', values=c(3,16))  +
+ # scale_shape_manual('', values=c(3,16))  +
   scale_color_viridis_d('', option='plasma') +
   theme_minimal() +
   labs(x='', y='Surface Concentration'~(mg~L^-1))
@@ -697,9 +717,38 @@ FMC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Fiv
 summary(FMC_lm)
 
 
+# 14. Regress pH and conductivity on storage ####
+regress_storage <- BoysenChem |>
+  filter(ShortName_Revised %in% c('pH', 'Conductance')) |>
+  left_join(storage)
+
+ggplot(regress_storage |> filter(ShortName_Revised=='pH'),
+       aes(Storage_AF, ChemValue)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  theme_minimal() +
+  labs(x='Reservoir storage (acre-ft)', 
+       y='pH')
+
+ph_storage.lm <- lm(ChemValue~Storage_AF, regress_storage |> filter(ShortName_Revised=='pH'))
+summary(ph_storage.lm)
 
 
-# 14. basic cyano plots ####
+ggplot(regress_storage |> filter(ShortName_Revised=='Conductance'),
+       aes(Storage_AF, ChemValue)) +
+  geom_point() +
+  geom_smooth(method='lm')+
+  theme_minimal() +
+  labs(x='Reservoir storage (acre-ft)', 
+       y='SpC')
+
+SpC_storage.lm <- lm(ChemValue~Storage_AF, regress_storage |> filter(ShortName_Revised=='Conductance'))
+summary(SpC_storage.lm)
+
+
+
+
+# 15. basic cyano plots ####
 ggplot(sd_data, aes(month, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
   geom_line() +
