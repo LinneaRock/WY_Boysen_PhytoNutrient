@@ -183,6 +183,7 @@ adonis2(dist~H, sd_data)
 
 # 3. NMDS and 4. BETA DIVERSITY DISPERSION ####
 #beta Dispersion plot --- I think these are the NMDS plots?????? 
+set.seed(06261993)
 nmds <- metaMDS(dist)
 
 nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.16
@@ -255,6 +256,13 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=H)) +
   scale_color_viridis_c() +
   theme_minimal()
+
+
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(size=H)) +
+  theme_minimal()
+
 
 # from Jordy 
 # check out ordiplot()
@@ -522,9 +530,13 @@ adonis2(wq_dist~WaterbodyName, wq_sd_data, strata=wq_sd_data$CollDate) #?? # sig
 adonis2(wq_dist~WaterbodyName, wq_sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
 adonis2(wq_dist~month, wq_sd_data) # sig
 adonis2(wq_dist~julianday, wq_sd_data) # sig
-adonis2(wq_dist~Cyanobacteria, wq_sd_data)
+adonis2(wq_dist~Cyanobacteria, wq_sd_data) # sig
 adonis2(wq_dist~Diatom, wq_sd_data)
+adonis2(wq_dist~`Green algae`, wq_sd_data)
 
+
+
+set.seed(06261993)
 wq_nmds <- metaMDS(wq_dist)
 
 wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.08
@@ -547,13 +559,50 @@ ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
   theme_minimal()
 
 
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=`Green algae`)) +
+  theme_minimal()
+
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(size=H)) +
+  theme_minimal()
+
+
+
+
+wq.env.fit <- envfit(wq_nmds, wq_sd_data, permutations=999, na.rm=TRUE)
+head(wq.env.fit)
+# ordiplot(nmds, type='n', main='extrinsic factors')
+# plot(wq.env.fit, p.max = 0.01, col = "black", cex = 0.7) 
+
+
+
+wq.env.fit_df <- as.data.frame(scores(wq.env.fit, display='vectors'))  #extracts relevant scores from wq.envifit
+wq.env.fit_df <- cbind(wq.env.fit_df, wq.env.variables = rownames(wq.env.fit_df)) #and then gives them their names
+
+wq.env.fit_df <- cbind(wq.env.fit_df, pval = wq.env.fit$vectors$pvals) # add pvalues to dataframe
+sig.wq.env.fit <- subset(wq.env.fit_df, pval<=0.05) #subset data to show variables significant at 0.05
+
+sig.wq.env.fit
+
+#Now we have the relevant information for plotting the ordination in ggplot! Lets get plotting!
+
+ggplot() +
+  geom_point(wq_scores, mapping=aes(x=NMDS1, y=NMDS2, color=Cyanobacteria)) +
+  theme_minimal() +
+  scale_color_viridis_c() +
+  geom_segment(sig.wq.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.wq.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = wq.env.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+
+
+
 
 # 5. ALPHA DIVERSITY ####
 #Taxonomy Line Plot
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -NO3.PO4, -NH4.PO4, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC) |>
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -562,7 +611,7 @@ phyto_rel_abund <- phyto_data |>
   left_join(sd_data) |>
   group_by(Group, WaterbodyName, taxa) |>
   summarize(rel_abund = 100*sum(rel_abund), .groups="drop") |>
-  ungroup() |>
+  ungroup() 
  # group_by(WaterbodyName, taxa) #|>
 #   summarise(rel_abund = mean(rel_abund, na.rm=TRUE), .groups='drop')  |>
 # ungroup()  
@@ -855,7 +904,46 @@ FMC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Fiv
 summary(FMC_lm)
 
 
-# 14. Regress pH and conductivity on storage ####
+
+
+
+# 14. precip-discharge relationships ? ####
+# PRISM Climate Group, Oregon State University, https://prism.oregonstate.edu, data created 4 Feb 2014, accessed 19 April 2024.
+
+
+## not good -- all have really bad R2. Data don't even look linear when plotted. This just won't work unfortunately 
+precip <- read.csv('Data/PRISM_ppt_mm.csv',skip=10) |>
+  mutate(CollDate = as.Date(Date)) |>
+  rename(precip_mm = ppt..mm.) |>
+  select(-Date)
+
+precip_discharge <- BoysenTribs |>
+  filter(ShortName_Revised == 'Discharge') |>
+  left_join(precip)
+
+ggplot(precip_discharge,aes(precip_mm, ChemValue)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  facet_wrap(~WaterbodyName, scales='free')
+
+WR_out_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Outlet'))
+summary(WR_out_lm)
+
+WR_in_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Inlet'))
+summary(WR_in_lm)
+
+MC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Muddy Creek'))
+summary(MC_lm)
+
+FMC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Fivemile Creek'))
+summary(FMC_lm)
+
+
+
+
+
+
+# 15. Regress pH and conductivity on storage ####
 regress_storage <- BoysenChem |>
   filter(ShortName_Revised %in% c('pH', 'Conductance')) |>
   left_join(storage)
@@ -886,7 +974,15 @@ summary(SpC_storage.lm)
 
 
 
-# 15. basic cyano plots ####
+
+
+
+
+
+
+
+
+# 16. basic cyano plots ####
 ggplot(sd_data, aes(month, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
   geom_line() +
@@ -934,5 +1030,8 @@ ggplot(sd_data, aes(PO4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName
   theme_minimal() +
   labs(x='Phosphate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
   facet_wrap(~Year) 
+
+
+
 
 
