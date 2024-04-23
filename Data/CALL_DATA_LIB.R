@@ -103,3 +103,14 @@ BoysenProfile <- BoysenProfile |>
   mutate(WaterbodyName=annoyingworkaroundfornames)
   
 rm(annoyingworkaroundfornames)
+
+
+
+
+# call in schmidt's stability 
+SS <- read.csv('Data/Schmidts_Stability.csv') |>
+  select(-X) |>
+  mutate(CollDate = as.Date(CollDate))
+
+
+

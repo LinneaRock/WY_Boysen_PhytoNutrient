@@ -2,7 +2,7 @@ library(terra)
 library(tidyterra)
 library(sp)
 
-
+# Call in bathy data made by Sean ####
 
 #If using the tif DEM
 boysen_bathy <- rast("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
@@ -69,7 +69,7 @@ hypso <- depth_area_aggregated |>
 
 
 
-# attempt some things using hypsometry data now
+# Find Schmidt's Stability ####
 source('Data/CALL_DATA_LIB.R')
 library(rLakeAnalyzer)
 
@@ -105,4 +105,7 @@ ggplot(smidts_stability) +
   theme(axis.text.x = element_text(angle = 45, hjust=1))
 
 
+
+write.csv(smidts_stability, 'Data/Schmidts_Stability.csv')
+write.csv(hypso, 'Data/Simplified_bathymetry.csv')
 
