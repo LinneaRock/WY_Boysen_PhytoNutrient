@@ -74,7 +74,7 @@ BoysenChem$WaterbodyName = trimws(BoysenChem$WaterbodyName)
 
 
 BoysenChem <- BoysenChem |> 
-  bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability'))
+  bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS, ChemUnits) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability'))
 
 
 

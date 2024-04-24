@@ -45,7 +45,8 @@ Copepoda: nauplius')) |>
 
 # Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
   group_by(WaterbodyName, CollDate) |>
-  mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln))))
+  mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln)))) |>
+  ungroup()
 
 
 
@@ -101,6 +102,7 @@ ggplot(BoysenPhyto_A) +
   geom_boxplot(aes(month, H)) 
 
 
+
 # 2. BETA DIVERSITY ANALYSIS ####
 #PERMANOVA with adonis or adonis2
 #can help test relationships between water quality values (for example) and community composition 
@@ -122,7 +124,8 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised == 'Secchi Depth' ~'Secchi',
                                        ShortName_Revised=='pH'~'pH',
                                        ShortName_Revised=='DO, mg/L'~'DO',
-                                       ShortName_Revised=='Conductance'~'SpC')) |>
+                                       ShortName_Revised=='Conductance'~'SpC',
+                                       ShortName_Revised=='Stability'~'Stability')) |>
   filter(!is.na(ShortName_Revised)) |>
   select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate,H) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
@@ -143,7 +146,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -177,6 +180,7 @@ adonis2(dist~SpC, sd_data)
 adonis2(dist~DO, sd_data) # sig
 adonis2(dist~Secchi, sd_data)
 adonis2(dist~H, sd_data)
+adonis2(dist~Stability, sd_data)
 
 
 
@@ -260,8 +264,9 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(size=H)) +
-  theme_minimal()
+  geom_point(aes(color=Stability)) +
+  theme_minimal() +
+  scale_color_viridis_c()
 
 
 # from Jordy 
@@ -531,15 +536,15 @@ adonis2(wq_dist~WaterbodyName, wq_sd_data) # high p-value == sites are the same 
 adonis2(wq_dist~month, wq_sd_data) # sig
 adonis2(wq_dist~julianday, wq_sd_data) # sig
 adonis2(wq_dist~Cyanobacteria, wq_sd_data) # sig
-adonis2(wq_dist~Diatom, wq_sd_data)
-adonis2(wq_dist~`Green algae`, wq_sd_data)
+adonis2(wq_dist~Diatom, wq_sd_data) #sig
+adonis2(wq_dist~`Green algae`, wq_sd_data) #sig
 
 
 
 set.seed(06261993)
 wq_nmds <- metaMDS(wq_dist)
 
-wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.08
+wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.07
 
 wq_scores <- scores(wq_nmds) |>
   as_tibble(rownames='Group') |>
@@ -564,9 +569,14 @@ ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
   theme_minimal()
 
 ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(size=H)) +
-  theme_minimal()
+  geom_point(aes(color=H)) +
+  theme_minimal() +
+  scale_color_viridis_c()
 
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=Stability)) +
+  theme_minimal() +
+  scale_color_viridis_c()
 
 
 
@@ -602,7 +612,7 @@ ggplot() +
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H) |>
+  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
