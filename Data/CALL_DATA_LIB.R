@@ -6,6 +6,14 @@ library(tidyverse)
 library(lubridate)
 library(patchwork)
 
+# call in schmidt's stability 
+SS <- read.csv('Data/Schmidts_Stability.csv') |>
+  select(-X) |>
+  mutate(CollDate = as.Date(CollDate)) |>
+  mutate(ChemUnits='J_m2') |>
+  select(-Year, -Month)
+
+
 # all WY chem data
 ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv', 
                      fileEncoding="latin1") |>
@@ -39,6 +47,13 @@ BoysenNutrient <- ChemPhys |>
   distinct() 
 
 
+BoysenNutrient$WaterbodyName = trimws(BoysenNutrient$WaterbodyName) 
+
+SS <- SS |>
+  left_join(BoysenNutrient |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday)) |>
+  distinct()
+
+
 
 BoysenChem <- ChemPhys |>
   dplyr::select(-ChemSampID) |>
@@ -53,7 +68,15 @@ BoysenChem <- ChemPhys |>
   group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct() 
+  distinct()  
+
+BoysenChem$WaterbodyName = trimws(BoysenChem$WaterbodyName)
+
+
+BoysenChem <- BoysenChem |> 
+  bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability'))
+
+
 
 
 # tributary and outlet data
@@ -107,10 +130,6 @@ rm(annoyingworkaroundfornames)
 
 
 
-# call in schmidt's stability 
-SS <- read.csv('Data/Schmidts_Stability.csv') |>
-  select(-X) |>
-  mutate(CollDate = as.Date(CollDate))
 
 
 
