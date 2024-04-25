@@ -9,18 +9,12 @@ head(BoysenNutrient)
 head(BoysenPhyto) 
 head(BoysenTribs)
 
-phyto_class <- read.csv('Data/phyto_class.csv') |>
-  rename(cat=Class) 
+phyto_class <- read.csv('Data/phyto_class.csv') 
 
-phyto_class$cat <- sub('^$', 'unknown', phyto_class$cat)
 
 
 
 BoysenPhyto_A <- BoysenPhyto |>
-  # get rid of the zoops
-  filter(Division != 'Copepoda',
-         !Genus.Species.Variety %in% c('Daphnia','Cladocera', '	
-Copepoda: nauplius')) |>
   left_join(phyto_class)  |>
   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
   distinct()|>
@@ -53,10 +47,6 @@ Copepoda: nauplius')) |>
 
 
 BoysenPhyto_cat <- BoysenPhyto |>
-  # get rid of the zoops
-  filter(Division != 'Copepoda',
-         !Genus.Species.Variety %in% c('Daphnia','Cladocera', '	
-Copepoda: nauplius')) |>
   filter(RepNum == 0) |>
   left_join(phyto_class)  |>
   left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
@@ -85,7 +75,7 @@ ggplot(BoysenPhyto_A) +
 
 n_phyto <- BoysenPhyto_A |>
   select(Genus.Species.Variety) |>
-  distinct() # 71 species found
+  distinct() # 76 species found
 
 
 
@@ -119,6 +109,7 @@ sd_data <- BoysenNutrient |>
                                        ShortName_Revised=='Total Ammonia as N'~'NH4',
                                        ShortName_Revised=='Phosphorus as P (total)'~'TP',
                                        ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
+                                       ShortName_Revised=='Orthophosphate as P (dissolved)'~'PO4',
                                        ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
                                        ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA',
                                        ShortName_Revised == 'Secchi Depth' ~'Secchi',
@@ -160,27 +151,25 @@ dist
 adonis2(dist~Latitude, sd_data)
 adonis2(dist~WaterbodyName, sd_data, strata=sd_data$CollDate) #??
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
-adonis2(dist~month, sd_data) # sig
-adonis2(dist~julianday, sd_data) # sig
+adonis2(dist~month, sd_data) 
+adonis2(dist~julianday, sd_data) 
 adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
-adonis2(dist~TN, sd_data)
+adonis2(dist~TN, sd_data) # sig
 adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
 adonis2(dist~TN.TP, sd_data)
 adonis2(dist~NO3, sd_data)
-adonis2(dist~NH4, sd_data) # produces significant result
-adonis2(dist~PO4, sd_data) # produces significant result
-#adonis2(dist~NO3.PO4, sd_data) # sig
-#adonis2(dist~NH4.PO4, sd_data) # sig
+adonis2(dist~NH4, sd_data) 
+adonis2(dist~PO4, sd_data) 
 adonis2(dist~IN.PO4, sd_data) # sig
 adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 #adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
 adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
-adonis2(dist~DO, sd_data) # sig
+adonis2(dist~DO, sd_data) 
 adonis2(dist~Secchi, sd_data)
 adonis2(dist~H, sd_data)
-adonis2(dist~Stability, sd_data)
+adonis2(dist~Stability, sd_data) # sig
 
 
 
@@ -190,7 +179,7 @@ adonis2(dist~Stability, sd_data)
 set.seed(06261993)
 nmds <- metaMDS(dist)
 
-nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.16
+nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.17
 
 scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
@@ -204,7 +193,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month)) +
   theme_bw() +
-  facet_wrap(~Year) +
+ # facet_wrap(~Year) +
   scale_color_viridis_d('')
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
@@ -523,7 +512,8 @@ dist_wq <- as.matrix(dist_wq)
 dist_wq <- replace(dist_wq, is.na(dist_wq), 0)
 
 
-wq_dist <- vegdist(dist_wq, method = 'bray')
+wq_dist <- vegdist(dist_wq, method = '') # try daisy package and use gowers
+
 
 wq_dist
 
@@ -532,12 +522,10 @@ wq_sd_data <- sd_data |>
 
 adonis2(wq_dist~Latitude, wq_sd_data) # sig
 adonis2(wq_dist~WaterbodyName, wq_sd_data, strata=wq_sd_data$CollDate) #?? # sig
-adonis2(wq_dist~WaterbodyName, wq_sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
+adonis2(wq_dist~WaterbodyName, wq_sd_data) # sig
 adonis2(wq_dist~month, wq_sd_data) # sig
 adonis2(wq_dist~julianday, wq_sd_data) # sig
-adonis2(wq_dist~Cyanobacteria, wq_sd_data) # sig
-adonis2(wq_dist~Diatom, wq_sd_data) #sig
-adonis2(wq_dist~`Green algae`, wq_sd_data) #sig
+
 
 
 
@@ -665,6 +653,17 @@ ggplot(NP_cyano) +
   labs(x='N:P molar ratio', y='% Cyanobacteria') +
   geom_vline(xintercept = 29) +
   theme_minimal()
+
+NP_phyto <- sd_data |>
+  pivot_longer(cols=c(TN.TP, IN.PO4), names_to = 'NP_type', values_to = 'ratio') |>
+  pivot_longer(cols=c(Diatom, `Green algae`, Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate), names_to = 'phyto_cat', values_to = 'phyto%biomass')
+
+
+ggplot(NP_phyto) +
+  geom_point(aes(ratio, `phyto%biomass`, shape=NP_type, color=phyto_cat)) +
+  labs(x='N:P molar ratio', y='% Biomass') +
+  geom_vline(xintercept = 29) +
+  theme_minimal()
   
 
 # 8. Tributary Budget Plots ####
@@ -684,7 +683,7 @@ pre_bud <- BoysenTribs |>
   drop_na(ShortName_Revised) |> # removing pH and SpC for now
   select(- ChemUnits) |> # all nutrients mg/L, Discharge L/s
   pivot_wider(names_from = ShortName_Revised, values_from = ChemValue) |>
-  filter(Year < 2023) 
+  filter(Year < 2024) 
 
 chems_bud <- pre_bud |>
   select(CollDate, WaterbodyName, Year, month, TN, NH4, NO3, PO4, TP) 
@@ -785,7 +784,7 @@ plot_profile_points <- function(param,paramname) {
 
 plot_profile_points(BoysenProfile$temp_C, 'Temp')
 plot_profile_points(BoysenProfile$pH, 'pH')
-plot_profile_points(BoysenProfile$cond_ugL, 'SpC')
+plot_profile_points(BoysenProfile$cond_uScm, 'SpC')
 plot_profile_points(BoysenProfile$DO_mgL, 'DO')
 plot_profile_points(BoysenProfile$DO_percent, 'DO %')
 plot_profile_points(BoysenProfile$ORP, 'ORP')
@@ -800,6 +799,7 @@ nutrient_forms <- BoysenNutrient|>
                                                        ShortName_Revised=='Total Ammonia as N'~'NH4',
                                                        ShortName_Revised=='Phosphorus as P (total)'~'TP',
                                                        ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
+                                       ShortName_Revised=='Orthophosphate as P (dissolved)'~'PO4',
                                                        ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
                                                        ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
   mutate(form = ifelse(ShortName_Revised %in% c('TP', 'PO4'), 'P', 
@@ -1003,7 +1003,7 @@ ggplot(sd_data, aes(month, Cyanobacteria, color=WaterbodyName, group=WaterbodyNa
 
 ggplot(sd_data, aes(TN, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
-  geom_line() +
+ # geom_line() +
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='TN concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
@@ -1011,7 +1011,7 @@ ggplot(sd_data, aes(TN, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)
 
 ggplot(sd_data, aes(NO3, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
-  geom_line() +
+ # geom_line() +
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='Nitrate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
@@ -1019,7 +1019,7 @@ ggplot(sd_data, aes(NO3, Cyanobacteria, color=WaterbodyName, group=WaterbodyName
 
 ggplot(sd_data, aes(NH4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
-  geom_line() +
+  #geom_line() +
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='Ammonium concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
@@ -1027,7 +1027,7 @@ ggplot(sd_data, aes(NH4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName
 
 ggplot(sd_data, aes(TP, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
-  geom_line() +
+  #geom_line() +
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='TP concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
@@ -1035,7 +1035,7 @@ ggplot(sd_data, aes(TP, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)
 
 ggplot(sd_data, aes(PO4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
-  geom_line() +
+ # geom_line() +
   scale_color_viridis_d('', option='turbo') +
   theme_minimal() +
   labs(x='Phosphate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +

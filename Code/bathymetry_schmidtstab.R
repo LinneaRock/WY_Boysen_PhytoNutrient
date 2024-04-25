@@ -73,6 +73,8 @@ hypso <- depth_area_aggregated |>
 source('Data/CALL_DATA_LIB.R')
 library(rLakeAnalyzer)
 
+hypso <- read.csv('Data/Simplified_bathymetry.csv')
+
 
 smidts_stability <- BoysenProfile |>
   drop_na() |>
