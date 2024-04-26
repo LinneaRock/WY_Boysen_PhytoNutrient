@@ -5,67 +5,67 @@
 source('Data/CALL_DATA_LIB.R')
 
 # 1. Prep data for plotting ####
-head(BoysenNutrient)
-head(BoysenPhyto) 
-head(BoysenTribs)
+# head(BoysenNutrient)
+# head(BoysenPhyto) 
+# head(BoysenTribs)
 
-phyto_class <- read.csv('Data/phyto_class.csv') 
-
-
-
-
-BoysenPhyto_A <- BoysenPhyto |>
-  left_join(phyto_class)  |>
-  filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
-  distinct()|>
-  group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
-  mutate(indsum = sum(`Individuals (Raw Cnt)`),
-         biovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
-  ungroup() |>
-  distinct() |>
-  group_by(WaterbodyName, month, Year) |>
-  mutate(totaln=sum(indsum),
-         totalbiovolume_cellsL=sum(biovolumeSum_cellsL)) |>
-  ungroup() |>
-  distinct() |>
-  mutate(percCount =(indsum/totaln)*100,
-         percBiovolume=(biovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
-  group_by(WaterbodyName, month, Year) |>
-  mutate(checkn = sum(percCount),
-         checkbv=sum(percBiovolume)) |>
-  ungroup() |>
-  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
-# percent biovolume = percent count -- duh but needed to verify
-
-# Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
-  group_by(WaterbodyName, CollDate) |>
-  mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln)))) |>
-  ungroup()
-
-
-
-
-
-BoysenPhyto_cat <- BoysenPhyto |>
-  filter(RepNum == 0) |>
-  left_join(phyto_class)  |>
-  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
-  distinct() |>
-  group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL, H) |>
-  summarise(catsum = sum(`Individuals (Raw Cnt)`),
-            CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
-  ungroup() |>
-  mutate(Catperc =(catsum/totaln)*100,
-         CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
-  group_by(WaterbodyName, month, Year,H) |>
-  mutate(checkCat = sum(Catperc),
-         checkbv=sum(CATpercBiovolume)) |>
-  # percent biovolume = percent count -- duh but needed to verify
-  ungroup() |>
-  select(WaterbodyName, month, Year, H, cat, Catperc) |>
-  distinct() |>
-  pivot_wider(names_from = cat, values_from = Catperc) 
-BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
+# phyto_class <- read.csv('Data/phyto_class.csv') 
+# 
+# 
+# 
+# 
+# BoysenPhyto_A <- BoysenPhyto |>
+#   left_join(phyto_class)  |>
+#   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
+#   distinct()|>
+#   group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
+#   mutate(indsum = sum(`Individuals (Raw Cnt)`),
+#          biovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
+#   ungroup() |>
+#   distinct() |>
+#   group_by(WaterbodyName, month, Year) |>
+#   mutate(totaln=sum(indsum),
+#          totalbiovolume_cellsL=sum(biovolumeSum_cellsL)) |>
+#   ungroup() |>
+#   distinct() |>
+#   mutate(percCount =(indsum/totaln)*100,
+#          percBiovolume=(biovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
+#   group_by(WaterbodyName, month, Year) |>
+#   mutate(checkn = sum(percCount),
+#          checkbv=sum(percBiovolume)) |>
+#   ungroup() |>
+#   select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
+# # percent biovolume = percent count -- duh but needed to verify
+# 
+# # Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
+#   group_by(WaterbodyName, CollDate) |>
+#   mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln)))) |>
+#   ungroup()
+# 
+# 
+# 
+# 
+# 
+# BoysenPhyto_cat <- BoysenPhyto |>
+#   filter(RepNum == 0) |>
+#   left_join(phyto_class)  |>
+#   left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
+#   distinct() |>
+#   group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL, H) |>
+#   summarise(catsum = sum(`Individuals (Raw Cnt)`),
+#             CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
+#   ungroup() |>
+#   mutate(Catperc =(catsum/totaln)*100,
+#          CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
+#   group_by(WaterbodyName, month, Year,H) |>
+#   mutate(checkCat = sum(Catperc),
+#          checkbv=sum(CATpercBiovolume)) |>
+#   # percent biovolume = percent count -- duh but needed to verify
+#   ungroup() |>
+#   select(WaterbodyName, month, Year, H, cat, Catperc) |>
+#   distinct() |>
+#   pivot_wider(names_from = cat, values_from = Catperc) 
+# BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
 
 
 
@@ -105,31 +105,14 @@ sd_data <- BoysenNutrient |>
   rbind(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
-                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
-                                       ShortName_Revised=='Phosphorus as P (total)'~'TP',
-                                       ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
-                                       ShortName_Revised=='Orthophosphate as P (dissolved)'~'PO4',
-                                       ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
-                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA',
-                                       ShortName_Revised == 'Secchi Depth' ~'Secchi',
-                                       ShortName_Revised=='pH'~'pH',
-                                       ShortName_Revised=='DO, mg/L'~'DO',
-                                       ShortName_Revised=='Conductance'~'SpC',
-                                       ShortName_Revised=='Stability'~'Stability')) |>
-  filter(!is.na(ShortName_Revised)) |>
-  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate,H) |>
-  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
-  mutate(TN.TP = (TN/TP)*2.11306,
-        # NO3.PO4 = (NO3/PO4)*2.11306,
-        # NH4.PO4 = (NH4/PO4)*2.11306,
-         IN.PO4 = ((NH4+NO3)/PO4)*2.11306)
-
+   select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) 
+ 
 
 # match up data for later
 phyto_data <- BoysenPhyto_A |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month, H) |>
+  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month) |>
   left_join(sd_data) |>
   pivot_wider(names_from = Genus.Species.Variety, values_from = indsum) |>
   as.data.frame() 
@@ -137,7 +120,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -166,7 +149,7 @@ adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 #adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
 adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
-adonis2(dist~DO, sd_data) 
+adonis2(dist~DO, sd_data) #missing data
 adonis2(dist~Secchi, sd_data)
 adonis2(dist~H, sd_data)
 adonis2(dist~Stability, sd_data) # sig
@@ -179,7 +162,7 @@ adonis2(dist~Stability, sd_data) # sig
 set.seed(06261993)
 nmds <- metaMDS(dist)
 
-nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.17
+nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.18
 
 scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
@@ -297,7 +280,33 @@ ggplot() +
 
 # Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
 
-env.fit <- envfit(nmds, sd_data, permutations=999, na.rm=TRUE)
+envbio.fit <- envfit(nmds, sd_data, permutations=999, na.rm=TRUE)
+head(envbio.fit)
+# ordiplot(nmds, type='n', main='extrinsic factors')
+# plot(envbio.fit, p.max = 0.01, col = "black", cex = 0.7) 
+
+
+
+envbio.fit_df <- as.data.frame(scores(envbio.fit, display='vectors'))  #extracts relevant scores from envifit
+envbio.fit_df <- cbind(envbio.fit_df, envbio.variables = rownames(envbio.fit_df)) #and then gives them their names
+
+envbio.fit_df <- cbind(envbio.fit_df, pval = envbio.fit$vectors$pvals) # add pvalues to dataframe
+sig.envbio.fit <- subset(envbio.fit_df, pval<=0.05) #subset data to show variables significant at 0.05
+
+sig.envbio.fit
+
+#Now we have the relevant information for plotting the ordination in ggplot! Lets get plotting!
+
+ggplot() +
+  geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=Cyanobacteria)) +
+  theme_minimal() +
+  scale_color_viridis_c() +
+  geom_segment(sig.envbio.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.envbio.fit, mapping=aes(x=NMDS1, y=NMDS2, label = envbio.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+
+
+
+env.fit <- envfit(nmds, sd_data |> select(-Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate), permutations=999, na.rm=TRUE)
 head(env.fit)
 # ordiplot(nmds, type='n', main='extrinsic factors')
 # plot(env.fit, p.max = 0.01, col = "black", cex = 0.7) 
@@ -320,6 +329,7 @@ ggplot() +
   scale_color_viridis_c() +
   geom_segment(sig.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = env.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+
 
 
 
@@ -463,10 +473,12 @@ ggplot(combo_phyto_env_kmdist, aes(site_dist_km, phyto_dist)) +
 
 ggplot(combo_phyto_env_kmdist |> filter(!is.na(matchyear)), aes(site_dist_km, env_dist)) +
   geom_point() +
+  geom_smooth(method='glm')+
   facet_wrap(~matchyear)
 
 ggplot(combo_phyto_env_kmdist |> filter(!is.na(matchyear)), aes(site_dist_km, phyto_dist)) +
   geom_point() +
+  geom_smooth(method='glm')+
   facet_wrap(~matchyear)
 
 ### 3aD Community comparisons by temporal distance ####
@@ -486,7 +498,8 @@ date_distance_daisy <- comm.dist.ls |>
          date_distance = Var2_fakedate-Var1_fakedate) |>
   mutate(matchyear=case_when(Var1_Yr==2020 & Var2_Yr==2020~2020,
                              Var1_Yr==2021 & Var2_Yr==2021~2021,
-                             Var1_Yr==2022 & Var2_Yr==2022~2022))
+                             Var1_Yr==2022 & Var2_Yr==2022~2022,
+                             Var1_Yr==2023 & Var2_Yr==2023~2023))
 
 
 ggplot(date_distance_daisy, aes(date_distance, value)) +
@@ -495,6 +508,7 @@ ggplot(date_distance_daisy, aes(date_distance, value)) +
 # within years 
 ggplot(date_distance_daisy |> filter(!is.na(matchyear)), aes(date_distance, value)) +
   geom_jitter() +
+  geom_smooth(method='loess')+
   facet_wrap(~matchyear)
 
 
@@ -512,13 +526,13 @@ dist_wq <- as.matrix(dist_wq)
 dist_wq <- replace(dist_wq, is.na(dist_wq), 0)
 
 
-wq_dist <- vegdist(dist_wq, method = '') # try daisy package and use gowers
+wq_dist <- daisy(scale(dist_wq), metric = 'gower') # try daisy/cluster package and use gowers
 
 
 wq_dist
 
 wq_sd_data <- sd_data |>
-  filter(CollDate != '2021-05-18')
+  filter(Group %in% rownames(dist_wq))
 
 adonis2(wq_dist~Latitude, wq_sd_data) # sig
 adonis2(wq_dist~WaterbodyName, wq_sd_data, strata=wq_sd_data$CollDate) #?? # sig
@@ -532,7 +546,7 @@ adonis2(wq_dist~julianday, wq_sd_data) # sig
 set.seed(06261993)
 wq_nmds <- metaMDS(wq_dist)
 
-wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.07
+wq_nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.17
 
 wq_scores <- scores(wq_nmds) |>
   as_tibble(rownames='Group') |>
@@ -600,7 +614,7 @@ ggplot() +
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability) |>
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -660,10 +674,11 @@ NP_phyto <- sd_data |>
 
 
 ggplot(NP_phyto) +
-  geom_point(aes(ratio, `phyto%biomass`, shape=NP_type, color=phyto_cat)) +
+  geom_point(aes(ratio, `phyto%biomass`, color=phyto_cat)) +
   labs(x='N:P molar ratio', y='% Biomass') +
   geom_vline(xintercept = 29) +
-  theme_minimal()
+  theme_bw() +
+  facet_wrap(~NP_type, scales='free')
   
 
 # 8. Tributary Budget Plots ####
@@ -673,7 +688,7 @@ q_interval <- 2.628e+6 # seconds/month
 
 pre_bud <- BoysenTribs |>
   mutate(month=month(CollDate, label=TRUE, abbr=TRUE)) |>
-  filter(between(Year, 2020,2022)) |>
+  filter(between(Year, 2020,2023)) |>
   mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN', 
                                        ShortName_Revised=='Total Ammonia as N'~'NH4', 
                                        ShortName_Revised=='Phosphorus as P (total)'~'TP',

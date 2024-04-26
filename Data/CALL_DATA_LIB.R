@@ -30,10 +30,11 @@ ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv',
          HUC12=as.numeric(HUC12)) ) |>
   # for all values below detection, make them half the reporting limit. In all cases of below detection, the reported value is the reporting limit. It is not always consistent, sometimes due to sample volume limits, matrix interference, laboratory instrument limitations, etc., the limits for individual analyte results are more or less than standard reporting limits. <- from personal communication with chloe Schaub and Eric Hargett at DEQ April 2024
   mutate(ChemValue = ifelse(BelowDet==1, ChemValue/2,ChemValue)) |>
+  select(-BelowDet) |>
   mutate(Year = year(CollDate)) |>
   filter(Year >= 2020) |>
   mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
-  mutate(julianday=yday(CollDate))
+  mutate(julianday=yday(CollDate)) 
 
 # filter for Boysen data
 BoysenNutrient <- ChemPhys |>
@@ -43,13 +44,36 @@ BoysenNutrient <- ChemPhys |>
   mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
   filter(ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N", "Orthophosphate as P (dissolved)")) |> # for now just keep at the nutrients and chlorophyll
   distinct() |>  # remove duplicates 
   group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct() 
+  distinct() |>
+  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
+                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
+                                       ShortName_Revised=='Phosphorus as P (total)'~'TP',
+                                       ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
+                                       ShortName_Revised=='Orthophosphate as P (dissolved)'~'PO4',
+                                       ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
+                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) 
+
+
+stoich <- BoysenNutrient |>
+  select(-ChemUnits,-SampleDepth) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
+  mutate(TN.TP = (TN/TP)*2.11306,
+         IN.PO4 = ((NH4+NO3)/PO4)*2.11306) |>
+  select(-c(PO4,NH4,TP,TN,NO3,CHLA)) |>
+  mutate(ChemUnits='molar ratio') |>
+  pivot_longer(c(TN.TP, IN.PO4), names_to = 'ShortName_Revised', values_to = 'ChemValue')
+
+BoysenNutrient <- BoysenNutrient |>
+  bind_rows(stoich)
+
+rm(stoich)
+  
 
 
 BoysenNutrient$WaterbodyName = trimws(BoysenNutrient$WaterbodyName) 
@@ -67,13 +91,22 @@ BoysenChem <- ChemPhys |>
   mutate(ChemUnits = sub('/l', '/L', ChemUnits)) |>
   # unite(col=Param, ShortName_Revised, ChemUnits, sep='_') |> # combine name and units
   # mutate(Param= gsub('[^[:alnum:]]+', '_', Param)) |> # fix for column header (for now)
-  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, BelowDet, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
+  dplyr::select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, ChemValue, ChemUnits, SampleDepth) |> # keep just what is interesting now
   filter(!ShortName_Revised %in% c("Phosphorus as P (total)","Total Nitrogen (unfiltered)","Nitrate as N", "Orthophosphate as P (total)","Nitrate plus Nitrite as N","Total Ammonia as N","Chlorophyll a (phytoplankton)","Total Kjeldahl Nitrogen (unfiltered)","Nitrite as N", "Orthophosphate as P (dissolved)")) |> # for now just keep at the nutrients and chlorophyll
   distinct() |>  # remove duplicates 
   group_by(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, ShortName_Revised, ChemUnits, SampleDepth) |>
   mutate(ChemValue = mean(ChemValue)) |> # take average of replicates
   ungroup() |>
-  distinct()  
+  distinct() |>
+  mutate(ShortName_Revised = case_when(
+    ShortName_Revised == 'Secchi Depth' ~'Secchi',
+    ShortName_Revised=='pH'~'pH',
+    ShortName_Revised=='DO, mg/L'~'DO',
+    ShortName_Revised=='Conductance'~'SpC',
+    ShortName_Revised=='Stability'~'Stability',
+    ShortName_Revised=='Temp'~'Temp')) |>
+  # getting rid of other variables for now
+  drop_na(ShortName_Revised)
 
 BoysenChem$WaterbodyName = trimws(BoysenChem$WaterbodyName)
 
@@ -83,6 +116,10 @@ BoysenChem <- BoysenChem |>
 
 
 
+# remove funky data from DO and temp
+BoysenChem <- BoysenChem |>
+  mutate(ChemValue=ifelse(ShortName_Revised=='DO' & ChemValue<0.5, NA, ChemValue),
+         ChemValue=ifelse(ShortName_Revised=='Temp' & ChemValue<6, NA, ChemValue))
 
 # tributary and outlet data
 BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
@@ -140,7 +177,82 @@ rm(annoyingworkaroundfornames)
 
 
 
+# read in cyano toxin data and filter for presence/absence 
+cyanotoxin <- read_xlsx('Data/cyano_data.xlsx') |>
+  mutate(CollDate=as.Date(CollDate),
+         Anatoxin_a_ugL=as.numeric(Anatoxin_a_ugL),
+         Microcysitn_ugL=as.numeric(Microcysitn_ugL)) |>
+  mutate(toxinpresent = ifelse(is.na(Anatoxin_a_ugL) & is.na(Microcysitn_ugL), NA, 'Y')) |>
+  select(-Anatoxin_a_ugL, -Microcysitn_ugL) |>
+  filter(toxinpresent=='Y' |
+           !is.na(Advisory)) |>
+  distinct() 
 
 
 
+# combine data for easier to use all boysen dataframe
+phyto_class <- read.csv('Data/phyto_class.csv') 
 
+BoysenPhyto_A <- BoysenPhyto |>
+  left_join(phyto_class)  |>
+  filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
+  distinct()|>
+  group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
+  mutate(indsum = sum(`Individuals (Raw Cnt)`),
+         biovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
+  ungroup() |>
+  distinct() |>
+  group_by(WaterbodyName, month, Year) |>
+  mutate(totaln=sum(indsum),
+         totalbiovolume_cellsL=sum(biovolumeSum_cellsL)) |>
+  ungroup() |>
+  distinct() |>
+  mutate(percCount =(indsum/totaln)*100,
+         percBiovolume=(biovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
+  group_by(WaterbodyName, month, Year) |>
+  mutate(checkn = sum(percCount),
+         checkbv=sum(percBiovolume)) |>
+  ungroup() |>
+  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
+  # percent biovolume = percent count -- duh but needed to verify
+  
+  # Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
+  group_by(WaterbodyName, CollDate) |>
+  mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln)))) |>
+  ungroup()
+
+
+H <- BoysenPhyto_A |>
+  select(WaterbodyName,CollDate,H) |>
+  left_join(BoysenNutrient |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday)) |>
+  distinct() |>
+  pivot_longer(H, names_to = 'ShortName_Revised',values_to = 'ChemValue') 
+
+
+BoysenChem <- BoysenChem |>
+  bind_rows(H)
+
+
+BoysenPhyto_cat <- BoysenPhyto |>
+  filter(RepNum == 0) |>
+  left_join(phyto_class)  |>
+  left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
+  distinct() |>
+  group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL, H) |>
+  summarise(catsum = sum(`Individuals (Raw Cnt)`),
+            CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
+  ungroup() |>
+  mutate(Catperc =(catsum/totaln)*100,
+         CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
+  group_by(WaterbodyName, month, Year,H) |>
+  mutate(checkCat = sum(Catperc),
+         checkbv=sum(CATpercBiovolume)) |>
+  # percent biovolume = percent count -- duh but needed to verify
+  ungroup() |>
+  select(WaterbodyName, month, Year, H, cat, Catperc) |>
+  distinct() |>
+  pivot_wider(names_from = cat, values_from = Catperc) 
+BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
+
+
+rm(H)
