@@ -4,71 +4,7 @@
 
 source('Data/CALL_DATA_LIB.R')
 
-# 1. Prep data for plotting ####
-# head(BoysenNutrient)
-# head(BoysenPhyto) 
-# head(BoysenTribs)
-
-# phyto_class <- read.csv('Data/phyto_class.csv') 
-# 
-# 
-# 
-# 
-# BoysenPhyto_A <- BoysenPhyto |>
-#   left_join(phyto_class)  |>
-#   filter(RepNum == 0) |> #only keep first counts  to avoid the insane confusion I had when I ignored this column
-#   distinct()|>
-#   group_by(WaterbodyName, CollDate, month, Year, Genus.Species.Variety) |>
-#   mutate(indsum = sum(`Individuals (Raw Cnt)`),
-#          biovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
-#   ungroup() |>
-#   distinct() |>
-#   group_by(WaterbodyName, month, Year) |>
-#   mutate(totaln=sum(indsum),
-#          totalbiovolume_cellsL=sum(biovolumeSum_cellsL)) |>
-#   ungroup() |>
-#   distinct() |>
-#   mutate(percCount =(indsum/totaln)*100,
-#          percBiovolume=(biovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
-#   group_by(WaterbodyName, month, Year) |>
-#   mutate(checkn = sum(percCount),
-#          checkbv=sum(percBiovolume)) |>
-#   ungroup() |>
-#   select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
-# # percent biovolume = percent count -- duh but needed to verify
-# 
-# # Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
-#   group_by(WaterbodyName, CollDate) |>
-#   mutate(H=sum(abs(log(indsum/totaln)*(indsum/totaln)))) |>
-#   ungroup()
-# 
-# 
-# 
-# 
-# 
-# BoysenPhyto_cat <- BoysenPhyto |>
-#   filter(RepNum == 0) |>
-#   left_join(phyto_class)  |>
-#   left_join(BoysenPhyto_A |> select(WaterbodyName, Year, H, month, totaln, totalbiovolume_cellsL)) |>
-#   distinct() |>
-#   group_by(WaterbodyName, CollDate, month, Year, cat, totaln, totalbiovolume_cellsL, H) |>
-#   summarise(catsum = sum(`Individuals (Raw Cnt)`),
-#             CATbiovolumeSum_cellsL=sum(`Density (cells/L)`)) |>
-#   ungroup() |>
-#   mutate(Catperc =(catsum/totaln)*100,
-#          CATpercBiovolume=(CATbiovolumeSum_cellsL/totalbiovolume_cellsL)*100) |>
-#   group_by(WaterbodyName, month, Year,H) |>
-#   mutate(checkCat = sum(Catperc),
-#          checkbv=sum(CATpercBiovolume)) |>
-#   # percent biovolume = percent count -- duh but needed to verify
-#   ungroup() |>
-#   select(WaterbodyName, month, Year, H, cat, Catperc) |>
-#   distinct() |>
-#   pivot_wider(names_from = cat, values_from = Catperc) 
-# BoysenPhyto_cat <- replace(BoysenPhyto_cat, is.na(BoysenPhyto_cat), 0)
-
-
-
+# 1. Prep/check data for plotting ####
 ggplot(BoysenPhyto_A) +
   geom_bar(aes(month, percCount, fill=Genus.Species.Variety), stat='identity') +
   facet_wrap(WaterbodyName~Year)
@@ -679,6 +615,31 @@ ggplot(NP_phyto) +
   geom_vline(xintercept = 29) +
   theme_bw() +
   facet_wrap(~NP_type, scales='free')
+  
+  
+  
+  ## 7a phytos ####
+nutrients_phytos <- NP_phyto |>
+  pivot_longer(cols=c(TN, TP, NO3, NH4, PO4), names_to = 'nutrients', values_to = 'concentration')
+
+
+ggplot(nutrients_phytos) +
+  geom_point(aes(concentration, `phyto%biomass`, color=phyto_cat)) +
+  labs(x='Nutrient concentration'~(mg~L^-1), y='% Biomass') +
+  theme_bw() +
+  facet_wrap(~nutrients, scales='free')
+
+
+ggplot(nutrients_phytos) +
+  geom_point(aes(CHLA, `phyto%biomass`, color=phyto_cat)) +
+  labs(x='Chlorophyll-a concentration'~(mu*g~L^-1), y='% Biomass') +
+  theme_bw() 
+
+
+ggplot(nutrients_phytos) +
+  geom_point(aes(concentration, CHLA, color=nutrients)) +
+  labs(y='Chlorophyll-a concentration '~(mu*g~L^-1), y='Nutrient concentration'~(mg~L^-1)) +
+  theme_bw() 
   
 
 # 8. Tributary Budget Plots ####
