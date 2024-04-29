@@ -182,7 +182,7 @@ cyanotoxin <- read_xlsx('Data/cyano_data.xlsx') |>
   mutate(CollDate=as.Date(CollDate),
          Anatoxin_a_ugL=as.numeric(Anatoxin_a_ugL),
          Microcysitn_ugL=as.numeric(Microcysitn_ugL)) |>
-  mutate(toxinpresent = ifelse(is.na(Anatoxin_a_ugL) & is.na(Microcysitn_ugL), NA, 'Y')) |>
+  mutate(toxinpresent = ifelse(is.na(Anatoxin_a_ugL) & is.na(Microcysitn_ugL), 'N', 'Y')) |>
   select(-Anatoxin_a_ugL, -Microcysitn_ugL) |>
   filter(toxinpresent=='Y' |
            !is.na(Advisory)) |>
