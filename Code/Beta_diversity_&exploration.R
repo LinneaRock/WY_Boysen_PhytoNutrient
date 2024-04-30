@@ -38,7 +38,7 @@ library(vegan)
 # I need all my other variables with a Grouping variable column to match with the dist data
 # create metadata 
 sd_data <- BoysenNutrient |>
-  rbind(BoysenChem) |>
+  bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
    select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
@@ -91,7 +91,7 @@ adonis2(dist~H, sd_data)
 adonis2(dist~Stability, sd_data) # sig
 
 
-
+psych::pairs.panels(sd_data |> select(-c(1:8)))
 
 # 3. NMDS and 4. BETA DIVERSITY DISPERSION ####
 #beta Dispersion plot --- I think these are the NMDS plots?????? 
@@ -253,7 +253,7 @@ env.fit_df <- as.data.frame(scores(env.fit, display='vectors'))  #extracts relev
 env.fit_df <- cbind(env.fit_df, env.variables = rownames(env.fit_df)) #and then gives them their names
 
 env.fit_df <- cbind(env.fit_df, pval = env.fit$vectors$pvals) # add pvalues to dataframe
-sig.env.fit <- subset(env.fit_df, pval<=0.05) #subset data to show variables significant at 0.05
+sig.env.fit <- subset(env.fit_df, pval<=0.5) #subset data to show variables significant at 0.5 - weak evidence/trend exists
 
 sig.env.fit
 
@@ -268,6 +268,15 @@ ggplot() +
 
 
 
+# look at deepest points vs other locations on NMDS, any clustering there? 
+sd_data_siteType <- scores |>
+  mutate(type = ifelse(grepl('Transitional',WaterbodyName), 'Reservoir - transitional',
+                       ifelse(grepl('Riverine',WaterbodyName), 'Reservoir - riverine',
+                              ifelse(grepl('Lacustrine',WaterbodyName), 'Reservoir - lacustrine', 'Reservoir-bays and shores'))))
+
+ggplot(sd_data_siteType, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=type)) +
+  theme_minimal() 
 
 # 3a - Pairwise beta diversity metrics!! ####
 # from Jordy 

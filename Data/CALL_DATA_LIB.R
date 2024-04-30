@@ -15,6 +15,19 @@ SS <- read.csv('Data/Schmidts_Stability.csv') |>
   select(-Year, -Month)
 
 
+
+# get profile data and do annoying things to get names right
+BoysenProfile <- read.csv('Data/profiles.csv') |>
+  mutate(CollDate=as.Date(CollDate, format='%m/%d/%Y'))
+#there's a space at the beginning of all the waterbody names :( 
+annoyingworkaroundfornames <- sub('.', '', BoysenProfile$WaterbodyName)
+BoysenProfile <- BoysenProfile |>
+  select(-WaterbodyName) |>
+  mutate(WaterbodyName=annoyingworkaroundfornames)
+
+rm(annoyingworkaroundfornames)
+
+
 # all WY chem data
 ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv', 
                      fileEncoding="latin1") |>
@@ -117,9 +130,34 @@ BoysenChem <- BoysenChem |>
 
 
 # remove funky data from DO and temp
+
 BoysenChem <- BoysenChem |>
-  mutate(ChemValue=ifelse(ShortName_Revised=='DO' & ChemValue<0.5, NA, ChemValue),
+  #Lacustrine Pelagic: Dam 2021-09-15 DO doesn't make sense
+  mutate(ChemValue=ifelse(ShortName_Revised=='DO' & ChemValue<0.5, NA, ChemValue), # looking at the profiles, the DO values are near zero through water column this day. seems like something is wrong 
+    #Tough Creek Campground 2023-08-16 - this was definitely a misreport or faulty sensor. 
          ChemValue=ifelse(ShortName_Revised=='Temp' & ChemValue<6, NA, ChemValue))
+
+# replace funky data manually:
+## from profile for TCC temperature
+replace_value_temp <- as.numeric(BoysenProfile |>
+  filter(WaterbodyName =='Tough Creek Campground' &
+           CollDate==as.Date('2023-08-16') &
+           between(depth_m, 0, 1)) |>
+  summarise(mean(temp_C)))
+
+## using average value from other data collected at surface in September in LPD
+replace_value_do <- as.numeric(BoysenChem |>
+                                   filter(WaterbodyName =='Lacustrine Pelagic: Dam' &
+                                            month=='Sep',
+                                          ShortName_Revised=='DO') |>
+                                   summarise(mean(ChemValue, na.rm = TRUE)))
+
+BoysenChem <- BoysenChem |>
+  mutate(ChemValue= ifelse(ShortName_Revised=='Temp' & is.na(ChemValue), replace_value_temp, ChemValue),
+         ChemValue= ifelse(ShortName_Revised=='DO' & is.na(ChemValue), replace_value_do, ChemValue))
+
+rm(replace_value_do)
+rm(replace_value_temp)
 
 # tributary and outlet data
 BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
@@ -161,19 +199,6 @@ BoysenPhyto <- BoysenNutrient |>
   mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
   unique()
 
-
-
-
-# get profile data and do annoying things to get names right
-BoysenProfile <- read.csv('Data/profiles.csv') |>
-  mutate(CollDate=as.Date(CollDate, format='%m/%d/%Y'))
-#there's a space at the beginning of all the waterbody names :( 
-annoyingworkaroundfornames <- sub('.', '', BoysenProfile$WaterbodyName)
-BoysenProfile <- BoysenProfile |>
-  select(-WaterbodyName) |>
-  mutate(WaterbodyName=annoyingworkaroundfornames)
-  
-rm(annoyingworkaroundfornames)
 
 
 
