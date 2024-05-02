@@ -23,7 +23,10 @@ BoysenProfile <- read.csv('Data/profiles.csv') |>
 annoyingworkaroundfornames <- sub('.', '', BoysenProfile$WaterbodyName)
 BoysenProfile <- BoysenProfile |>
   select(-WaterbodyName) |>
-  mutate(WaterbodyName=annoyingworkaroundfornames)
+  mutate(WaterbodyName=annoyingworkaroundfornames) |>
+  group_by(WaterbodyName, CollDate) |>
+  mutate(maxdepth = max(depth_m)) |>
+  ungroup()
 
 rm(annoyingworkaroundfornames)
 
@@ -47,7 +50,7 @@ ChemPhys <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv',
   mutate(Year = year(CollDate)) |>
   filter(Year >= 2020) |>
   mutate(month = month(CollDate, label=TRUE, abbr=TRUE)) |>
-  mutate(julianday=yday(CollDate)) 
+  mutate(julianday=yday(CollDate))
 
 # filter for Boysen data
 BoysenNutrient <- ChemPhys |>
@@ -125,7 +128,8 @@ BoysenChem$WaterbodyName = trimws(BoysenChem$WaterbodyName)
 
 
 BoysenChem <- BoysenChem |> 
-  bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS, ChemUnits) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability'))
+  bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS, ChemUnits) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability')) |>
+  left_join(BoysenProfile |> select(WaterbodyName, CollDate, maxdepth) |> distinct())
 
 
 

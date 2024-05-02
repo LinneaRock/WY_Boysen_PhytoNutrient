@@ -5,7 +5,7 @@ library(sp)
 # Call in bathy data made by Sean ####
 
 #If using the tif DEM
-boysen_bathy <- rast("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
+boysen_bathy <- rast("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
 
 #To plot contours easily all you have to do is:
 contour(boysen_bathy) #this only works with the raster not the vector
@@ -86,10 +86,11 @@ smidts_stability <- BoysenProfile |>
   group_by(WaterbodyName, CollDate) |>
   summarise(SS = schmidt.stability(temp, depth, hypso$areas, hypso$depths, sal=0)) |>
   as.data.frame() |>
+  mutate(SS = ifelse(SS<0,0,SS)) |> # two points where stability is <0, that defies laws of physics so make 0
   mutate(Year = year(CollDate),
          Month = month(CollDate, label=TRUE, abbr=TRUE)) |>
   group_by(Year,Month) |>
-  mutate(average_mon_whole_SS = mean(SS))
+  mutate(average_mon_whole_SS = mean(SS)) 
 
 ggplot(smidts_stability) +
   geom_point(aes(Month, SS, color=WaterbodyName)) +
@@ -110,4 +111,5 @@ ggplot(smidts_stability) +
 
 write.csv(smidts_stability, 'Data/Schmidts_Stability.csv')
 write.csv(hypso, 'Data/Simplified_bathymetry.csv')
+
 
