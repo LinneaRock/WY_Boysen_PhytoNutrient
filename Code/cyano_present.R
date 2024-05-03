@@ -4,6 +4,8 @@
 
 source('Data/CALL_DATA_LIB.R')
 
+# 1. Quick look at parameters ####
+
 nutrient_summarise <- BoysenNutrient |>
   group_by(CollDate, Year, ShortName_Revised) |>
   summarise(mean = mean(ChemValue),
@@ -30,14 +32,15 @@ ggplot(data_summarise) +
   facet_wrap(~ShortName_Revised, scales='free',nrow=5) 
 
 
-# logistic regression for cyanos present/not present ####
+# 2. Logistic regression for cyanos present/not present ####
 cyano_prep <- cyanotoxin |>
   mutate(month = month(CollDate,label=TRUE,abbr=TRUE),
          Year=year(CollDate)) |>
   select(-CollDate, -Advisory) |>
   mutate(toxinpresent=as.character(toxinpresent)) |>
   mutate(toxinpresent=ifelse(toxinpresent=='N',0,1)) |>
-  filter(toxinpresent != 0)
+  filter(toxinpresent != 0) |>
+  distinct()
 
 
 
@@ -127,8 +130,6 @@ ggplot(logistic_data, mapping = aes(Secchi, toxinpresent)) +
 # summary(m.4)
 
 
-
-
 # I don't want to lose everything by dropping NAs, but the stepwise model finder can't handle NAs :( 
 
 # logistic_data_nona <- drop_na(logistic_data)
@@ -160,3 +161,36 @@ ggplot(logistic_data, mapping = aes(Secchi, toxinpresent)) +
 #     align = c("l", "r", "r", "r", "r"),
 #     format.args = list(big.mark = ",")
 #   )
+
+
+# 3. Before, during, after Cyanos ####
+bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  # i wish i could figure out how to code this instead of manually, but idk how
+  # 2020
+  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
+                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
+  # 2021
+  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2022
+  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2023
+  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))
+
+library(ggpubr)
+ggplot(bda_cyano) +
+  geom_boxplot(aes(toxinpresent, ChemValue)) +
+  geom_jitter(aes(toxinpresent, ChemValue, color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d(option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  facet_wrap(~ShortName_Revised, scales='free')
+  
+  
+
+
+
+
+
+
