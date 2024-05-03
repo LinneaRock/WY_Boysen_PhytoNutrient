@@ -56,7 +56,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -73,7 +73,7 @@ adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in ter
 adonis2(dist~month, sd_data) 
 adonis2(dist~julianday, sd_data) 
 adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
-adonis2(dist~TN, sd_data) # sig
+adonis2(dist~TN, sd_data) 
 adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
 adonis2(dist~TN.TP, sd_data)
@@ -85,10 +85,11 @@ adonis2(dist~Cyanobacteria, sd_data) # produces significant result
 #adonis2(dist~TN.TP+NO3.PO4+NH4.PO4+IN.PO4+TN*TP*NO3*NH4*PO4, sd_data) # interesting result potentially here with interactions of N and P
 adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
-adonis2(dist~DO, sd_data) #missing data
+adonis2(dist~DO, sd_data) 
 adonis2(dist~Secchi, sd_data)
 adonis2(dist~H, sd_data)
 adonis2(dist~Stability, sd_data) # sig
+adonis2(dist~maxdepth, sd_data)
 
 
 psych::pairs.panels(sd_data |> select(-c(1:8)))
@@ -253,7 +254,7 @@ env.fit_df <- as.data.frame(scores(env.fit, display='vectors'))  #extracts relev
 env.fit_df <- cbind(env.fit_df, env.variables = rownames(env.fit_df)) #and then gives them their names
 
 env.fit_df <- cbind(env.fit_df, pval = env.fit$vectors$pvals) # add pvalues to dataframe
-sig.env.fit <- subset(env.fit_df, pval<=0.5) #subset data to show variables significant at 0.5 - weak evidence/trend exists
+sig.env.fit <- subset(env.fit_df, pval<=0.1) #subset data to show variables significant at 0.1 - weak evidence/trend exists
 
 sig.env.fit
 
@@ -470,7 +471,7 @@ dist_wq <- dist_wq[,-1]
 dist_wq <- as.matrix(dist_wq)
 dist_wq <- replace(dist_wq, is.na(dist_wq), 0)
 
-
+library(cluster)
 wq_dist <- daisy(scale(dist_wq), metric = 'gower') # try daisy/cluster package and use gowers
 
 
@@ -485,6 +486,7 @@ adonis2(wq_dist~WaterbodyName, wq_sd_data) # sig
 adonis2(wq_dist~month, wq_sd_data) # sig
 adonis2(wq_dist~julianday, wq_sd_data) # sig
 
+adonis2(wq_dist~Cyanobacteria, wq_sd_data)
 
 
 
@@ -526,6 +528,16 @@ ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
   scale_color_viridis_c()
 
 
+ggplot(wq_scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=maxdepth)) +
+  theme_minimal() +
+  scale_color_viridis_c()
+
+
+ggplot(sd_data, aes(maxdepth, Stability)) +
+  geom_point()
+
+
 
 wq.env.fit <- envfit(wq_nmds, wq_sd_data, permutations=999, na.rm=TRUE)
 head(wq.env.fit)
@@ -559,7 +571,7 @@ ggplot() +
 #rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp) |>
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -598,7 +610,8 @@ ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
                position = position_dodge(width=0.6)) +
   theme_minimal() +
   labs(y=NULL,
-       x="Relative Abundance (%)")
+       x="Relative Abundance (%)") +
+  scale_color_viridis_d(option='turbo')
 
 
 # 7. %cyano plot from Smith 1983 ####
@@ -873,31 +886,31 @@ ggplot(BoysenChem |>
 
 # 13. storage-discharge relationships ? ####
 ## not good -- all have really bad R2. Data don't even look linear when plotted. This just won't work unfortunately 
-storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
-  mutate(CollDate = as.Date(Datetime..UTC.)) |>
-  rename(Storage_AF = Result)
-
-storage_discharge <- BoysenTribs |>
-  filter(ShortName_Revised == 'Discharge') |>
-  left_join(storage |> select(CollDate, Storage_AF))
-
-ggplot(storage_discharge,aes(Storage_AF, ChemValue)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  facet_wrap(~WaterbodyName, scales='free')
-
-WR_out_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Outlet'))
-summary(WR_out_lm)
-
-WR_in_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Inlet'))
-summary(WR_in_lm)
-
-MC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Muddy Creek'))
-summary(MC_lm)
-
-FMC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Fivemile Creek'))
-summary(FMC_lm)
-
+# storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+#   mutate(CollDate = as.Date(Datetime..UTC.)) |>
+#   rename(Storage_AF = Result)
+# 
+# storage_discharge <- BoysenTribs |>
+#   filter(ShortName_Revised == 'Discharge') |>
+#   left_join(storage |> select(CollDate, Storage_AF))
+# 
+# ggplot(storage_discharge,aes(Storage_AF, ChemValue)) +
+#   geom_point() +
+#   geom_smooth(method='lm') +
+#   facet_wrap(~WaterbodyName, scales='free')
+# 
+# WR_out_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Outlet'))
+# summary(WR_out_lm)
+# 
+# WR_in_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Wind River Inlet'))
+# summary(WR_in_lm)
+# 
+# MC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Muddy Creek'))
+# summary(MC_lm)
+# 
+# FMC_lm <- lm(ChemValue~Storage_AF, storage_discharge|>filter(WaterbodyName=='Fivemile Creek'))
+# summary(FMC_lm)
+# 
 
 
 
@@ -907,31 +920,31 @@ summary(FMC_lm)
 
 
 ## not good -- all have really bad R2. Data don't even look linear when plotted. This just won't work unfortunately 
-precip <- read.csv('Data/PRISM_ppt_mm.csv',skip=10) |>
-  mutate(CollDate = as.Date(Date)) |>
-  rename(precip_mm = ppt..mm.) |>
-  select(-Date)
-
-precip_discharge <- BoysenTribs |>
-  filter(ShortName_Revised == 'Discharge') |>
-  left_join(precip)
-
-ggplot(precip_discharge,aes(precip_mm, ChemValue)) +
-  geom_point() +
-  geom_smooth(method='lm') +
-  facet_wrap(~WaterbodyName, scales='free')
-
-WR_out_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Outlet'))
-summary(WR_out_lm)
-
-WR_in_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Inlet'))
-summary(WR_in_lm)
-
-MC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Muddy Creek'))
-summary(MC_lm)
-
-FMC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Fivemile Creek'))
-summary(FMC_lm)
+# precip <- read.csv('Data/PRISM_ppt_mm.csv',skip=10) |>
+#   mutate(CollDate = as.Date(Date)) |>
+#   rename(precip_mm = ppt..mm.) |>
+#   select(-Date)
+# 
+# precip_discharge <- BoysenTribs |>
+#   filter(ShortName_Revised == 'Discharge') |>
+#   left_join(precip)
+# 
+# ggplot(precip_discharge,aes(precip_mm, ChemValue)) +
+#   geom_point() +
+#   geom_smooth(method='lm') +
+#   facet_wrap(~WaterbodyName, scales='free')
+# 
+# WR_out_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Outlet'))
+# summary(WR_out_lm)
+# 
+# WR_in_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Wind River Inlet'))
+# summary(WR_in_lm)
+# 
+# MC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Muddy Creek'))
+# summary(MC_lm)
+# 
+# FMC_lm <- lm(ChemValue~precip_mm, precip_discharge|>filter(WaterbodyName=='Fivemile Creek'))
+# summary(FMC_lm)
 
 
 

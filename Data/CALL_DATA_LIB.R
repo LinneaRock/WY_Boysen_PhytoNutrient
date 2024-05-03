@@ -129,7 +129,7 @@ BoysenChem$WaterbodyName = trimws(BoysenChem$WaterbodyName)
 
 BoysenChem <- BoysenChem |> 
   bind_rows(SS |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, SS, ChemUnits) |> rename(ChemValue=SS) |> mutate(ShortName_Revised='Stability')) |>
-  left_join(BoysenProfile |> select(WaterbodyName, CollDate, maxdepth) |> distinct())
+  bind_rows(BoysenProfile |> left_join(BoysenNutrient |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday)) |> select(StationID, WaterbodyName, Latitude, Longitude, CollDate, Year, month, julianday, maxdepth) |> distinct() |> pivot_longer(maxdepth, names_to = 'ShortName_Revised', values_to = 'ChemValue') |> mutate(ChemUnits='m'))
 
 
 
@@ -171,7 +171,12 @@ BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
   mutate(WaterbodyName = case_when(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY'~'Wind River Outlet',
                                    WaterbodyName=='WIND RIVER AB BOYSEN RESERVOIR, NR SHOSHONI, WY'~'Wind River Inlet',
                                    WaterbodyName=='FIVEMILE CREEK NEAR SHOSHONI, WY'~'Fivemile Creek',
-                                   WaterbodyName=='MUDDY CREEK NEAR SHOSHONI, WY'~'Muddy Creek'))
+                                   WaterbodyName=='MUDDY CREEK NEAR SHOSHONI, WY'~'Muddy Creek')) |>
+  mutate(DrainageArea_ha = DrainageArea * 258.999) |>
+  select(-DrainageArea)
+
+TribLoadFlux <- read.csv('Data/trib_load_flux.csv') |>
+  select(-X)
 
 
 library(readr)
