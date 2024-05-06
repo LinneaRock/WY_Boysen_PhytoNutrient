@@ -96,8 +96,12 @@ Trib_loading <- BoysenTribs_data |>
          TP_flux_kg_ha =  TP_load_kg/DrainageArea_ha,
          NH4_flux_kg_ha = NH4_load_kg/DrainageArea_ha,
          NO3_flux_kg_ha = NO3_load_kg/DrainageArea_ha,
-         PO4_flux_kg_ha = PO4_load_kg/DrainageArea_ha)|>
-  # get total load from all tribs each month 
+         PO4_flux_kg_ha = PO4_load_kg/DrainageArea_ha)
+
+
+# get total load from all tribs each month - do not inlcude outlet
+loading <- Trib_loading|>
+  filter(WaterbodyName != 'Wind River Outlet') |>
   group_by(month, Year) |>
   mutate(TotalTrib_TN_kg = sum(TN_load_kg, na.rm=TRUE),
          TotalTrib_TP_kg = sum(TP_load_kg, na.rm=TRUE),
@@ -105,6 +109,8 @@ Trib_loading <- BoysenTribs_data |>
          TotalTrib_NO3_kg = sum(NO3_load_kg, na.rm=TRUE),
          TotalTrib_PO4_kg = sum(PO4_load_kg, na.rm=TRUE)) |>
   ungroup() 
+
+Trib_loading <- left_join(Trib_loading, loading)
 
 Trib_loading[Trib_loading == 0] <- NA
 

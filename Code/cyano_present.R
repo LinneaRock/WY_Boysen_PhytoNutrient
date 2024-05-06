@@ -129,6 +129,9 @@ ggplot(logistic_data, mapping = aes(Secchi, toxinpresent)) +
 # m.4 <- glm(toxinpresent~DO*pH, logistic_data, family=binomial)
 # summary(m.4)
 
+ # m.4 <- glm(toxinpresent~maxdepth, logistic_data, family=binomial)
+ # summary(m.4)
+
 
 # I don't want to lose everything by dropping NAs, but the stepwise model finder can't handle NAs :( 
 
@@ -180,13 +183,13 @@ bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
   mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))
 
 library(ggpubr)
-ggplot(bda_cyano) +
-  geom_boxplot(aes(toxinpresent, ChemValue)) +
-  geom_jitter(aes(toxinpresent, ChemValue, color=WaterbodyName), alpha=0.5) +
+ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
   scale_color_viridis_d(option='turbo') +
   stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
   facet_wrap(~ShortName_Revised, scales='free')
-  
   
 
 

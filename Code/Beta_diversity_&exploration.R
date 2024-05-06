@@ -488,6 +488,7 @@ adonis2(wq_dist~julianday, wq_sd_data) # sig
 
 adonis2(wq_dist~Cyanobacteria, wq_sd_data)
 
+adonis2(wq_dist~month*Year, wq_sd_data)
 
 
 set.seed(06261993)
@@ -662,6 +663,32 @@ ggplot(nutrients_phytos) +
   geom_point(aes(concentration, CHLA, color=nutrients)) +
   labs(y='Chlorophyll-a concentration '~(mu*g~L^-1), y='Nutrient concentration'~(mg~L^-1)) +
   theme_bw() 
+
+
+## 7b. phytos density plots ####
+dens_biomass <- bind_rows(BoysenNutrient, BoysenChem)|> 
+  left_join(BoysenPhyto_cat) |>
+  pivot_longer(cols=c(Diatom, `Green algae`, Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate), names_to = 'phyto_cat', values_to = 'phyto%biomass')
+
+library(ggridges)
+ggplot(dens_biomass) +
+  geom_density_ridges(aes(x=Cyanobacteria, y=month, fill = WaterbodyName),  alpha = 0.5, scale = 1.5, 
+                      quantile_lines = FALSE, size = 0.5, color = 'grey10',
+                      rel_min_height = 0.01) +
+  scale_fill_viridis_d(name = '', option='turbo') +
+  theme_ridges(grid = TRUE, center_axis_labels = TRUE) +
+  scale_y_discrete(limits=rev) +
+  facet_wrap(~Year)
+
+ggplot(dens_biomass) +
+  geom_density_ridges(aes(x=ChemValue, y=month, fill = WaterbodyName),  alpha = 0.5, scale = 1.5, 
+                      quantile_lines = FALSE, size = 0.5, color = 'grey10',
+                      rel_min_height = 0.01) +
+  scale_fill_viridis_d(name = '', option='turbo') +
+  theme_ridges(grid = TRUE, center_axis_labels = TRUE) +
+  scale_y_discrete(limits=rev) +
+  facet_wrap(~ShortName_Revised, scales='free')
+
   
 
 # 8. Tributary Budget Plots ####
