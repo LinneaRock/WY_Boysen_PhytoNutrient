@@ -105,8 +105,8 @@ ggplot(logistic_data, mapping = aes(Secchi, toxinpresent)) +
        y = 'Cyanotoxins present')
 
 
-# m4 <- glm(toxinpresent~SpC, logistic_data, family=binomial)
-# summary(m4)
+ # m4 <- glm(toxinpresent~SpC, logistic_data, family=binomial)
+ # summary(m4)
 
 # m4 <- glm(toxinpresent~Stability, logistic_data, family=binomial)
 # summary(m4)

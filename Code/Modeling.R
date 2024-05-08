@@ -1,0 +1,592 @@
+#--------------------------------------------------------------------------#
+# Various models to predict high percentages of cyanobacteria
+#--------------------------------------------------------------------------#
+
+source('Data/CALL_DATA_LIB.R')
+
+# 1. Structural Equation Modeling ####
+
+## 1A. load libraries needed specifically for this script ####
+library(tidySEM)
+library(lavaan)
+library(statpsych) # for skew.test
+
+## 1B. Prep data ####
+sd_data <- BoysenNutrient |>
+  bind_rows(BoysenChem) |>
+  left_join(BoysenPhyto_cat) |>
+  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
+  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) 
+
+# look at correlations 
+psych::pairs.panels(sd_data |> select(-c(1:8)))
+
+## 1C. Normality assumptions test ####
+variables <- colnames(sd_data |> select(-c(1:8)))
+
+skew <- data.frame(Skewness=NA, p=NA, variable=NA)
+
+for(var in variables) {
+  dat <- sd_data |> select(var) |>
+    drop_na() 
+  
+  dat <- as.vector(dat |> select(1) |> distinct())[[1]]
+  
+  tmp <- test.skew(dat) |>
+    as.data.frame() |>
+    mutate(variable=var)
+  
+  skew <- bind_rows(skew, tmp)
+}
+
+## 1D. transform to normality ####
+# for biomass % and all other non-normal variables (p<0.05 in skew dataset), add1 and log10
+
+trn_data <- sd_data |>
+  mutate_at(vars(Diatom, `Green algae`, Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, CHLA, TN.TP, Stability, IN.PO4, NO3, DO, TN, maxdepth), ~log10(.+1))
+  # scale the data
+ 
+
+
+# 1E. Run the SEM ####
+
+# starting model based on Deutsch et al., 2020
+m1 <- 'Cyanobacteria ~ Temp + Stability + maxdepth + TP + TN + TN.TP + IN.PO4 + CHLA
+Stability ~ Temp + DO + maxdepth
+CHLA ~ Temp + Secchi + Stability + pH
+DO ~ CHLA'
+
+fit1 <- sem(m1, trn_data)
+summary(fit1, standardized = TRUE)
+graph_sem(fit1)
+semPlot::semPaths(fit1, what = "std", whatLabels = "std", residuals=FALSE)
+modificationindices(fit1)
+
+
+
+
+
+# testing stratification model
+m2 <- 'Stratification=~Secchi + Stability + Temp
+       Secchi~~maxdepth
+       Stability~Temp + maxdepth
+       Cyanobacteria ~ Stratification'
+
+fit2 <- sem(m2, trn_data)
+summary(fit2, standardized = TRUE)
+summary(fit2, modindices=TRUE)
+graph_sem(fit2)
+semPlot::semPaths(fit2, what = "std", whatLabels = "std", residuals=FALSE)
+modificationindices(fit2)
+
+
+
+
+
+# 2. CART modeling ####
+
+## 2A. load packages ####
+
+library(tidyverse)
+library(rpart)
+library(rsample)
+library(caret)
+library(rpart.plot)
+library(yardstick)
+
+
+
+## 2B. Predict Before-During-After toxins present ####
+cart_data <- trn_data  |>
+  left_join(cyano_prep) |> # this is from cyano_present.R
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+    # i wish i could figure out how to code this instead of manually, but idk how
+  # 2020
+  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
+                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
+  # 2021
+  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2022
+  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2023
+  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))|>
+  # time is too important, so get rid of it to assess other variables
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria)
+
+
+
+# Training data 
+# split training and testing data by 60/40% 
+test_inds <- initial_split(cart_data, 0.6)
+# Split data into test/train 
+train <- training(test_inds) 
+test <- testing(test_inds) 
+
+
+# Run CART model
+CART_mod <- rpart(toxinpresent~., data=train, method='class', cp=0.01)
+
+# test cart model 
+test$predict <- predict(CART_mod, test, 'class')
+cm <- conf_mat(test, toxinpresent, predict)
+accuracy(test, toxinpresent, predict) # like r2
+cm
+
+## get the best cp 
+printcp(CART_mod)
+bestcp <- CART_mod$cptable[which.min(CART_mod$cptable[,'xerror']), 'CP']
+
+CART_mod_pruned <- prune(CART_mod, cp=bestcp)
+
+## print tree 
+
+plot(CART_mod_pruned)
+text(CART_mod_pruned, cex=0.8, xpd=TRUE)
+#text(CART_mod_pruned, cex=0.8, use.n=TRUE, xpd=TRUE)
+
+
+
+## 2C. Predict toxin presence/absence ####
+cart_data <- trn_data  |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent = ifelse(is.na(toxinpresent), 0, toxinpresent)) |>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria) |>
+  mutate(toxinpresent=as.factor(toxinpresent))
+
+# Training data 
+# split training and testing data by 60/40% 
+test_inds <- initial_split(cart_data, 0.6)
+# Split data into test/train 
+train <- training(test_inds) 
+test <- testing(test_inds) 
+
+
+
+# Run CART model 
+CART_mod <- rpart(toxinpresent~., data=train, method='class', cp=0.01)
+
+# test cart model
+test$predict <- predict(CART_mod, test, 'class')
+cm <- conf_mat(test, toxinpresent, predict)
+accuracy(test, toxinpresent, predict) # like r2
+cm
+
+## get the best cp 
+printcp(CART_mod)
+bestcp <- CART_mod$cptable[which.min(CART_mod$cptable[,'xerror']), 'CP']
+
+CART_mod_pruned <- prune(CART_mod, cp=bestcp)
+
+## print tree 
+
+plot(CART_mod_pruned)
+text(CART_mod_pruned, cex=0.8, xpd=TRUE)
+#text(CART_mod_pruned, cex=0.8, use.n=TRUE, xpd=TRUE)
+
+
+
+
+## 2D. Predict high vs low cyanobacteria (greater than 50% biomass) ####
+cart_data <- trn_data |>
+  mutate(cyano= ifelse(Cyanobacteria > log10(51), 'high cyano','low cyano'))|>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria) |>
+  mutate(cyano=as.factor(cyano))
+
+# Training data 
+# split training and testing data by 60/40% 
+test_inds <- initial_split(cart_data, 0.6)
+# Split data into test/train 
+train <- training(test_inds) 
+test <- testing(test_inds) 
+
+
+
+# Run CART model 
+CART_mod <- rpart(cyano~., data=train, method='class', cp=0.01)
+
+## test cart model 
+test$predict <- predict(CART_mod, test, 'class')
+cm <- conf_mat(test, cyano, predict)
+accuracy(test, cyano, predict) # like r2
+cm
+
+## get the best cp 
+printcp(CART_mod)
+bestcp <- CART_mod$cptable[which.min(CART_mod$cptable[,'xerror']), 'CP']
+
+CART_mod_pruned <- prune(CART_mod, cp=bestcp)
+
+## print tree 
+
+plot(CART_mod_pruned)
+text(CART_mod_pruned, cex=0.8, xpd=TRUE)
+#text(CART_mod_pruned, cex=0.8, use.n=TRUE, xpd=TRUE)
+
+
+
+# 3. Random Forest modeling ####
+
+## 3A. load packages ####
+library(randomForest)
+library(rsample)
+library(caret)
+library(reprtree)
+
+
+# RF can't handle NAs, so let's remove the CHLA, it hasn't been a significant predictor of anything yet anyway
+
+
+
+
+## 3B. Regression RF to predict cyanobacteria % biomass ####
+
+rf.data <- trn_data |>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, - CHLA) 
+
+# use 80% data for training, 20% for testing
+set.seed(62693)
+split <- initial_split(rf.data, prop=0.80)
+training.dat <- training(split) |> mutate_if(is.numeric, round, digits=2)
+testing.dat <- testing(split) |> mutate_if(is.numeric, round, digits=2) 
+
+
+# model with default parameters
+rf_default <- train(Cyanobacteria ~.,
+                    training.dat,
+                    metric='RMSE',
+                    method='rf',
+                    tuneGrid=expand.grid(.mtry=ncol(training.dat)/3),
+                    ntree=500,
+                    trControl=trainControl(method='cv', number=10))
+
+rf_default #rmse 0.4874
+
+
+
+# find best mtry
+set.seed(62693)
+rf_mtry <- train(Cyanobacteria~.,
+                 data = training.dat,
+                 method = "rf",
+                 metric = "RMSE",
+                 tuneGrid = expand.grid(.mtry = c(1: 10)),
+                 trControl = trainControl(method = "cv",
+                                          number = 10,
+                                          search = "grid"))
+
+print(rf_mtry) 
+plot(rf_mtry) 
+# mtry=10, with RMSE of 0.4597
+
+
+# find best ntrees
+store_maxtrees <- list()
+for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
+  set.seed(62693)
+  rf_maxtrees <- train(Cyanobacteria~.,
+                       data = training.dat,
+                       method = "rf",
+                       metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10,
+                                                search = "grid"),
+                       ntree = ntree)
+  key <- toString(ntree)
+  store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+
+summary(results_tree) # looks like 150 has lowest MAE and RMSE, not the highest R2 (800 though) - tested both, 150 performs better
+
+
+
+
+# fit the model with the best hyperparameters
+fit_rf <- randomForest(Cyanobacteria~.,
+                       training.dat,
+                       method = "rf",
+                       metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10),
+                       importance = TRUE,
+                       mtry = 10,
+                       ntree = 150)
+# get predicted values
+testing.dat$prediction <- predict(fit_rf, testing.dat)
+
+
+
+fit_rf
+
+# Call:
+#   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 10, ntree = 150) 
+# Type of random forest: regression
+# Number of trees: 150
+# No. of variables tried at each split: 10
+# 
+# Mean of squared residuals: 0.2085367
+# % Var explained: 63.82 
+
+varImpPlot(fit_rf)
+plot(fit_rf)
+
+varImpPlot(fit_rf, type = 1, scale = TRUE,
+           n.var = ncol(rf.data) - 1, cex = 0.8,
+           main = "Variable importance")
+
+fit_rf$importance
+
+library(reprtree)
+plot.getTree(fit_rf)
+
+ggplot(testing.dat) +
+  geom_point(aes(prediction, Cyanobacteria)) +
+  theme_classic() +
+  labs(x='Predicted % biomass Cyanobacteria', y='Actual Values') +
+  geom_abline(slope=1, intercept=0, color='red4')
+
+
+
+
+
+
+## 3C. Categorical RF to predict presence absence ####
+rf.data <- trn_data  |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent = ifelse(is.na(toxinpresent), 0, toxinpresent)) |>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria,-CHLA) |>
+  mutate(toxinpresent=as.factor(toxinpresent))
+
+# use 80% data for training, 20% for testing
+set.seed(62693)
+split <- initial_split(rf.data, prop=0.80)
+training.dat <- training(split) |> mutate_if(is.numeric, round, digits=2)
+testing.dat <- testing(split) |> mutate_if(is.numeric, round, digits=2) 
+
+
+# model with default parameters
+rf_default <- train(toxinpresent ~.,
+                    training.dat,
+                    #metric='RMSE',
+                    method='rf',
+                    tuneGrid=expand.grid(.mtry=ncol(training.dat)/3),
+                    ntree=500,
+                    trControl=trainControl(method='cv', number=10))
+
+rf_default #accuracy=0.8844
+
+
+
+# find best mtry
+set.seed(62693)
+rf_mtry <- train(toxinpresent~.,
+                 data = training.dat,
+                 method = "rf",
+                # metric = "RMSE",
+                 tuneGrid = expand.grid(.mtry = c(1: 10)),
+                 trControl = trainControl(method = "cv",
+                                          number = 10,
+                                          search = "grid"))
+
+print(rf_mtry) 
+plot(rf_mtry) 
+# mtry=7, with RMSE of 0.8847
+
+
+# find best ntrees
+store_maxtrees <- list()
+for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
+  set.seed(62693)
+  rf_maxtrees <- train(toxinpresent~.,
+                       data = training.dat,
+                       method = "rf",
+                       #metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10,
+                                                search = "grid"),
+                       ntree = ntree)
+  key <- toString(ntree)
+  store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+
+summary(results_tree) # they're like all the same? so I'll just go with 100
+
+
+
+
+# fit the model with the best hyperparameters
+fit_rf <- randomForest(toxinpresent~.,
+                       training.dat,
+                       method = "rf",
+                       #metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10),
+                       importance = TRUE,
+                       mtry = 7,
+                       ntree = 100)
+# get predicted values
+testing.dat$prediction <- predict(fit_rf, testing.dat)
+
+
+
+fit_rf
+
+# Call:
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 7, ntree = 100) 
+# Type of random forest: classification
+# Number of trees: 100
+# No. of variables tried at each split: 7
+# 
+# OOB estimate of  error rate: 12.98%
+# Confusion matrix:
+#   0  1 class.error
+# 0 57  8   0.1230769
+# 1  9 57   0.1363636
+
+varImpPlot(fit_rf)
+plot(fit_rf)
+
+varImpPlot(fit_rf, type = 1, scale = TRUE,
+           n.var = ncol(rf.data) - 1, cex = 0.8,
+           main = "Variable importance")
+
+fit_rf$importance
+
+library(reprtree)
+plot.getTree(fit_rf)
+
+
+
+
+
+## 3D. Categorical RF to predict before-during-after toxin ####
+
+rf.data <- trn_data  |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  # i wish i could figure out how to code this instead of manually, but idk how
+  # 2020
+  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
+                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
+  # 2021
+  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2022
+  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2023
+  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))|>
+  # time is too important, so get rid of it to assess other variables
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA)
+
+
+
+
+
+# use 80% data for training, 20% for testing
+set.seed(62693)
+split <- initial_split(rf.data, prop=0.80)
+training.dat <- training(split) |> mutate_if(is.numeric, round, digits=2)
+testing.dat <- testing(split) |> mutate_if(is.numeric, round, digits=2) 
+
+
+# model with default parameters
+rf_default <- train(toxinpresent ~.,
+                    training.dat,
+                    #metric='RMSE',
+                    method='rf',
+                    tuneGrid=expand.grid(.mtry=ncol(training.dat)/3),
+                    ntree=500,
+                    trControl=trainControl(method='cv', number=10))
+
+rf_default #accuracy=0.8796
+
+
+
+# find best mtry
+set.seed(62693)
+rf_mtry <- train(toxinpresent~.,
+                 data = training.dat,
+                 method = "rf",
+                 # metric = "RMSE",
+                 tuneGrid = expand.grid(.mtry = c(1: 10)),
+                 trControl = trainControl(method = "cv",
+                                          number = 10,
+                                          search = "grid"))
+
+print(rf_mtry) 
+plot(rf_mtry) 
+# mtry=4, with RMSE of 0.9010
+
+
+# find best ntrees
+store_maxtrees <- list()
+for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
+  set.seed(62693)
+  rf_maxtrees <- train(toxinpresent~.,
+                       data = training.dat,
+                       method = "rf",
+                       #metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10,
+                                                search = "grid"),
+                       ntree = ntree)
+  key <- toString(ntree)
+  store_maxtrees[[key]] <- rf_maxtrees
+}
+results_tree <- resamples(store_maxtrees)
+
+summary(results_tree) # accuracy same across, kappa increases at 250 and remains same
+
+
+
+
+# fit the model with the best hyperparameters
+fit_rf <- randomForest(toxinpresent~.,
+                       training.dat,
+                       method = "rf",
+                       #metric = "RMSE",
+                       tuneGrid = expand.grid(.mtry = c(1: 10)),
+                       trControl = trainControl(method = "cv",
+                                                number = 10),
+                       importance = TRUE,
+                       mtry = 4,
+                       ntree = 250)
+# get predicted values
+testing.dat$prediction <- predict(fit_rf, testing.dat)
+
+
+
+fit_rf
+
+# Call:
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 250) 
+# Type of random forest: classification
+# Number of trees: 250
+# No. of variables tried at each split: 4
+# 
+# OOB estimate of  error rate: 11.45%
+# Confusion matrix:
+#          Before During After class.error
+# Before     41      8     0  0.16326531
+# During      6     60     0  0.09090909
+# After       0      1    15  0.06250000
+
+varImpPlot(fit_rf)
+plot(fit_rf)
+
+varImpPlot(fit_rf, type = 1, scale = TRUE,
+           n.var = ncol(rf.data) - 1, cex = 0.8,
+           main = "Variable importance")
+
+fit_rf$importance
+
+
+plot.getTree(fit_rf)

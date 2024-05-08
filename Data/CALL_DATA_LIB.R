@@ -79,7 +79,7 @@ BoysenNutrient <- ChemPhys |>
 stoich <- BoysenNutrient |>
   select(-ChemUnits,-SampleDepth) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
-  mutate(TN.TP = (TN/TP)*2.11306,
+  mutate(TN.TP = (TN/TP)*2.11306, # makes molar
          IN.PO4 = ((NH4+NO3)/PO4)*2.11306) |>
   select(-c(PO4,NH4,TP,TN,NO3,CHLA)) |>
   mutate(ChemUnits='molar ratio') |>
