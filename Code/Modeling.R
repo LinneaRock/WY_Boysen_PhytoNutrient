@@ -237,12 +237,12 @@ library(reprtree)
 
 # RF can't handle NAs, so let's remove the CHLA, it hasn't been a significant predictor of anything yet anyway
 
-
+# data do not need to be normal for RF - and scaling/transforming data can be harmful
 
 
 ## 3B. Regression RF to predict cyanobacteria % biomass ####
 
-rf.data <- trn_data |>
+rf.data <- sd_data |>
   select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, - CHLA) 
 
 # use 80% data for training, 20% for testing
@@ -261,7 +261,7 @@ rf_default <- train(Cyanobacteria ~.,
                     ntree=500,
                     trControl=trainControl(method='cv', number=10))
 
-rf_default #rmse 0.4874
+rf_default #rmse 25.12346
 
 
 
@@ -278,7 +278,7 @@ rf_mtry <- train(Cyanobacteria~.,
 
 print(rf_mtry) 
 plot(rf_mtry) 
-# mtry=10, with RMSE of 0.4597
+# mtry=8, with RMSE of  25.06891 
 
 
 # find best ntrees
@@ -299,7 +299,7 @@ for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
 }
 results_tree <- resamples(store_maxtrees)
 
-summary(results_tree) # looks like 150 has lowest MAE and RMSE, not the highest R2 (800 though) - tested both, 150 performs better
+summary(results_tree) # 100
 
 
 
@@ -313,8 +313,8 @@ fit_rf <- randomForest(Cyanobacteria~.,
                        trControl = trainControl(method = "cv",
                                                 number = 10),
                        importance = TRUE,
-                       mtry = 10,
-                       ntree = 150)
+                       mtry = 8,
+                       ntree = 100)
 # get predicted values
 testing.dat$prediction <- predict(fit_rf, testing.dat)
 
@@ -323,31 +323,60 @@ testing.dat$prediction <- predict(fit_rf, testing.dat)
 fit_rf
 
 # Call:
-#   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 10, ntree = 150) 
+#   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 8, ntree = 100) 
 # Type of random forest: regression
-# Number of trees: 150
-# No. of variables tried at each split: 10
+# Number of trees: 100
+# No. of variables tried at each split: 8
 # 
-# Mean of squared residuals: 0.2085367
-# % Var explained: 63.82 
+# Mean of squared residuals: 650.1686
+# % Var explained: 57.56
 
 varImpPlot(fit_rf)
 plot(fit_rf)
 
-varImpPlot(fit_rf, type = 1, scale = TRUE,
+plt.dat<-varImpPlot(fit_rf, type = 1, scale = TRUE,
            n.var = ncol(rf.data) - 1, cex = 0.8,
-           main = "Variable importance")
+           main = "Variable importance") |>
+  as.data.frame() |>
+  mutate(variable=rownames(plt.dat)) |>
+  order()
+
+ggplot(plt.dat)
+
+ggsave(impplot, 'Figures/RandomForest/Cyano_%biomass/Var_importance_biomass.png', height=4.5, width=6.5, dpi=1200)
 
 fit_rf$importance
 
 library(reprtree)
 plot.getTree(fit_rf)
 
-ggplot(testing.dat) +
-  geom_point(aes(prediction, Cyanobacteria)) +
+
+
+fit_rf$mse[length(fit_rf$mse)]
+# take square root to calculate RMSE for the model
+sqrt(fit_rf$mse[length(fit_rf$mse)]) # 25.50
+
+# now illustrate how to calculate RMSE on test data vs. training data
+predValues <- predict(fit_rf,testing.dat)
+# we can calculate it  directly 
+sqrt(mean((testing.dat$Cyanobacteria - predValues)^2)) # 18.20
+
+
+
+test.result<- lm(Cyanobacteria~prediction, testing.dat)
+summary(test.result)
+
+
+ggplot() +
+  geom_point(testing.dat, mapping=aes(prediction, Cyanobacteria)) +
   theme_classic() +
-  labs(x='Predicted % biomass Cyanobacteria', y='Actual Values') +
-  geom_abline(slope=1, intercept=0, color='red4')
+  labs(x='Predicted % biomass cyanobacteria', y='Observed % biomass cyanobacteria') +
+  geom_abline(slope=1, intercept=0, color='red4') +
+  geom_text(mapping=aes(25,95, label=paste0('y = ', round(coef(test.result)[[2]], 2), 'x ', round(coef(test.result)[[1]], 2)))) +
+  geom_text(mapping=aes(25,90, label=paste0('R² = ', round(summary(test.result)$adj.r,2)))) +
+  geom_text(mapping=aes(25,85, label=paste0('RMSE = ', round(sqrt(mean((testing.dat$Cyanobacteria - predValues)^2))))))
+
+
 
 
 
@@ -355,7 +384,7 @@ ggplot(testing.dat) +
 
 
 ## 3C. Categorical RF to predict presence absence ####
-rf.data <- trn_data  |>
+rf.data <- sd_data  |>
   left_join(cyano_prep) |>
   mutate(toxinpresent = ifelse(is.na(toxinpresent), 0, toxinpresent)) |>
   select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria,-CHLA) |>
@@ -377,7 +406,7 @@ rf_default <- train(toxinpresent ~.,
                     ntree=500,
                     trControl=trainControl(method='cv', number=10))
 
-rf_default #accuracy=0.8844
+rf_default #accuracy=0.8857
 
 
 
@@ -394,7 +423,7 @@ rf_mtry <- train(toxinpresent~.,
 
 print(rf_mtry) 
 plot(rf_mtry) 
-# mtry=7, with RMSE of 0.8847
+# mtry=6, with RMSE of 0.8847
 
 
 # find best ntrees
@@ -429,7 +458,7 @@ fit_rf <- randomForest(toxinpresent~.,
                        trControl = trainControl(method = "cv",
                                                 number = 10),
                        importance = TRUE,
-                       mtry = 7,
+                       mtry = 6,
                        ntree = 100)
 # get predicted values
 testing.dat$prediction <- predict(fit_rf, testing.dat)
@@ -439,16 +468,16 @@ testing.dat$prediction <- predict(fit_rf, testing.dat)
 fit_rf
 
 # Call:
-#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 7, ntree = 100) 
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 6, ntree = 100) 
 # Type of random forest: classification
 # Number of trees: 100
-# No. of variables tried at each split: 7
+# No. of variables tried at each split: 6
 # 
-# OOB estimate of  error rate: 12.98%
+# OOB estimate of  error rate: 14.5%
 # Confusion matrix:
-#   0  1 class.error
-# 0 57  8   0.1230769
-# 1  9 57   0.1363636
+#   0  1   class.error
+# 0 56  9   0.1384615
+# 1 10 56   0.1515152
 
 varImpPlot(fit_rf)
 plot(fit_rf)
@@ -468,7 +497,7 @@ plot.getTree(fit_rf)
 
 ## 3D. Categorical RF to predict before-during-after toxin ####
 
-rf.data <- trn_data  |>
+rf.data <- sd_data  |>
   left_join(cyano_prep) |>
   mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
   # i wish i could figure out how to code this instead of manually, but idk how
@@ -543,7 +572,7 @@ for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
 }
 results_tree <- resamples(store_maxtrees)
 
-summary(results_tree) # accuracy same across, kappa increases at 250 and remains same
+summary(results_tree) # 100
 
 
 
@@ -558,7 +587,7 @@ fit_rf <- randomForest(toxinpresent~.,
                                                 number = 10),
                        importance = TRUE,
                        mtry = 4,
-                       ntree = 250)
+                       ntree = 100)
 # get predicted values
 testing.dat$prediction <- predict(fit_rf, testing.dat)
 
@@ -567,17 +596,17 @@ testing.dat$prediction <- predict(fit_rf, testing.dat)
 fit_rf
 
 # Call:
-#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 250) 
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 100) 
 # Type of random forest: classification
-# Number of trees: 250
+# Number of trees: 100
 # No. of variables tried at each split: 4
 # 
-# OOB estimate of  error rate: 11.45%
+# OOB estimate of  error rate: 13.74%
 # Confusion matrix:
-#          Before During After class.error
-# Before     41      8     0  0.16326531
-# During      6     60     0  0.09090909
-# After       0      1    15  0.06250000
+#           Before During After class.error
+# Before     41      8     0   0.1632653
+# During      7     59     0   0.1060606
+# After       1      2    13   0.1875000
 
 varImpPlot(fit_rf)
 plot(fit_rf)
@@ -590,3 +619,81 @@ fit_rf$importance
 
 
 plot.getTree(fit_rf)
+
+
+# plot ROC curve
+# predict test set, get probs instead of response
+predictions <- as.data.frame(predict(fit_rf, testing.dat, type = "prob"))
+
+# predict class and then attach test class
+predictions$predict <- names(predictions)[1:3][apply(predictions[,1:3], 1, which.max)]
+predictions$observed <- testing.dat$toxinpresent
+head(predictions)
+
+
+library(pROC)
+roc.Before <- roc(ifelse(predictions$observed=="Before", "Before", "non-Before"), as.numeric(predictions$Before))
+
+
+# others
+roc.During <- roc(ifelse(predictions$observed=="During", "During", "non-During"), as.numeric(predictions$Before))
+roc.After <- roc(ifelse(predictions$observed=="After", "After", "non-After"), as.numeric(predictions$Before))
+
+
+
+roc.dat <- data.frame(toxinpresent='Before',
+                      Sensitivity=roc.Before[["sensitivities"]],
+                      Specificity=roc.Before[["specificities"]]) |>
+  rbind(data.frame(toxinpresent='During',
+                   Sensitivity=roc.During[["sensitivities"]],
+                   Specificity=roc.During[["specificities"]])) |>
+  rbind(data.frame(toxinpresent='After',
+                   Sensitivity=roc.After[["sensitivities"]],
+                   Specificity=roc.After[["specificities"]])) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))
+
+AUC <- data.frame(toxinpresent=c('Before','During','After'),
+                  auc=c(roc.Before[["auc"]],roc.During[["auc"]],roc.After[["auc"]]))
+
+
+
+ggplot() +
+  theme_classic() +
+  geom_path(roc.dat, mapping=aes(x=1-Specificity,y=Sensitivity,color = toxinpresent)) +
+  scale_color_manual('Cyanotoxin presence', values=c('#88CCEE','#999933','#44AA99')) +
+  geom_abline(slope=1,intercept=0, linetype="dashed")+
+  theme(legend.position = c(0.8,0.5),
+        legend.background=element_rect(fill = alpha("white", 0))) +
+  geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.9,0.55, label=paste0('AUC = ',round(auc,2))), color='#88CCEE')+
+  geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.9,0.47, label=paste0('AUC = ',round(auc,2))), color='#999933') +
+  geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.9,0.39, label=paste0('AUC = ',round(auc,2))), color='#44AA99')
+  
+
+
+
+
+# plot confusion matrix
+cm <- confusionMatrix(testing.dat$prediction, testing.dat$toxinpresent, dnn=c('Predicted', 'Observed'))
+
+cm <- as.data.frame(cm$table) |>
+  group_by(Observed) |>
+  mutate(prop = Freq/sum(Freq),
+         prop = round(prop,2))
+
+
+
+ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
+  geom_tile(color="black") +
+  scale_x_discrete(expand = c(0, 0))+ #remove white space
+  scale_y_discrete(expand = c(0, 0))+ #remove white space
+  scale_fill_gradient(low="white", high="#DDCC77",
+                      name="Frequency") +
+  geom_text(aes(label = paste0("n=",Freq)), vjust = .5,  alpha = 1, size=3) +
+  geom_text(aes(label = paste0("prop.=",prop)), vjust = 2.0,  alpha = 1, size=2) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y=element_text(angle=45),
+        legend.position = 'none')
+
+
+
