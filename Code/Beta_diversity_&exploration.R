@@ -667,8 +667,7 @@ ggplot(nutrients_phytos) +
 
 ## 7b. phytos density plots ####
 dens_biomass <- bind_rows(BoysenNutrient, BoysenChem)|> 
-  left_join(BoysenPhyto_cat) |>
-  pivot_longer(cols=c(Diatom, `Green algae`, Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate), names_to = 'phyto_cat', values_to = 'phyto%biomass')
+  left_join(BoysenPhyto_cat)
 
 library(ggridges)
 ggplot(dens_biomass) +
@@ -680,7 +679,10 @@ ggplot(dens_biomass) +
   scale_y_discrete(limits=rev) +
   facet_wrap(~Year)
 
-ggplot(dens_biomass) +
+dens_biomass_wide <- dens_biomass |>
+  pivot_longer(cols=c(Diatom, `Green algae`, Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate), names_to = 'phyto_cat', values_to = 'phyto%biomass')
+
+ggplot(dens_biomass_wide) +
   geom_density_ridges(aes(x=ChemValue, y=month, fill = WaterbodyName),  alpha = 0.5, scale = 1.5, 
                       quantile_lines = FALSE, size = 0.5, color = 'grey10',
                       rel_min_height = 0.01) +
@@ -784,6 +786,73 @@ BoysenTribs |>
   facet_wrap(~ShortName_Revised, scales='free_y') +
   theme_minimal() +
   labs(x='', y='Concentration'~(mg~L^-1))
+
+
+
+# 8/9 TRIB loading presentation plot ####
+trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+
+N<- ggplot(TribLoadFlux |> 
+         mutate(TN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TN_load_kg, TN_load_kg)) |>
+         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
+  geom_point(aes(fakedate, TN_load_kg, color=WaterbodyName),size=3) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  labs(x='',y='TN load (kg)') +
+  scale_color_manual('',values =trib_colors)
+ggsave(N,'Figures/TN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+
+P<-ggplot(TribLoadFlux |> 
+         mutate(TP_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TP_load_kg, TP_load_kg)) |>
+         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d')) |>
+         filter(TP_load_kg>-50000)) +
+  geom_point(aes(fakedate, TP_load_kg, color=WaterbodyName),size=3) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey")  +
+  labs(x='',y='TP load (kg)') +
+  scale_color_manual('',values =trib_colors)
+ggsave(P,'Figures/TP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+N/P
+
+
+
+ggplot(TribLoadFlux |> 
+         mutate(TN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TN_load_kg, NA)) |>
+         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
+  geom_point(aes(fakedate, TotalTrib_TN_kg),size=3) +
+  geom_point(aes(fakedate, TN_load_kg),size=3) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  labs(x='',y='TN load (kg)')
+ggsave('Figures/totalTN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+ggplot(TribLoadFlux |> 
+         mutate(TP_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TP_load_kg, NA)) |>
+         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
+  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3) +
+  geom_point(aes(fakedate, TP_load_kg),size=3) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  labs(x='',y='TP load (kg)')
+ggsave('Figures/totalTP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 
 # 10. Boysen storage  ####
