@@ -108,13 +108,17 @@ scores <- scores(nmds) |>
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=WaterbodyName)) +
-  theme_minimal()
+  theme_minimal() +
+  scale_color_viridis_d('', option='turbo')
+ggsave('Figures/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month)) +
-  theme_bw() +
+  theme_minimal() +
  # facet_wrap(~Year) +
   scale_color_viridis_d('')
+ggsave('Figures/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
+
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=julianday)) +
@@ -162,6 +166,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=Cyanobacteria)) +
   scale_color_viridis_c() +
   theme_minimal()
+ggsave('Figures/nmds_cyano.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 
@@ -254,7 +259,7 @@ env.fit_df <- as.data.frame(scores(env.fit, display='vectors'))  #extracts relev
 env.fit_df <- cbind(env.fit_df, env.variables = rownames(env.fit_df)) #and then gives them their names
 
 env.fit_df <- cbind(env.fit_df, pval = env.fit$vectors$pvals) # add pvalues to dataframe
-sig.env.fit <- subset(env.fit_df, pval<=0.1) #subset data to show variables significant at 0.1 - weak evidence/trend exists
+sig.env.fit <- subset(env.fit_df, pval<=0.05) #subset data to show variables significant at 0.1 - weak evidence/trend exists
 
 sig.env.fit
 
@@ -266,7 +271,7 @@ ggplot() +
   scale_color_viridis_c() +
   geom_segment(sig.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = env.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-
+ggsave('Figures/nmds_envVar.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
 # look at deepest points vs other locations on NMDS, any clustering there? 
@@ -824,35 +829,98 @@ ggsave(P,'Figures/TP_loading.png',height = 4.5, width = 6.5, units='in', dpi=120
 
 N/P
 
-
-
-ggplot(TribLoadFlux |> 
-         mutate(TN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TN_load_kg, NA)) |>
-         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
+TribLoadFlux |> 
+  mutate(TN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TN_load_kg, NA)) |>
+  mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d')) |>
+  select(fakedate, TotalTrib_TN_kg, TN_load_kg) |>
+  distinct() |>
+  mutate(dummy = ifelse(is.na(TN_load_kg), 'a','b')) |>
+  arrange(dummy,fakedate) |>
+  filter(!if_all(c(TotalTrib_TN_kg, TN_load_kg), is.na)) |>
+ggplot() +
   geom_point(aes(fakedate, TotalTrib_TN_kg),size=3) +
+  geom_path(aes(fakedate, TotalTrib_TN_kg)) +
   geom_point(aes(fakedate, TN_load_kg),size=3) +
+  geom_path(aes(fakedate, TN_load_kg)) +
   geom_abline(slope=0, intercept=0) +
   theme_minimal() +
-  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='TN load (kg)')
 ggsave('Figures/totalTN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
-ggplot(TribLoadFlux |> 
-         mutate(TP_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TP_load_kg, NA)) |>
-         mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
-  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3) +
-  geom_point(aes(fakedate, TP_load_kg),size=3) +
+TribLoadFlux |> 
+  mutate(IN_load_kg = NH4_load_kg + NO3_load_kg) |>
+  mutate(TotalTrib_IN_kg = TotalTrib_NH4_kg + TotalTrib_NO3_kg) |>
+  mutate(IN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*IN_load_kg, NA)) |>
+  mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d')) |>
+  select(fakedate, TotalTrib_IN_kg, IN_load_kg) |>
+  distinct() |>
+  mutate(dummy = ifelse(is.na(IN_load_kg), 'a','b')) |>
+  arrange(dummy,fakedate) |>
+  filter(!if_all(c(TotalTrib_IN_kg, IN_load_kg), is.na)) |>
+    ggplot() +
+  geom_point(aes(fakedate, TotalTrib_IN_kg),size=3) +
+  geom_path(aes(fakedate, TotalTrib_IN_kg)) +
+  geom_point(aes(fakedate, IN_load_kg),size=3) +
+  geom_path(aes(fakedate, IN_load_kg)) +
   geom_abline(slope=0, intercept=0) +
   theme_minimal() +
-  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
-  annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  labs(x='',y='Nitrate + ammonium load (kg)')
+ggsave('Figures/totalIN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+
+
+TribLoadFlux |> 
+  mutate(TP_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TP_load_kg, NA)) |>
+  mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d')) |>
+  select(fakedate, TotalTrib_TP_kg, TP_load_kg) |>
+  distinct() |>
+  mutate(dummy = ifelse(is.na(TP_load_kg), 'a','b')) |>
+  arrange(dummy,fakedate) |>
+  filter(!if_all(c(TotalTrib_TP_kg, TP_load_kg), is.na)) |>
+ggplot() +
+  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3) +
+  geom_path(aes(fakedate, TotalTrib_TP_kg)) +
+  geom_point(aes(fakedate, TP_load_kg),size=3) +
+  geom_path(aes(fakedate, TP_load_kg)) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='TP load (kg)')
 ggsave('Figures/totalTP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+
+TribLoadFlux |> 
+  mutate(PO4_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*PO4_load_kg, NA)) |>
+  mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d')) |>
+  select(fakedate, TotalTrib_PO4_kg, PO4_load_kg) |>
+  distinct() |>
+  mutate(dummy = ifelse(is.na(PO4_load_kg), 'a','b')) |>
+  arrange(dummy,fakedate) |>
+  filter(!if_all(c(TotalTrib_PO4_kg, PO4_load_kg), is.na)) |>
+  ggplot() +
+  geom_point(aes(fakedate, TotalTrib_PO4_kg),size=3) +
+  geom_path(aes(fakedate, TotalTrib_PO4_kg)) +
+  geom_point(aes(fakedate, PO4_load_kg),size=3) +
+  geom_path(aes(fakedate, PO4_load_kg)) +
+  geom_abline(slope=0, intercept=0) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  labs(x='',y='Phosphate load (kg)')
+ggsave('Figures/totalPO4_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 
 # 10. Boysen storage  ####
@@ -889,16 +957,8 @@ plot_profile_points(BoysenProfile$ORP, 'ORP')
 # 12. Nutrient timeseries ####
 
 nutrient_forms <- BoysenNutrient|>
-  mutate(ShortName_Revised = case_when(ShortName_Revised=='Total Nitrogen (unfiltered)'~'TN',
-                                                       ShortName_Revised=='Total Ammonia as N'~'NH4',
-                                                       ShortName_Revised=='Phosphorus as P (total)'~'TP',
-                                                       ShortName_Revised=='Orthophosphate as P (total)'~'PO4',
-                                       ShortName_Revised=='Orthophosphate as P (dissolved)'~'PO4',
-                                                       ShortName_Revised=='Nitrate plus Nitrite as N'~'NO3',
-                                                       ShortName_Revised=='Chlorophyll a (phytoplankton)'~'CHLA')) |>
   mutate(form = ifelse(ShortName_Revised %in% c('TP', 'PO4'), 'P', 
-                       ifelse(ShortName_Revised %in% c('TN', 'NO3', 'NH4'), 'N', NA))) |>
-  mutate(BelowDet = ifelse(BelowDet==1, 'Below detection', 'Result fine'))
+                       ifelse(ShortName_Revised %in% c('TN', 'NO3', 'NH4'), 'N', NA)))
 
  
 ggplot(nutrient_forms |> 
@@ -912,11 +972,9 @@ ggplot(nutrient_forms |>
   labs(x='', y='Surface Chlorophyll-a Concentration'~(mu*g~L^-1))
 
 
-
-ggplot(nutrient_forms |> 
-         filter(form=='N'),
-       #aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
-       aes(CollDate, ChemValue, color=ShortName_Revised)) +
+nutrient_forms |> 
+  filter(form=='N') |>
+ggplot(aes(CollDate, ChemValue, color=ShortName_Revised)) +
   geom_jitter() +
   facet_wrap(~WaterbodyName, scales='free_y') +
  # scale_shape_manual('', values=c(3,16)) +
@@ -924,13 +982,11 @@ ggplot(nutrient_forms |>
   theme_minimal() +
   labs(x='', y='Surface Concentration'~(mg~L^-1))
 
-
-ggplot(nutrient_forms |> 
-         filter(form=='P'),
-       #aes(CollDate, ChemValue, shape=BelowDet, color=ShortName_Revised)) +
-       aes(CollDate, ChemValue, color=ShortName_Revised)) +
+nutrient_forms |> 
+  filter(form=='P') |>
+ggplot(aes(CollDate, ChemValue, color=ShortName_Revised)) +
   geom_jitter() +
-  geom_jitter() +
+  geom_line() +
   facet_wrap(~WaterbodyName, scales='free_y') +
  # scale_shape_manual('', values=c(3,16))  +
   scale_color_viridis_d('', option='plasma') +

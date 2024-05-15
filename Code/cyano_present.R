@@ -7,6 +7,10 @@ source('Data/CALL_DATA_LIB.R')
 # 1. Quick look at parameters ####
 
 nutrient_summarise <- BoysenNutrient |>
+  select(-ChemUnits, -SampleDepth) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
+  mutate(IN=NO3+NH4) |>
+  pivot_longer(c(TN.TP, IN.PO4, TN, TP, PO4, NO3, NH4, IN, CHLA), names_to = 'ShortName_Revised', values_to = 'ChemValue') |>
   group_by(CollDate, Year, ShortName_Revised) |>
   summarise(mean = mean(ChemValue),
             max = max(ChemValue),
@@ -30,6 +34,43 @@ ggplot(data_summarise) +
   theme_bw() +
   labs(x='',y='Reservoir average and range') +
   facet_wrap(~ShortName_Revised, scales='free',nrow=5) 
+
+nutrient_summarise |>
+  filter(ShortName_Revised %in% c('IN', 'TN')) |>
+  left_join(cyanotoxin) |>
+ggplot() +
+  geom_point(aes(CollDate, mean)) +
+  geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
+  facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(IN='Inorganic N', TN='Total N'))) +
+  theme_bw() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+ # scale_color_manual('', values=c('#882255','#332288')) +
+  theme(legend.position = 'none') +
+  labs(x='',y='Concentration'~(mg~L^-1))
+  ggsave('Figures/in-res_N.png',height=4.5,width=6.5, units='in',dpi=1200)
+  
+  
+  
+  nutrient_summarise |>
+    filter(ShortName_Revised %in% c('PO4', 'TP')) |>
+    ggplot() +
+    geom_point(aes(CollDate, mean)) +
+    geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
+    facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(PO4='Inorganic P', TP='Total P'))) +
+    theme_bw() +
+    annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+    annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+    annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+    annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+   # scale_color_manual('', values=c('#117733','#DDCC77')) +
+    theme(legend.position = 'none') +
+    labs(x='',y='Concentration'~(mg~L^-1))
+  ggsave('Figures/in-res_P.png',height=4.5,width=6.5, units='in',dpi=1200)
+
+
 
 
 # 2. Logistic regression for cyanos present/not present ####
