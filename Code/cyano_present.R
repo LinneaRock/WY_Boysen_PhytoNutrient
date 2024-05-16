@@ -36,39 +36,43 @@ ggplot(data_summarise) +
   facet_wrap(~ShortName_Revised, scales='free',nrow=5) 
 
 nutrient_summarise |>
-  filter(ShortName_Revised %in% c('IN', 'TN')) |>
+  #filter(ShortName_Revised %in% c('IN', 'TN')) |>
+  filter(ShortName_Revised %in% c('TN')) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c('TN','IN'))) |>
   left_join(cyanotoxin) |>
 ggplot() +
-  geom_point(aes(CollDate, mean)) +
-  geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
-  facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(IN='Inorganic N', TN='Total N'))) +
-  theme_bw() +
+  geom_point(aes(CollDate, mean),size=3, color='red4') +
+  geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2), color='red4') +
+ # facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(IN='Inorganic N', TN='Total N')),nrow=2) +
+  theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
  # scale_color_manual('', values=c('#882255','#332288')) +
   theme(legend.position = 'none') +
-  labs(x='',y='Concentration'~(mg~L^-1))
-  ggsave('Figures/in-res_N.png',height=4.5,width=6.5, units='in',dpi=1200)
+  labs(x='',y='TN Concentration'~(mg~L^-1))
+  ggsave('Figures/ASLO24/in-res_N.png',height=4.5,width=6.5, units='in',dpi=1200)
   
   
   
   nutrient_summarise |>
-    filter(ShortName_Revised %in% c('PO4', 'TP')) |>
+    #filter(ShortName_Revised %in% c('PO4', 'TP')) |>
+    filter(ShortName_Revised %in% c('TP')) |>
+    mutate(ShortName_Revised = factor(ShortName_Revised, levels=c('TP','PO4'))) |>
     ggplot() +
-    geom_point(aes(CollDate, mean)) +
-    geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
-    facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(PO4='Inorganic P', TP='Total P'))) +
-    theme_bw() +
+    geom_point(aes(CollDate, mean),size=3, color='#336a98') +
+    geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2),color='#336a98') +
+  #  facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(PO4='Inorganic P', TP='Total P')), nrow=2) +
+    theme_minimal() +
     annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
     annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
     annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
     annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
    # scale_color_manual('', values=c('#117733','#DDCC77')) +
     theme(legend.position = 'none') +
-    labs(x='',y='Concentration'~(mg~L^-1))
-  ggsave('Figures/in-res_P.png',height=4.5,width=6.5, units='in',dpi=1200)
+    labs(x='',y='TP Concentration'~(mg~L^-1))
+  ggsave('Figures/ASLO24/in-res_P.png',height=4.5,width=6.5, units='in',dpi=1200)
 
 
 
@@ -233,8 +237,46 @@ ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   facet_wrap(~ShortName_Revised, scales='free')
   
 
+# 4. Cyanos Gif ####
+library(sf)
+library(raster)
+shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+class(shapefile)# sf, df
+crs(shapefile)
+
+cyano_sf <- BoysenPhyto_cat |>
+  left_join(BoysenChem) |>
+  dplyr::select(WaterbodyName, Year, month,Latitude, Longitude, Cyanobacteria) |>
+  st_as_sf(coords=c('Longitude','Latitude'), crs=4326)
+
+crs(cyano_sf)
+
+crs(shapefile)==crs(cyano_sf) # idk why it says false? they are both WGS 84 and 4326
 
 
+p<-ggplot()+
+  geom_sf(shapefile, mapping=aes()) +
+  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=5) +
+  theme_minimal() +
+  scale_color_viridis_c('% biovolume Cyanobacteria') +
+  facet_wrap(~Year, ncol=2)
+
+library(gganimate)
+library(transformr)
+p
+p.anim = p + transition_time(cyano_sf$CollDate)
+animate(p.anim)
 
 
+p.anim <- p + transition_time(cyano_sf$CollDate) +
+ transition_time(as.POSIXct(paste(cyano_sf$Year, cyano_sf$month, "01", sep = "-"), format='%Y-%b-%d')) +
+  #labs(title = "Year: {frame_time}") +
+  enter_fade() +
+  exit_fade()
+
+# p.anim
+# animate(p.anim, nframes = 200)
+
+library(gifski)
+anim_save(filename = 'Figures/ASLO24/cyano.gif', animation = p.anim, width = 800, height=600, fps=10, duration=30, renderer = gifski_renderer())
 

@@ -110,14 +110,14 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=WaterbodyName)) +
   theme_minimal() +
   scale_color_viridis_d('', option='turbo')
-ggsave('Figures/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month)) +
   theme_minimal() +
  # facet_wrap(~Year) +
   scale_color_viridis_d('')
-ggsave('Figures/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
@@ -166,7 +166,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=Cyanobacteria)) +
   scale_color_viridis_c() +
   theme_minimal()
-ggsave('Figures/nmds_cyano.png',height=4.5,width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/nmds_cyano.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 
@@ -271,7 +271,7 @@ ggplot() +
   scale_color_viridis_c() +
   geom_segment(sig.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = env.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-ggsave('Figures/nmds_envVar.png',height=4.5, width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/nmds_envVar.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
 # look at deepest points vs other locations on NMDS, any clustering there? 
@@ -809,7 +809,7 @@ N<- ggplot(TribLoadFlux |>
   annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='TN load (kg)') +
   scale_color_manual('',values =trib_colors)
-ggsave(N,'Figures/TN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave(N,'Figures/ASLO24/TN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 
 P<-ggplot(TribLoadFlux |> 
@@ -825,7 +825,7 @@ P<-ggplot(TribLoadFlux |>
   annotate("rect", xmin = as.Date('2022-11-01'), xmax = as.Date('2023-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey")  +
   labs(x='',y='TP load (kg)') +
   scale_color_manual('',values =trib_colors)
-ggsave(P,'Figures/TP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave(P,'Figures/ASLO24/TP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 N/P
 
@@ -838,10 +838,10 @@ TribLoadFlux |>
   arrange(dummy,fakedate) |>
   filter(!if_all(c(TotalTrib_TN_kg, TN_load_kg), is.na)) |>
 ggplot() +
-  geom_point(aes(fakedate, TotalTrib_TN_kg),size=3) +
-  geom_path(aes(fakedate, TotalTrib_TN_kg)) +
-  geom_point(aes(fakedate, TN_load_kg),size=3) +
-  geom_path(aes(fakedate, TN_load_kg)) +
+  geom_point(aes(fakedate, TotalTrib_TN_kg),size=3,color='red4') +
+  geom_path(aes(fakedate, TotalTrib_TN_kg),color='red4') +
+   geom_point(aes(fakedate, TN_load_kg),size=3,color='red4')+#, alpha=0) +
+   geom_path(aes(fakedate, TN_load_kg),color='red4') +#,alpha=0) +
   geom_abline(slope=0, intercept=0) +
   theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -849,7 +849,8 @@ ggplot() +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='TN load (kg)')
-ggsave('Figures/totalTN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave('Figures/ASLO24/totalTN_loading_INFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave('Figures/ASLO24/totalTN_loading_OUTFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 TribLoadFlux |> 
   mutate(IN_load_kg = NH4_load_kg + NO3_load_kg) |>
@@ -873,7 +874,7 @@ TribLoadFlux |>
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='Nitrate + ammonium load (kg)')
-ggsave('Figures/totalIN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave('Figures/ASLO24/totalIN_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 
 
@@ -886,10 +887,10 @@ TribLoadFlux |>
   arrange(dummy,fakedate) |>
   filter(!if_all(c(TotalTrib_TP_kg, TP_load_kg), is.na)) |>
 ggplot() +
-  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3) +
-  geom_path(aes(fakedate, TotalTrib_TP_kg)) +
-  geom_point(aes(fakedate, TP_load_kg),size=3) +
-  geom_path(aes(fakedate, TP_load_kg)) +
+  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3,color='#336a98') +
+  geom_path(aes(fakedate, TotalTrib_TP_kg),color='#336a98') +
+  geom_point(aes(fakedate, TP_load_kg),size=3,color='#336a98')+#,alpha=0) +
+  geom_path(aes(fakedate, TP_load_kg),color='#336a98')+#,alpha=0) +
   geom_abline(slope=0, intercept=0) +
   theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -897,8 +898,8 @@ ggplot() +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='TP load (kg)')
-ggsave('Figures/totalTP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
-
+ggsave('Figures/ASLO24/totalTP_loading_INFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave('Figures/ASLO24/totalTP_loading_OUTFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 TribLoadFlux |> 
   mutate(PO4_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*PO4_load_kg, NA)) |>
@@ -920,7 +921,7 @@ TribLoadFlux |>
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   labs(x='',y='Phosphate load (kg)')
-ggsave('Figures/totalPO4_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+ggsave('Figures/ASLO24/totalPO4_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
 
 # 10. Boysen storage  ####
@@ -1150,6 +1151,51 @@ ggplot(sd_data, aes(month, Cyanobacteria, color=WaterbodyName, group=WaterbodyNa
   theme_minimal() +
   labs(x='',y='% Biovolume cyanobacteria') +
   facet_wrap(~Year) 
+
+
+sd_data |>
+group_by(CollDate, Year, month) |>
+  summarise(mean = mean(Cyanobacteria),
+            max = max(Cyanobacteria),
+            min = min(Cyanobacteria)) |>
+  ungroup() |>
+  ggplot() +
+  geom_point(aes(CollDate, mean), size=3) +
+  geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  # scale_color_manual('', values=c('#882255','#332288')) +
+  theme(legend.position = 'none') +
+  labs(x='',y='% Biovolume cyanobacteria')
+ggsave('Figures/ASLO24/cyano_biovol_agg.png',height=4.5,width=6.5,units='in',dpi=1200)
+
+
+sd_data |>
+  group_by(CollDate, Year, month) |>
+  summarise(meanCN = mean(Cyanobacteria),
+            meanTN= mean(TN),
+            meanTP = mean(TP)) |>
+  ungroup() |>
+  ggplot() +
+  geom_point(aes(CollDate, meanCN), size=3) +
+  geom_line(aes(CollDate, meanCN, group=Year)) +
+  geom_point(aes(CollDate, meanTN*100), size=3,color='red4') +
+  geom_line(aes(CollDate, meanTN*100, group=Year), color='red4') +
+  geom_point(aes(CollDate, meanTP*1000), size=3,color='#336a98') +
+  geom_line(aes(CollDate, meanTP*1000, group=Year), color='#336a98') +
+  theme_minimal() +
+  annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  annotate("rect", xmin = as.Date('2022-10-15'), xmax = as.Date('2023-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
+  # scale_color_manual('', values=c('#882255','#332288')) +
+  theme(legend.position = 'none') +
+  labs(x='',y='% Biovolume cyanobacteria')
+ggsave('Figures/ASLO24/cyano_biovol_agg_N.png',height=4.5,width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/cyano_biovol_agg_N_P.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(sd_data, aes(TN, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
   geom_point() +
