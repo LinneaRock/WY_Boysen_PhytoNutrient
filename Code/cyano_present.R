@@ -237,9 +237,16 @@ ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   facet_wrap(~ShortName_Revised, scales='free')
   
 
+
+
+
 # 4. Cyanos Gif ####
 library(sf)
 library(raster)
+library(gganimate)
+library(transformr)
+library(gifski)
+
 shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 class(shapefile)# sf, df
 crs(shapefile)
@@ -247,36 +254,124 @@ crs(shapefile)
 cyano_sf <- BoysenPhyto_cat |>
   left_join(BoysenChem) |>
   dplyr::select(WaterbodyName, Year, month,Latitude, Longitude, Cyanobacteria) |>
+  mutate(Cyanobacteria=ifelse(Cyanobacteria==0, NA, Cyanobacteria)) |>
+  mutate(fakedate=as.POSIXct(paste(Year, match(month, month.abb), "01", sep = "-"))) |>
+  distinct() |>
   st_as_sf(coords=c('Longitude','Latitude'), crs=4326)
 
 crs(cyano_sf)
 
 crs(shapefile)==crs(cyano_sf) # idk why it says false? they are both WGS 84 and 4326
 
-
-p<-ggplot()+
+## 2020 gif ####
+p<-cyano_sf |>
+  filter(Year=='2020') |>
+ggplot()+
   geom_sf(shapefile, mapping=aes()) +
-  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=5) +
+  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=6) +
   theme_minimal() +
   scale_color_viridis_c('% biovolume Cyanobacteria') +
-  facet_wrap(~Year, ncol=2)
+  theme(axis.text.x = element_text(angle=45),
+        plot.title = element_text(size = 20, face = "bold"))
 
-library(gganimate)
-library(transformr)
 p
-p.anim = p + transition_time(cyano_sf$CollDate)
-animate(p.anim)
 
+# Set explicit range for transition_time if necessary
+time_range <- range((cyano_sf|>
+                      filter(Year=='2020'))$fakedate, na.rm = TRUE) 
 
-p.anim <- p + transition_time(cyano_sf$CollDate) +
- transition_time(as.POSIXct(paste(cyano_sf$Year, cyano_sf$month, "01", sep = "-"), format='%Y-%b-%d')) +
-  #labs(title = "Year: {frame_time}") +
+p.anim <- p + 
+  transition_time(cyano_sf$fakedate, range = time_range) +
+  labs(title = 'Year-Month: {format(frame_time, "%Y-%B")}') +
   enter_fade() +
-  exit_fade()
+  exit_fade() 
+
 
 # p.anim
-# animate(p.anim, nframes = 200)
+#animate(p.anim, nframes = 200)
 
 library(gifski)
-anim_save(filename = 'Figures/ASLO24/cyano.gif', animation = p.anim, width = 800, height=600, fps=10, duration=30, renderer = gifski_renderer())
+anim_save(filename = 'Figures/ASLO24/cyano2020.gif', animation = p.anim, width = 800, height=600, fps=10, duration=10, renderer = gifski_renderer())
 
+
+
+## 2021 gif ####
+p<-cyano_sf |>
+  filter(Year=='2021') |>
+  ggplot()+
+  geom_sf(shapefile, mapping=aes()) +
+  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=6) +
+  theme_minimal() +
+  scale_color_viridis_c('% biovolume Cyanobacteria') +
+  theme(axis.text.x = element_text(angle=45),
+        plot.title = element_text(size = 20, face = "bold"))
+
+p
+
+# Set explicit range for transition_time if necessary
+time_range <- range((cyano_sf|>
+                       filter(Year=='2021'))$fakedate, na.rm = TRUE) 
+
+p.anim <- p + 
+  transition_time(cyano_sf$fakedate, range = time_range) +
+  labs(title = 'Year-Month: {format(frame_time, "%Y-%B")}') +
+  enter_fade() +
+  exit_fade() 
+
+
+anim_save(filename = 'Figures/ASLO24/cyano2021.gif', animation = p.anim, width = 800, height=600, fps=10, duration=10, renderer = gifski_renderer())
+
+
+
+## 2022 gif ####
+p<-cyano_sf |>
+  filter(Year=='2022') |>
+  ggplot()+
+  geom_sf(shapefile, mapping=aes()) +
+  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=6) +
+  theme_minimal() +
+  scale_color_viridis_c('% biovolume Cyanobacteria') +
+  theme(axis.text.x = element_text(angle=45),
+        plot.title = element_text(size = 20, face = "bold"))
+
+p
+
+# Set explicit range for transition_time if necessary
+time_range <- range((cyano_sf|>
+                       filter(Year=='2022'))$fakedate, na.rm = TRUE) 
+
+p.anim <- p + 
+  transition_time(cyano_sf$fakedate, range = time_range) +
+  labs(title = 'Year-Month: {format(frame_time, "%Y-%B")}') +
+  enter_fade() +
+  exit_fade() 
+
+
+anim_save(filename = 'Figures/ASLO24/cyano2022.gif', animation = p.anim, width = 800, height=600, fps=10, duration=10, renderer = gifski_renderer())
+
+
+
+## 2023 gif ####
+p<-cyano_sf |>
+  filter(Year=='2023') |>
+  ggplot()+
+  geom_sf(shapefile, mapping=aes()) +
+  geom_sf(cyano_sf, mapping=aes(color=Cyanobacteria),size=6) +
+  theme_minimal() +
+  scale_color_viridis_c('% biovolume Cyanobacteria') +
+  theme(axis.text.x = element_text(angle=45),
+        plot.title = element_text(size = 20, face = "bold"))
+
+p
+
+# Set explicit range for transition_time if necessary
+time_range <- range((cyano_sf|>
+                       filter(Year=='2023'))$fakedate, na.rm = TRUE) 
+
+p.anim <- p + 
+  transition_time(cyano_sf$fakedate, range = time_range) +
+  labs(title = 'Year-Month: {format(frame_time, "%Y-%B")}') +
+  enter_fade() +
+  exit_fade() 
+
+anim_save(filename = 'Figures/ASLO24/cyano2023.gif', animation = p.anim, width = 800, height=600, fps=10, duration=10, renderer = gifski_renderer())
