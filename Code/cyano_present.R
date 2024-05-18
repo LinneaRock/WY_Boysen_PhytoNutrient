@@ -375,3 +375,30 @@ p.anim <- p +
   exit_fade() 
 
 anim_save(filename = 'Figures/ASLO24/cyano2023.gif', animation = p.anim, width = 800, height=600, fps=10, duration=10, renderer = gifski_renderer())
+
+# 5. gif not working well - create manually ####
+months <- c('May','Jun','Jul','Aug','Sep','Oct')
+years <- c('2020','2021','2022','2023')
+
+for(y in years) {
+  for(m in months) {
+    
+    p<-cyano_sf |>
+      filter(Year==y,
+             month==m) |>
+      drop_na() |>
+      ggplot()+
+      geom_sf(shapefile, mapping=aes()) +
+      geom_sf(mapping=aes(color=Cyanobacteria),size=3) +
+      theme_minimal() +
+      labs(x='',y='',title=paste0(y,': ', m)) +
+      scale_color_viridis_c('% biovolume \n Cyanobacteria', limits=c(0,100)) +
+      theme(axis.text.x = element_text(angle=45),
+            plot.title = element_text(size = 10, face = "bold"))
+    
+    ggsave(filename=paste0('Figures/ASLO24/GIFS/', y,m,'.png'),plot=p,height=4.5,width=6.5,units='in',dpi=1200)
+    
+    
+  }
+}
+

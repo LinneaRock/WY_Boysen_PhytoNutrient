@@ -99,7 +99,7 @@ library(yardstick)
 
 ## 2B. Predict Before-During-After toxins present ####
 cart_data <- trn_data  |>
-  left_join(cyano_prep) |> # this is from cyano_present.R
+  left_join(cyano_prep) |> # this df is from cyano_present.R
   mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
     # i wish i could figure out how to code this instead of manually, but idk how
   # 2020
@@ -303,9 +303,9 @@ summary(results_tree) # 100
 
 
 
-
+set.seed(06261993)
 # fit the model with the best hyperparameters
-fit_rf <- randomForest(Cyanobacteria~.,
+BIOMASS_fit_rf <- randomForest(Cyanobacteria~.,
                        training.dat,
                        method = "rf",
                        metric = "RMSE",
@@ -316,11 +316,11 @@ fit_rf <- randomForest(Cyanobacteria~.,
                        mtry = 8,
                        ntree = 100)
 # get predicted values
-testing.dat$prediction <- predict(fit_rf, testing.dat)
+testing.dat$prediction <- predict(BIOMASS_fit_rf, testing.dat)
 
 
 
-fit_rf
+BIOMASS_fit_rf
 
 # Call:
 #   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 8, ntree = 100) 
@@ -328,43 +328,48 @@ fit_rf
 # Number of trees: 100
 # No. of variables tried at each split: 8
 # 
-# Mean of squared residuals: 650.1686
-# % Var explained: 57.56
+# Mean of squared residuals: 621.9576
+# % Var explained: 59.4
 
-varImpPlot(fit_rf)
-plot(fit_rf)
+varImpPlot(BIOMASS_fit_rf)
+plot(BIOMASS_fit_rf)
 
-plt.dat<-varImpPlot(fit_rf, type = 1, scale = TRUE,
+plt.dat<-varImpPlot(BIOMASS_fit_rf, type = 1, scale = TRUE,
            n.var = ncol(rf.data) - 1, cex = 0.8,
            main = "Variable importance") |>
   as.data.frame() |>
-  mutate(variable=rownames(plt.dat)) |>
-  order()
+  arrange(desc(`%IncMSE`))
 
-ggplot(plt.dat)
+plt.dat<-cbind(rownames(plt.dat), plt.dat) |>
+  rename(var=1)
 
-ggsave(impplot, 'Figures/RandomForest/Cyano_%biomass/Var_importance_biomass.png', height=4.5, width=6.5, dpi=1200)
+ggplot(plt.dat |> filter(var != 'NH4')) +
+  geom_bar(aes(x=`%IncMSE`,y=reorder(var, `%IncMSE`)), stat='identity') +
+  theme_minimal() +
+  labs(y='')
 
-fit_rf$importance
+ggsave('Figures/RandomForest/Cyano_%biomass/Var_importance_biomass.png', height=4.5, width=6.5, dpi=1200)
+
+BIOMASS_fit_rf$importance
 
 library(reprtree)
-plot.getTree(fit_rf)
+plot.getTree(BIOMASS_fit_rf)
 
 
 
-fit_rf$mse[length(fit_rf$mse)]
+BIOMASS_fit_rf$mse[length(BIOMASS_fit_rf$mse)]
 # take square root to calculate RMSE for the model
-sqrt(fit_rf$mse[length(fit_rf$mse)]) # 25.50
+sqrt(BIOMASS_fit_rf$mse[length(BIOMASS_fit_rf$mse)]) # 24.93908
 
 # now illustrate how to calculate RMSE on test data vs. training data
-predValues <- predict(fit_rf,testing.dat)
+predValues <- predict(BIOMASS_fit_rf,testing.dat)
 # we can calculate it  directly 
-sqrt(mean((testing.dat$Cyanobacteria - predValues)^2)) # 18.20
+sqrt(mean((testing.dat$Cyanobacteria - predValues)^2)) # 18.74332
 
 
 
 test.result<- lm(Cyanobacteria~prediction, testing.dat)
-summary(test.result)
+summary(test.result) # Adjusted R-squared:  0.6834
 
 
 ggplot() +
@@ -376,7 +381,7 @@ ggplot() +
   geom_text(mapping=aes(25,90, label=paste0('R² = ', round(summary(test.result)$adj.r,2)))) +
   geom_text(mapping=aes(25,85, label=paste0('RMSE = ', round(sqrt(mean((testing.dat$Cyanobacteria - predValues)^2))))))
 
-
+ggsave('Figures/RandomForest/Cyano_%biomass/prediction_line.png', height=4.5, width=6.5, dpi=1200)
 
 
 
@@ -448,9 +453,9 @@ summary(results_tree) # they're like all the same? so I'll just go with 100
 
 
 
-
+set.seed(06261993)
 # fit the model with the best hyperparameters
-fit_rf <- randomForest(toxinpresent~.,
+presence_fit_rf <- randomForest(toxinpresent~.,
                        training.dat,
                        method = "rf",
                        #metric = "RMSE",
@@ -461,11 +466,11 @@ fit_rf <- randomForest(toxinpresent~.,
                        mtry = 6,
                        ntree = 100)
 # get predicted values
-testing.dat$prediction <- predict(fit_rf, testing.dat)
+testing.dat$prediction <- predict(presence_fit_rf, testing.dat)
 
 
 
-fit_rf
+presence_fit_rf
 
 # Call:
 #   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 6, ntree = 100) 
@@ -473,23 +478,123 @@ fit_rf
 # Number of trees: 100
 # No. of variables tried at each split: 6
 # 
-# OOB estimate of  error rate: 14.5%
+# OOB estimate of  error rate: 11.45%
 # Confusion matrix:
-#   0  1   class.error
-# 0 56  9   0.1384615
-# 1 10 56   0.1515152
+#    0   1 class.error
+# 0  58  7   0.1076923
+# 1  8  58   0.1212121
 
-varImpPlot(fit_rf)
-plot(fit_rf)
+varImpPlot(presence_fit_rf)
+plot(presence_fit_rf)
 
-varImpPlot(fit_rf, type = 1, scale = TRUE,
+varImpPlot(presence_fit_rf, type = 1, scale = TRUE,
            n.var = ncol(rf.data) - 1, cex = 0.8,
            main = "Variable importance")
 
-fit_rf$importance
+presence_fit_rf$importance
+
+plt.dat<-varImpPlot(presence_fit_rf, type = 1, scale = TRUE,
+                    n.var = ncol(rf.data) - 1, cex = 0.8,
+                    main = "Variable importance") |>
+  as.data.frame() |>
+  arrange(desc(MeanDecreaseAccuracy))
+
+plt.dat<-cbind(rownames(plt.dat), plt.dat) |>
+  rename(var=1)
+
+ggplot(plt.dat |> filter(var != 'NH4')) +
+  geom_bar(aes(x=MeanDecreaseAccuracy,y=reorder(var, MeanDecreaseAccuracy)), stat='identity') +
+  theme_minimal() +
+  labs(y='',x='Variable importance')
+
+ggsave('Figures/RandomForest/PresenceToxin/Var_importance_presence.png', height=4.5, width=6.5, dpi=1200)
+
+
 
 library(reprtree)
-plot.getTree(fit_rf)
+plot.getTree(presence_fit_rf)
+
+
+# plot ROC curve
+# predict test set, get probs instead of response
+predictions <- as.data.frame(predict(presence_fit_rf, testing.dat, type = "prob"))
+
+# predict class and then attach test class
+predictions$predict <- names(predictions)[1:2][apply(predictions[,1:2], 1, which.max)]
+predictions$observed <- testing.dat$toxinpresent
+head(predictions)
+
+
+library(pROC)
+roc.absence <- roc(ifelse(predictions$observed==0, "Absent", "not"), as.numeric(predictions$Absent))
+
+roc.presence <- roc(ifelse(predictions$observed==1, "Detected", "not"), as.numeric(predictions$observed))
+
+
+
+
+
+
+roc.dat <- data.frame(toxinpresent='Absent',
+                      Sensitivity=roc.absence[["sensitivities"]],
+                      Specificity=roc.absence[["specificities"]]) |>
+  rbind(data.frame(toxinpresent='Detected',
+                   Sensitivity=roc.presence[["sensitivities"]],
+                   Specificity=roc.presence[["specificities"]])) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Absent','Detected')))
+
+AUC <- data.frame(toxinpresent=c('Absent','Detected'),
+                  auc=c(roc.absence[["auc"]],roc.presence[["auc"]]))
+
+
+
+ggplot() +
+  theme_classic() +
+  geom_path(roc.dat, mapping=aes(x=1-Specificity,y=Sensitivity,color = toxinpresent)) +
+  scale_color_manual('Cyanotoxin presence', values=c('#88CCEE','#999933','#44AA99')) +
+  geom_abline(slope=1,intercept=0, linetype="dashed")+
+  theme(legend.position = c(0.8,0.5),
+        legend.background=element_rect(fill = alpha("white", 0))) +
+  geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.9,0.55, label=paste0('AUC = ',round(auc,2))), color='#88CCEE')+
+  geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.9,0.47, label=paste0('AUC = ',round(auc,2))), color='#999933') +
+  geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.9,0.39, label=paste0('AUC = ',round(auc,2))), color='#44AA99')
+
+
+
+
+
+# plot confusion matrix
+cm <- confusionMatrix(testing.dat$prediction, testing.dat$toxinpresent, dnn=c('Predicted', 'Observed'))
+
+cm <- as.data.frame(cm$table) |>
+  group_by(Observed) |>
+  mutate(prop = Freq/sum(Freq),
+         prop = round(prop,2))
+
+
+
+ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
+  geom_tile(color="black") +
+  scale_x_discrete(expand = c(0, 0))+ #remove white space
+  scale_y_discrete(expand = c(0, 0))+ #remove white space
+  scale_fill_gradient(low="white", high="#DDCC77",
+                      name="Frequency") +
+  geom_text(aes(label = paste0("n=",Freq)), vjust = .5,  alpha = 1, size=3) +
+  geom_text(aes(label = paste0("prop.=",prop)), vjust = 2.0,  alpha = 1, size=2) +
+  theme_minimal() +
+  theme(axis.title = element_blank(),
+        axis.text.y=element_text(angle=45),
+        legend.position = 'none')
+
+
+
+
+
+
+
+
+
+
 
 
 

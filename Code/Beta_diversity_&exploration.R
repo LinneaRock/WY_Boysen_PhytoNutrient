@@ -15,6 +15,8 @@ n_phyto <- BoysenPhyto_A |>
 
 
 
+
+## look at H and stability ####
 ggplot(BoysenPhyto_A) +
   geom_boxplot(aes(month, H)) +
   geom_point(aes(month, H, color=WaterbodyName)) +
@@ -26,6 +28,69 @@ ggplot(BoysenPhyto_A) +
 
 ggplot(BoysenPhyto_A) +
   geom_boxplot(aes(month, H)) 
+
+
+
+
+  h <- aov(H~month, BoysenPhyto_A)
+  tukey <- TukeyHSD(h)
+  library(multcompView)
+  cld <- multcompLetters4(h, tukey)
+  cld2 <- data.frame(letters = cld$month$Letters)
+  cld2$month <- rownames(cld2)
+  sig.letters <- cld2
+
+
+sig.letters <- sig.letters |>
+  drop_na(letters) 
+
+means <- left_join(BoysenPhyto_A, sig.letters) |>
+  group_by(month, letters) |>
+  summarise(max.result = max(H, na.rm = TRUE)) |>
+  distinct()
+
+ggplot(BoysenPhyto_A) +
+  geom_boxplot(aes(month, H)) +
+  geom_jitter(aes(month, H, color=WaterbodyName),alpha=0.5) +
+  scale_color_viridis_d('', option='turbo') +
+  geom_text(means, mapping=aes(month, 
+                             max.result+0.5, label = letters), 
+          size=4) +
+  labs(x='',y='Shannon-Weiner diversity index') +
+  theme_minimal()
+ggsave('Figures/ASLO24/H_diversity.png',height=4.5,width=6.5,units='in',dpi=1200)
+
+
+
+
+
+h <- aov(SS~month, SS)
+tukey <- TukeyHSD(h)
+library(multcompView)
+cld <- multcompLetters4(h, tukey)
+cld2 <- data.frame(letters = cld$month$Letters)
+cld2$month <- rownames(cld2)
+sig.letters <- cld2
+
+
+sig.letters <- sig.letters |>
+  drop_na(letters) 
+
+means <- left_join(SS, sig.letters) |>
+  group_by(month, letters) |>
+  summarise(max.result = max(SS, na.rm = TRUE)) |>
+  distinct()
+
+ggplot(SS) +
+  geom_boxplot(aes(month, SS)) +
+  geom_jitter(aes(month, SS, color=WaterbodyName),alpha=0.5) +
+  scale_color_viridis_d('', option='turbo') +
+  geom_text(means, mapping=aes(month, 
+                               max.result+100, label = letters), 
+            size=4) +
+  labs(x='',y='Schmidt Stability Index'~(J~m^-2)) +
+  theme_minimal()
+ggsave('Figures/ASLO24/stability.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 
@@ -41,7 +106,7 @@ sd_data <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-   select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+   dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) 
  
 
@@ -116,7 +181,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month)) +
   theme_minimal() +
  # facet_wrap(~Year) +
-  scale_color_viridis_d('')
+  scale_color_viridis_d('',option='magma')
 ggsave('Figures/ASLO24/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
@@ -609,15 +674,20 @@ abundances <- inner_join(phyto_rel_abund, taxon_pool) |>
             .groups="drop") |>
   drop_na(taxa)
   
-
-ggplot(abundances, aes(rel_abund, taxa, color=WaterbodyName)) +
+abundances |>
+  drop_na()|>
+  arrange(desc(mean)) |>
+  mutate(taxa=factor(taxa)) |>
+  filter(mean>5) |> # annoying filter just to make plot less complicated by removeing the lowest taxa
+ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
   stat_summary(fun.data=median_hilow, geom = "pointrange",
                fun.args=list(conf.int=0.5),
                position = position_dodge(width=0.6)) +
   theme_minimal() +
   labs(y=NULL,
        x="Relative Abundance (%)") +
-  scale_color_viridis_d(option='turbo')
+  scale_color_viridis_d('',option='turbo') 
+ggsave('Figures/ASLO24/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 # 7. %cyano plot from Smith 1983 ####
@@ -1236,8 +1306,5 @@ ggplot(sd_data, aes(PO4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName
   theme_minimal() +
   labs(x='Phosphate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
   facet_wrap(~Year) 
-
-
-
 
 
