@@ -515,79 +515,79 @@ library(reprtree)
 plot.getTree(presence_fit_rf)
 
 
-# plot ROC curve
-# predict test set, get probs instead of response
-predictions <- as.data.frame(predict(presence_fit_rf, testing.dat, type = "prob"))
-
-# predict class and then attach test class
-predictions$predict <- names(predictions)[1:2][apply(predictions[,1:2], 1, which.max)]
-predictions$observed <- testing.dat$toxinpresent
-head(predictions)
-
-
-library(pROC)
-roc.absence <- roc(ifelse(predictions$observed==0, "Absent", "not"), as.numeric(predictions$Absent))
-
-roc.presence <- roc(ifelse(predictions$observed==1, "Detected", "not"), as.numeric(predictions$observed))
-
-
-
-
-
-
-roc.dat <- data.frame(toxinpresent='Absent',
-                      Sensitivity=roc.absence[["sensitivities"]],
-                      Specificity=roc.absence[["specificities"]]) |>
-  rbind(data.frame(toxinpresent='Detected',
-                   Sensitivity=roc.presence[["sensitivities"]],
-                   Specificity=roc.presence[["specificities"]])) |>
-  mutate(toxinpresent=factor(toxinpresent, levels=c('Absent','Detected')))
-
-AUC <- data.frame(toxinpresent=c('Absent','Detected'),
-                  auc=c(roc.absence[["auc"]],roc.presence[["auc"]]))
-
-
-
-ggplot() +
-  theme_classic() +
-  geom_path(roc.dat, mapping=aes(x=1-Specificity,y=Sensitivity,color = toxinpresent)) +
-  scale_color_manual('Cyanotoxin presence', values=c('#88CCEE','#999933','#44AA99')) +
-  geom_abline(slope=1,intercept=0, linetype="dashed")+
-  theme(legend.position = c(0.8,0.5),
-        legend.background=element_rect(fill = alpha("white", 0))) +
-  geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.9,0.55, label=paste0('AUC = ',round(auc,2))), color='#88CCEE')+
-  geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.9,0.47, label=paste0('AUC = ',round(auc,2))), color='#999933') +
-  geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.9,0.39, label=paste0('AUC = ',round(auc,2))), color='#44AA99')
-
-
-
-
-
-# plot confusion matrix
-cm <- confusionMatrix(testing.dat$prediction, testing.dat$toxinpresent, dnn=c('Predicted', 'Observed'))
-
-cm <- as.data.frame(cm$table) |>
-  group_by(Observed) |>
-  mutate(prop = Freq/sum(Freq),
-         prop = round(prop,2))
-
-
-
-ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
-  geom_tile(color="black") +
-  scale_x_discrete(expand = c(0, 0))+ #remove white space
-  scale_y_discrete(expand = c(0, 0))+ #remove white space
-  scale_fill_gradient(low="white", high="#DDCC77",
-                      name="Frequency") +
-  geom_text(aes(label = paste0("n=",Freq)), vjust = .5,  alpha = 1, size=3) +
-  geom_text(aes(label = paste0("prop.=",prop)), vjust = 2.0,  alpha = 1, size=2) +
-  theme_minimal() +
-  theme(axis.title = element_blank(),
-        axis.text.y=element_text(angle=45),
-        legend.position = 'none')
-
-
-
+# # plot ROC curve
+# # predict test set, get probs instead of response
+# predictions <- as.data.frame(predict(presence_fit_rf, testing.dat, type = "prob")) 
+# 
+# 
+# # predict class and then attach test class
+# predictions$predict <- names(predictions)[1:2][apply(predictions[,1:2], 1, which.max)]
+# predictions$observed <- testing.dat$toxinpresent
+# head(predictions)
+# 
+# library(pROC)
+# roc.absent <- roc(ifelse(predictions$observed==0,'absent',"non-absent"), as.numeric(predictions$`0`))
+# 
+# roc.present <- roc(ifelse(predictions$observed==1, "present", "non-present"), as.numeric(predictions$`0`))
+# 
+# 
+# 
+# roc.dat <- data.frame(toxinpresent=0,
+#                       Sensitivity=roc.absent[["sensitivities"]],
+#                       Specificity=roc.absent[["specificities"]]) |>
+#   rbind(data.frame(toxinpresent=1,
+#                    Sensitivity=roc.present[["sensitivities"]],
+#                    Specificity=roc.present[["specificities"]])) 
+# 
+# AUC <- data.frame(toxinpresent=c('Before','During','After'),
+#                   auc=c(roc.Before[["auc"]],roc.During[["auc"]],roc.After[["auc"]]))
+# 
+# 
+# 
+# ggplot() +
+#   theme_classic() +
+#   geom_path(roc.dat, mapping=aes(x=1-Specificity,y=Sensitivity,color = toxinpresent)) +
+#   scale_color_manual('Cyanotoxin presence', values=c('#88CCEE','#999933')) +
+#   geom_abline(slope=1,intercept=0, linetype="dashed")+
+#   theme(legend.position = c(0.65,0.25),
+#         legend.background=element_rect(fill = alpha("white", 0))) +
+#   geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.81,0.27, label=paste0('AUC = ',round(auc,2))), color='#88CCEE',size=3.4)+
+#   geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.81,0.19, label=paste0('AUC = ',round(auc,2))), color='#999933',size=3.4) +
+#   geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.81,0.12, label=paste0('AUC = ',round(auc,2))), color='#44AA99',size=3.4)
+# 
+# 
+# 
+# 
+# # plot confusion matrix
+# cm <- confusionMatrix(testing.dat$prediction, testing.dat$toxinpresent, dnn=c('Predicted', 'Observed'))
+# 
+# accuracy <- cm$overall
+# 
+# cm <- as.data.frame(cm$table) |>
+#   group_by(Observed) |>
+#   mutate(prop = Freq/sum(Freq),
+#          prop = round(prop,2))
+# 
+# 
+# 
+# cmplot<-ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
+#   geom_tile(color="black") +
+#   scale_x_discrete(expand = c(0, 0))+ #remove white space
+#   scale_y_discrete(expand = c(0, 0))+ #remove white space
+#   scale_fill_gradient(low="white", high="#999933",
+#                       name="Frequency") +
+#   geom_text(aes(label = paste0("n=",Freq)), vjust = .5,  alpha = 1, size=3) +
+#   geom_text(aes(label = paste0("prop.=",prop)), vjust = 2.0,  alpha = 1, size=2) +
+#   theme_minimal() +
+#   theme(axis.title = element_blank(),
+#         axis.text.y=element_text(angle=45),
+#         legend.position = 'none') +
+#   labs(title = paste0("Accuracy: ",round(accuracy,2))) 
+# 
+# library(patchwork)
+# cmplot+rocplot
+# 
+# ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
 
 
@@ -681,9 +681,9 @@ summary(results_tree) # 100
 
 
 
-
+set.seed(06261993)
 # fit the model with the best hyperparameters
-fit_rf <- randomForest(toxinpresent~.,
+bda_fit_rf <- randomForest(toxinpresent~.,
                        training.dat,
                        method = "rf",
                        #metric = "RMSE",
@@ -694,11 +694,11 @@ fit_rf <- randomForest(toxinpresent~.,
                        mtry = 4,
                        ntree = 100)
 # get predicted values
-testing.dat$prediction <- predict(fit_rf, testing.dat)
+testing.dat$prediction <- predict(bda_fit_rf, testing.dat)
 
 
 
-fit_rf
+bda_fit_rf
 
 # Call:
 #   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 100) 
@@ -706,29 +706,48 @@ fit_rf
 # Number of trees: 100
 # No. of variables tried at each split: 4
 # 
-# OOB estimate of  error rate: 13.74%
+# OOB estimate of  error rate: 14.5%
 # Confusion matrix:
-#           Before During After class.error
-# Before     41      8     0   0.1632653
-# During      7     59     0   0.1060606
-# After       1      2    13   0.1875000
+#          Before During After class.error
+# Before     41      7     1  0.16326531
+# During      6     60     0  0.09090909
+# After       1      4    11  0.31250000
 
-varImpPlot(fit_rf)
-plot(fit_rf)
+varImpPlot(bda_fit_rf)
+plot(bda_fit_rf)
 
-varImpPlot(fit_rf, type = 1, scale = TRUE,
+varImpPlot(bda_fit_rf, type = 2, scale = TRUE,
            n.var = ncol(rf.data) - 1, cex = 0.8,
            main = "Variable importance")
 
-fit_rf$importance
+bda_fit_rf$importance
 
 
-plot.getTree(fit_rf)
+plot.getTree(bda_fit_rf)
+
+
+plt.dat<-varImpPlot(bda_fit_rf, type = 1, scale = TRUE,
+                    n.var = ncol(rf.data) - 1, cex = 0.8,
+                    main = "Variable importance") |>
+  as.data.frame() |>
+  arrange(desc(MeanDecreaseAccuracy))
+
+plt.dat<-cbind(rownames(plt.dat), plt.dat) |>
+  rename(var=1)
+
+ggplot(plt.dat) +
+  geom_bar(aes(x=MeanDecreaseAccuracy,y=reorder(var, MeanDecreaseAccuracy)), stat='identity') +
+  theme_minimal() +
+  labs(y='')
+
+ggsave('Figures/RandomForest/beforeduringaftertoxin/Var_importance_bda.png', height=4.5, width=6.5, dpi=1200)
+
+
 
 
 # plot ROC curve
 # predict test set, get probs instead of response
-predictions <- as.data.frame(predict(fit_rf, testing.dat, type = "prob"))
+predictions <- as.data.frame(predict(bda_fit_rf, testing.dat, type = "prob"))
 
 # predict class and then attach test class
 predictions$predict <- names(predictions)[1:3][apply(predictions[,1:3], 1, which.max)]
@@ -762,23 +781,24 @@ AUC <- data.frame(toxinpresent=c('Before','During','After'),
 
 
 
-ggplot() +
+rocplot<-ggplot() +
   theme_classic() +
   geom_path(roc.dat, mapping=aes(x=1-Specificity,y=Sensitivity,color = toxinpresent)) +
   scale_color_manual('Cyanotoxin presence', values=c('#88CCEE','#999933','#44AA99')) +
   geom_abline(slope=1,intercept=0, linetype="dashed")+
-  theme(legend.position = c(0.8,0.5),
+  theme(legend.position = c(0.65,0.25),
         legend.background=element_rect(fill = alpha("white", 0))) +
-  geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.9,0.55, label=paste0('AUC = ',round(auc,2))), color='#88CCEE')+
-  geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.9,0.47, label=paste0('AUC = ',round(auc,2))), color='#999933') +
-  geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.9,0.39, label=paste0('AUC = ',round(auc,2))), color='#44AA99')
+  geom_text(AUC |> filter(toxinpresent=='Before'), mapping=aes(0.81,0.27, label=paste0('AUC = ',round(auc,2))), color='#88CCEE',size=3.4)+
+  geom_text(AUC |> filter(toxinpresent=='During'), mapping=aes(0.81,0.19, label=paste0('AUC = ',round(auc,2))), color='#999933',size=3.4) +
+  geom_text(AUC |> filter(toxinpresent=='After'), mapping=aes(0.81,0.12, label=paste0('AUC = ',round(auc,2))), color='#44AA99',size=3.4)
   
-
 
 
 
 # plot confusion matrix
 cm <- confusionMatrix(testing.dat$prediction, testing.dat$toxinpresent, dnn=c('Predicted', 'Observed'))
+
+accuracy <- cm$overall
 
 cm <- as.data.frame(cm$table) |>
   group_by(Observed) |>
@@ -787,18 +807,56 @@ cm <- as.data.frame(cm$table) |>
 
 
 
-ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
+cmplot<-ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
   geom_tile(color="black") +
   scale_x_discrete(expand = c(0, 0))+ #remove white space
   scale_y_discrete(expand = c(0, 0))+ #remove white space
-  scale_fill_gradient(low="white", high="#DDCC77",
+  scale_fill_gradient(low="white", high="#999933",
                       name="Frequency") +
   geom_text(aes(label = paste0("n=",Freq)), vjust = .5,  alpha = 1, size=3) +
   geom_text(aes(label = paste0("prop.=",prop)), vjust = 2.0,  alpha = 1, size=2) +
   theme_minimal() +
   theme(axis.title = element_blank(),
         axis.text.y=element_text(angle=45),
-        legend.position = 'none')
+        legend.position = 'none') +
+  labs(title = paste0("Accuracy: ",round(accuracy,2))) 
+
+library(patchwork)
+cmplot+rocplot
+
+ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
 
+
+
+### 3D - variables ####
+# look at top ten most important variables via Mean Decrease in Accuracy (MDA)
+top10 <- plt.dat |>
+  slice(1:10)
+
+bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  # i wish i could figure out how to code this instead of manually, but idk how
+  # 2020
+  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
+                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
+  # 2021
+  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2022
+  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2023
+  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) |>
+  # here, let's just keep the top 10 best predictor variables from MDA
+  filter(ShortName_Revised %in% c(top10$var))
+
+library(ggpubr)
+ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d(option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free')
 
