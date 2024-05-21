@@ -677,7 +677,7 @@ for (ntree in c(100, 150, 250, 300, 350, 400, 450, 500, 800, 1000, 2000)) {
 }
 results_tree <- resamples(store_maxtrees)
 
-summary(results_tree) # 100
+summary(results_tree) # 250
 
 
 
@@ -692,7 +692,7 @@ bda_fit_rf <- randomForest(toxinpresent~.,
                                                 number = 10),
                        importance = TRUE,
                        mtry = 4,
-                       ntree = 100)
+                       ntree = 250)
 # get predicted values
 testing.dat$prediction <- predict(bda_fit_rf, testing.dat)
 
@@ -701,22 +701,22 @@ testing.dat$prediction <- predict(bda_fit_rf, testing.dat)
 bda_fit_rf
 
 # Call:
-#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 100) 
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 250) 
 # Type of random forest: classification
-# Number of trees: 100
+# Number of trees: 250
 # No. of variables tried at each split: 4
 # 
-# OOB estimate of  error rate: 14.5%
+# OOB estimate of  error rate: 12.21%
 # Confusion matrix:
-#          Before During After class.error
+#         Before During After class.error
 # Before     41      7     1  0.16326531
 # During      6     60     0  0.09090909
-# After       1      4    11  0.31250000
+# After       0      2    14  0.12500000
 
 varImpPlot(bda_fit_rf)
 plot(bda_fit_rf)
 
-varImpPlot(bda_fit_rf, type = 2, scale = TRUE,
+varImpPlot(bda_fit_rf, type = 1, scale = TRUE,
            n.var = ncol(rf.data) - 1, cex = 0.8,
            main = "Variable importance")
 
@@ -849,14 +849,18 @@ bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
   mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
   mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) |>
   # here, let's just keep the top 10 best predictor variables from MDA
-  filter(ShortName_Revised %in% c(top10$var))
+  filter(ShortName_Revised %in% c(top10$var)) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var)))
 
-library(ggpubr)
+#library(ggpubr)
 ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
-  scale_color_viridis_d(option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
-  facet_wrap(~ShortName_Revised, scales='free')
+  scale_color_viridis_d('',option='turbo') +
+  # stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  # scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=3) +
+  theme_bw() +
+  labs(x='',y='')
+  
 

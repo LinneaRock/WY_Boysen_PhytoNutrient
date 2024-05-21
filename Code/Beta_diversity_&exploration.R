@@ -48,8 +48,9 @@ means <- left_join(BoysenPhyto_A, sig.letters) |>
   group_by(month, letters) |>
   summarise(max.result = max(H, na.rm = TRUE)) |>
   distinct()
-
-ggplot(BoysenPhyto_A) +
+BoysenPhyto_A |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
+ggplot() +
   geom_boxplot(aes(month, H)) +
   geom_jitter(aes(month, H, color=WaterbodyName),alpha=0.5) +
   scale_color_viridis_d('', option='turbo') +
@@ -57,7 +58,8 @@ ggplot(BoysenPhyto_A) +
                              max.result+0.5, label = letters), 
           size=4) +
   labs(x='',y='Shannon-Weiner diversity index') +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position='none')
 ggsave('Figures/ASLO24/H_diversity.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -81,7 +83,9 @@ means <- left_join(SS, sig.letters) |>
   summarise(max.result = max(SS, na.rm = TRUE)) |>
   distinct()
 
-ggplot(SS) +
+SS |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
+ggplot() +
   geom_boxplot(aes(month, SS)) +
   geom_jitter(aes(month, SS, color=WaterbodyName),alpha=0.5) +
   scale_color_viridis_d('', option='turbo') +
@@ -89,7 +93,8 @@ ggplot(SS) +
                                max.result+100, label = letters), 
             size=4) +
   labs(x='',y='Schmidt Stability Index'~(J~m^-2)) +
-  theme_minimal()
+  theme_minimal() +
+  theme(legend.position = 'none')
 ggsave('Figures/ASLO24/stability.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -170,11 +175,13 @@ scores <- scores(nmds) |>
   as_tibble(rownames='Group') |>
   left_join(sd_data)
 
-
-ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+scores |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
+ggplot(aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=WaterbodyName)) +
   theme_minimal() +
-  scale_color_viridis_d('', option='turbo')
+  scale_color_viridis_d('', option='turbo') +
+  theme(legend.position = 'none')
 ggsave('Figures/ASLO24/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
@@ -639,7 +646,6 @@ ggplot() +
 
 # 5. ALPHA DIVERSITY ####
 #Taxonomy Line Plot
-#rarefy and normalizing before calculating any alpha diversity metrics- since my samples have a variety of number of sequences or organisms
 
 phyto_rel_abund <- phyto_data |>
   select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth) |>
@@ -652,9 +658,7 @@ phyto_rel_abund <- phyto_data |>
   group_by(Group, WaterbodyName, taxa) |>
   summarize(rel_abund = 100*sum(rel_abund), .groups="drop") |>
   ungroup() 
- # group_by(WaterbodyName, taxa) #|>
-#   summarise(rel_abund = mean(rel_abund, na.rm=TRUE), .groups='drop')  |>
-# ungroup()  
+
   
 
 taxon_pool <- phyto_rel_abund |>
@@ -679,6 +683,7 @@ abundances |>
   arrange(desc(mean)) |>
   mutate(taxa=factor(taxa)) |>
   filter(mean>5) |> # annoying filter just to make plot less complicated by removeing the lowest taxa
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
   stat_summary(fun.data=median_hilow, geom = "pointrange",
                fun.args=list(conf.int=0.5),
@@ -686,8 +691,9 @@ ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
   theme_minimal() +
   labs(y=NULL,
        x="Relative Abundance (%)") +
-  scale_color_viridis_d('',option='turbo') 
-ggsave('Figures/ASLO24/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
+  scale_color_viridis_d('',option='turbo') +
+  theme(legend.position = 'none')
+ggsave('Figures/ASLO24/rel_abundance.png',height=6.5,width=4.5,units='in',dpi=1200)
 
 
 # 7. %cyano plot from Smith 1983 ####
