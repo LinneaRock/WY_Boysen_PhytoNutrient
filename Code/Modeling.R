@@ -738,7 +738,7 @@ plt.dat<-cbind(rownames(plt.dat), plt.dat) |>
 ggplot(plt.dat) +
   geom_bar(aes(x=MeanDecreaseAccuracy,y=reorder(var, MeanDecreaseAccuracy)), stat='identity') +
   theme_minimal() +
-  labs(y='')
+  labs(y='',x='Mean decrease accuracy', title='Variable Importance')
 
 ggsave('Figures/RandomForest/beforeduringaftertoxin/Var_importance_bda.png', height=4.5, width=6.5, dpi=1200)
 
@@ -825,6 +825,23 @@ library(patchwork)
 cmplot+rocplot
 
 ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
+
+
+### 3D-gpt ideas #### - pdp not working 
+# librayr(pdp)
+# # Partial Dependence Plot for specific conductivity
+# pdp_spc<- partial(bda_fit_rf, pred.var = "SpC", plot = TRUE, rug = TRUE)
+# # PDP for specific conductivity
+# pdp_conductivity <- partial(bda_fit_rf, pred.var = "SpC", train = training.dat)
+# p1 <- autoplot(pdp_conductivity) +
+#   labs(title = "Partial Dependence of Specific Conductivity", x = "Specific Conductivity", y = "Predicted Response")
+# 
+# 
+# 
+# # Partial Dependence Plot for pH
+# pdp_ph <- partial(rf_model, pred.var = "pH", plot = TRUE, rug = TRUE)
+# # Partial Dependence Plot for water temperature
+# pdp_temp <- partial(rf_model, pred.var = "water_temperature", plot = TRUE, rug = TRUE)
 
 
 
