@@ -854,6 +854,7 @@ top10 <- plt.dat |>
 bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
   left_join(cyano_prep) |>
   mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
   # i wish i could figure out how to code this instead of manually, but idk how
   # 2020
   mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
@@ -880,4 +881,17 @@ ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   theme_bw() +
   labs(x='',y='')
   
-
+library(ggpubr)
+bda_cyano |>
+  filter(ShortName_Revised %in% c((top10 |> slice(1:5))$var)) |>
+  data.frame() |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var))) |>
+ggplot(aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d('',option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=3) +
+  theme_bw() +
+  labs(x='',y='')
