@@ -41,10 +41,10 @@ nutrient_summarise |>
   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c('TN','IN'))) |>
   left_join(cyanotoxin) |>
 ggplot() +
-  geom_point(aes(CollDate, mean),size=3, color='red4') +
+  geom_point(aes(CollDate, mean),size=3, fill='red4', shape=21) +
   geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2), color='red4') +
  # facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(IN='Inorganic N', TN='Total N')),nrow=2) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -61,10 +61,10 @@ ggplot() +
     filter(ShortName_Revised %in% c('TP')) |>
     mutate(ShortName_Revised = factor(ShortName_Revised, levels=c('TP','PO4'))) |>
     ggplot() +
-    geom_point(aes(CollDate, mean),size=3, color='#336a98') +
+    geom_point(aes(CollDate, mean),size=3, fill='#336a98',shape=21) +
     geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2),color='#336a98') +
   #  facet_wrap(~ShortName_Revised, scales='free', labeller=as_labeller(c(PO4='Inorganic P', TP='Total P')), nrow=2) +
-    theme_minimal() +
+    dark_theme_minimal() +
     annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
     annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
     annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +

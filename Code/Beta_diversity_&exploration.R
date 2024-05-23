@@ -52,13 +52,13 @@ BoysenPhyto_A |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot() +
   geom_boxplot(aes(month, H)) +
-  geom_jitter(aes(month, H, color=WaterbodyName),alpha=0.5) +
-  scale_color_viridis_d('', option='turbo') +
+  geom_jitter(aes(month, H, fill=WaterbodyName),alpha=0.5,shape=21) +
+  scale_fill_viridis_d('', option='turbo') +
   geom_text(means, mapping=aes(month, 
                              max.result+0.5, label = letters), 
           size=4) +
   labs(x='',y='Shannon-Weiner diversity index') +
-  theme_minimal() +
+  dark_theme_minimal() +
   theme(legend.position='none')
 ggsave('Figures/ASLO24/H_diversity.png',height=4.5,width=6.5,units='in',dpi=1200)
 
@@ -87,13 +87,13 @@ SS |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot() +
   geom_boxplot(aes(month, SS)) +
-  geom_jitter(aes(month, SS, color=WaterbodyName),alpha=0.5) +
-  scale_color_viridis_d('', option='turbo') +
+  geom_jitter(aes(month, SS, fill=WaterbodyName),alpha=0.5,shape=21) +
+  scale_fill_viridis_d('', option='turbo') +
   geom_text(means, mapping=aes(month, 
                                max.result+100, label = letters), 
             size=4) +
   labs(x='',y='Schmidt Stability Index'~(J~m^-2)) +
-  theme_minimal() +
+  dark_theme_minimal() +
   theme(legend.position = 'none')
 ggsave('Figures/ASLO24/stability.png',height=4.5,width=6.5,units='in',dpi=1200)
 
@@ -178,17 +178,17 @@ scores <- scores(nmds) |>
 scores |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot(aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=WaterbodyName)) +
-  theme_minimal() +
-  scale_color_viridis_d('', option='turbo') +
+  geom_point(aes(fill=WaterbodyName),shape=21,size=2) +
+  dark_theme_minimal() +
+  scale_fill_viridis_d('', option='turbo') +
   theme(legend.position = 'none')
 ggsave('Figures/ASLO24/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=month)) +
-  theme_minimal() +
- # facet_wrap(~Year) +
-  scale_color_viridis_d('',option='magma')
+  geom_point(aes(fill=month),shape=21,size=2) +
+  dark_theme_minimal() +
+  facet_wrap(~Year) +
+  scale_fill_viridis_d('',option='magma')
 ggsave('Figures/ASLO24/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
@@ -235,9 +235,9 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=Cyanobacteria)) +
-  scale_color_viridis_c() +
-  theme_minimal()
+  geom_point(aes(fill=Cyanobacteria),shape=21,size=2) +
+  scale_fill_viridis_c() +
+  dark_theme_minimal()
 ggsave('Figures/ASLO24/nmds_cyano.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -276,7 +276,7 @@ spp.fit_df <- as.data.frame(scores(spp.fit, display='vectors'))  #extracts relev
 spp.fit_df <- cbind(spp.fit_df, spp.variables = rownames(spp.fit_df)) #and then gives them their names
 
 spp.fit_df <- cbind(spp.fit_df, pval = spp.fit$vectors$pvals) # add pvalues to dataframe
-sig.spp.fit <- subset(spp.fit_df, pval<=0.01) #subset data to show variables significant at 0.05
+sig.spp.fit <- subset(spp.fit_df, pval<=0.001) #subset data to show variables significant at 0.05
 
 sig.spp.fit
 
@@ -289,7 +289,14 @@ ggplot() +
   geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1, y=NMDS2, label = spp.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
 
-
+# dark theme
+ggplot() +
+  geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=month)) +
+  dark_theme_minimal() +
+  scale_color_viridis_d('',option='magma') +
+  geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")),lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1, y=NMDS2, label = spp.variables), cex = 3, direction = "both", segment.size = 0.25,color='white') #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+ggsave('Figures/ASLO24/spp.fit.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 # Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
@@ -343,6 +350,15 @@ ggplot() +
   scale_color_viridis_c() +
   geom_segment(sig.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = env.variables), cex = 3, direction = "both", segment.size = 0.25) #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+ggsave('Figures/ASLO24/nmds_envVar.png',height=4.5, width=6.5,units='in',dpi=1200)
+
+# dark theme
+ggplot() +
+  geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=Cyanobacteria),) +
+  dark_theme_minimal() +
+  scale_color_viridis_c() +
+  geom_segment(sig.env.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.env.fit, mapping=aes(x=NMDS1, y=NMDS2, label = env.variables), cex = 3, direction = "both", segment.size = 0.25,color='white') #add labels, use ggrepel::geom_text_repel so that labels do not overlap
 ggsave('Figures/ASLO24/nmds_envVar.png',height=4.5, width=6.5,units='in',dpi=1200)
 
 
@@ -688,7 +704,7 @@ ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
   stat_summary(fun.data=median_hilow, geom = "pointrange",
                fun.args=list(conf.int=0.5),
                position = position_dodge(width=0.6)) +
-  theme_minimal() +
+  theme_classic() +
   labs(y=NULL,
        x="Relative Abundance (%)") +
   scale_color_viridis_d('',option='turbo') +
@@ -772,7 +788,29 @@ ggplot(dens_biomass_wide) +
   scale_y_discrete(limits=rev) +
   facet_wrap(~ShortName_Revised, scales='free')
 
-  
+
+## 7c. cyano density plot ####
+cyano_density <- BoysenPhyto |>
+  left_join(phyto_class) |>
+  filter(RepNum == 0) |>
+  left_join(phyto_class)  |>
+  distinct() |>
+  group_by(WaterbodyName, CollDate, month, Year, cat) |>
+  summarise(Density_cellsL=sum(`Density (cells/L)`)) |>
+  ungroup() |>
+  distinct() |>
+  pivot_wider(names_from = cat, values_from = Density_cellsL) 
+
+cyano_density<- replace(cyano_density, is.na(cyano_density), 0)
+
+cyano_density_summarise <- cyano_density |>
+  group_by(CollDate, Year) |>
+  summarise(mean = mean(Cyanobacteria),
+            max = max(Cyanobacteria),
+            min = min(Cyanobacteria)) |>
+  ungroup()
+# can't do this because there is no density data for 2023 - only counts
+
 
 # 8. Tributary Budget Plots ####
 
@@ -903,6 +941,7 @@ P<-ggplot(TribLoadFlux |>
   scale_color_manual('',values =trib_colors)
 ggsave(P,'Figures/ASLO24/TP_loading.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 
+library(patchwork)
 N/P
 
 TribLoadFlux |> 
@@ -914,12 +953,12 @@ TribLoadFlux |>
   arrange(dummy,fakedate) |>
   filter(!if_all(c(TotalTrib_TN_kg, TN_load_kg), is.na)) |>
 ggplot() +
-  geom_point(aes(fakedate, TotalTrib_TN_kg),size=3,color='red4') +
+  geom_point(aes(fakedate, TotalTrib_TN_kg),size=3,fill='red4',shape=21) +
   geom_path(aes(fakedate, TotalTrib_TN_kg),color='red4') +
-   geom_point(aes(fakedate, TN_load_kg),size=3,color='red4')+#, alpha=0) +
-   geom_path(aes(fakedate, TN_load_kg),color='red4') +#,alpha=0) +
+   geom_point(aes(fakedate, TN_load_kg),size=3,fill='red4',shape=21)+#, alpha=0) +
+   geom_path(aes(fakedate, TN_load_kg),color='red4')+#,alpha=0) +
   geom_abline(slope=0, intercept=0) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -927,6 +966,9 @@ ggplot() +
   labs(x='',y='TN load (kg)')
 ggsave('Figures/ASLO24/totalTN_loading_INFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
 ggsave('Figures/ASLO24/totalTN_loading_OUTFLOW.png',height = 4.5, width = 6.5, units='in', dpi=1200)
+
+
+
 
 TribLoadFlux |> 
   mutate(IN_load_kg = NH4_load_kg + NO3_load_kg) |>
@@ -963,12 +1005,12 @@ TribLoadFlux |>
   arrange(dummy,fakedate) |>
   filter(!if_all(c(TotalTrib_TP_kg, TP_load_kg), is.na)) |>
 ggplot() +
-  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3,color='#336a98') +
+  geom_point(aes(fakedate, TotalTrib_TP_kg),size=3,fill='#336a98',shape=21) +
   geom_path(aes(fakedate, TotalTrib_TP_kg),color='#336a98') +
-  geom_point(aes(fakedate, TP_load_kg),size=3,color='#336a98')+#,alpha=0) +
+  geom_point(aes(fakedate, TP_load_kg),size=3,fill='#336a98',shape=21)+#,alpha=0) +
   geom_path(aes(fakedate, TP_load_kg),color='#336a98')+#,alpha=0) +
   geom_abline(slope=0, intercept=0) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -1238,7 +1280,7 @@ group_by(CollDate, Year, month) |>
   ggplot() +
   geom_point(aes(CollDate, mean), size=3) +
   geom_errorbar(aes(CollDate, mean, ymin=min, ymax=max, width=0.2)) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -1258,11 +1300,11 @@ sd_data |>
   ggplot() +
   geom_point(aes(CollDate, meanCN), size=3) +
   geom_line(aes(CollDate, meanCN, group=Year)) +
-  geom_point(aes(CollDate, meanTN*100), size=3,color='red4') +
+  geom_point(aes(CollDate, meanTN*100), size=3,fill='red4',shape=21) +
   geom_line(aes(CollDate, meanTN*100, group=Year), color='red4') +
-  geom_point(aes(CollDate, meanTP*1000), size=3,color='#336a98') +
+  geom_point(aes(CollDate, meanTP*1000), size=3,fill='#336a98',shape=21) +
   geom_line(aes(CollDate, meanTP*1000, group=Year), color='#336a98') +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-10-15'), xmax = as.Date('2021-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-10-15'), xmax = as.Date('2022-04-15'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -1313,4 +1355,10 @@ ggplot(sd_data, aes(PO4, Cyanobacteria, color=WaterbodyName, group=WaterbodyName
   labs(x='Phosphate concentration'~(mg~L^-1),y='% Biovolume cyanobacteria') +
   facet_wrap(~Year) 
 
-
+ggplot(sd_data, aes(CHLA, Cyanobacteria, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point() +
+  # geom_line() +
+  scale_color_viridis_d('', option='turbo') +
+  theme_minimal() +
+  labs(x='CHLa concentration'~(mu*g~L^-1),y='% Biovolume cyanobacteria') +
+  facet_wrap(~Year,scales='free') 

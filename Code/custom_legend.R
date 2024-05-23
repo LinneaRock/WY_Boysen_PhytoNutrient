@@ -38,5 +38,14 @@ ggplot()+
   theme(legend.position='none') +
   expand_limits(x=-108)
 
-
-
+# dark theme 
+ggplot()+
+  geom_sf(shapefile, mapping=aes(), fill='black',color='white') +
+  geom_sf(sites_sf,mapping=aes(fill=WaterbodyName),size=5,shape=21) +
+  # geom_text(sites_sf, mapping=aes(lon,lat, label=WaterbodyName),nudge_x=0,hjust=1.05) +
+  geom_text(sites_sf, mapping=aes(lon,lat, label=WaterbodyName),vjust=2,size=5) +
+  dark_theme_void() +
+  labs(x='',y='') +
+  scale_fill_viridis_d('',option='turbo') +
+  theme(legend.position='none') +
+  expand_limits(x=-108)
