@@ -1,17 +1,44 @@
 library(terra)
 library(tidyterra)
 library(sp)
+library(tidyverse)
 
 # Call in bathy data made by Sean ####
 
 #If using the tif DEM
-boysen_bathy <- rast("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
+boysen_bathy <- rast("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
 
 #To plot contours easily all you have to do is:
 contour(boysen_bathy) #this only works with the raster not the vector
 
+depth_raster <- 1463.04 - boysen_bathy
+
+# Replace all 0 values in depth raster with NA
+depth_raster[depth_raster < 0.25] <- NA
+
+
+ggplot() +
+  geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
+  scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
+  theme_minimal() + 
+  guides(fill= guide_colorbar(reverse=T)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+ggsave('Figures/ASLO24/bathymetry.png',height=6.5,width=4.5,units='in',dpi=1200)
+
+#dark theme 
+ggplot() +
+  geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
+  scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
+  dark_theme_minimal() + 
+  guides(fill= guide_colorbar(reverse=T)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+
+ggsave('Figures/ASLO24/bathymetry_dark.png',height=6.5,width=4.5,units='in',dpi=1200)
+
+
 #If using the contour lines shapefile
-#boysen_bathy <- vect("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen_Contours/Boysen_Contours/All_Boysen_Contours.shp")
+# boysen_bathy <- vect("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen_Contours/Boysen_Contours/All_Boysen_Contours.shp")
 #You can plot either of these easily using base plot or use the tidyterra package for ggplot
 
 
@@ -113,3 +140,40 @@ write.csv(smidts_stability, 'Data/Schmidts_Stability.csv')
 write.csv(hypso, 'Data/Simplified_bathymetry.csv')
 
 
+
+# try making a 3d map
+# library(marmap)
+# bathy_xyz <- terra::as.data.frame(boysen_bathy,xy=TRUE)
+# head(bathy_xyz)
+# 
+# bath <- marmap::as.bathy(bathy_xyz |> dplyr::select(1:3))
+# 
+# library(lattice)
+# lattice::wireframe(unclass(bath), shade = TRUE, aspect = c(1/2, 0.1))
+
+# try making a cross section
+# define transect
+start_point <- c(lon = -108.180325, lat = 43.173358) 
+end_point <- c(lon = -108.180325, lat = 43.416572) 
+
+#extract data along transect
+# Create a sequence of points along the transect
+lon_seq <- seq(start_point["lon"], end_point["lon"], length.out = 5000)
+lat_seq <- seq(start_point["lat"], end_point["lat"], length.out = 5000)
+
+
+# Create a data frame of these points
+transect_points <- data.frame(lon = lon_seq, lat = lat_seq)
+
+# Extract depth values at these points
+transect_points$depth <- terra::extract(boysen_bathy, cbind(transect_points$lon, transect_points$lat))[,1]
+
+
+
+# Create the cross-section plot
+ggplot(transect_points, aes(x = lat, y = 1463.04 -depth)) +
+  geom_line(color = "blue") +
+  geom_point(color = "red") +
+  theme_minimal() +
+  labs(x = "Latitude", y = "Depth (m)", title = "Lake Bathymetry Cross-Section") +
+  scale_y_reverse()

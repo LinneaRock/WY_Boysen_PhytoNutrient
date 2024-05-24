@@ -137,6 +137,7 @@ dist <- vegdist(dist_phyto, method = 'bray')
 
 dist
 
+set.seed(06261993)
 adonis2(dist~Latitude, sd_data)
 adonis2(dist~WaterbodyName, sd_data, strata=sd_data$CollDate) #??
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
@@ -165,7 +166,7 @@ adonis2(dist~maxdepth, sd_data)
 psych::pairs.panels(sd_data |> select(-c(1:8)))
 
 # 3. NMDS and 4. BETA DIVERSITY DISPERSION ####
-#beta Dispersion plot --- I think these are the NMDS plots?????? 
+#beta Dispersion plots
 set.seed(06261993)
 nmds <- metaMDS(dist)
 
