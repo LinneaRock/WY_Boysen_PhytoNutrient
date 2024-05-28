@@ -1,5 +1,5 @@
 ## heatmaps of lake profile data ####
-
+library(patchwork)
 # some of these are not working for certain locations/seasons
 
 
@@ -27,7 +27,10 @@ boy_pro <- BoysenProfile |>
          param=temp_C) |>
   filter(WaterbodyName==location) |>
   select(WaterbodyName, sampledate, depth, param) |>
-  mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', 'Summer 2021')) |>
+  mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', NA)) |>
+  mutate(summer=ifelse(year(sampledate)==2021, 'Summer 2021',
+                              ifelse(year(sampledate)==2022, 'Summer 2022',
+                                     ifelse(year(sampledate)==2023,'Summer 2023',summer)))) |>
   filter(summer==season)
 
 # 2. Write function to interpolate between sampled points ####
@@ -93,6 +96,12 @@ tmp1 <- interp_plot_temp(location=name,season='Summer 2020',legend=expression("T
 tmp2 <- interp_plot_temp(location=name,season='Summer 2021',legend=expression("Temperature"~(degree*C)))
 
 
+tmp3 <- interp_plot_temp(location=name,season='Summer 2022',legend=expression("Temperature"~(degree*C)))
+
+tmp4 <- interp_plot_temp(location=name,season='Summer 2023',legend=expression("Temperature"~(degree*C)))
+
+
+
 
 tmp1 +
   plot_annotation(title = name) 
@@ -103,6 +112,17 @@ tmp2 +
   plot_annotation(title = name) 
 
 ggsave(paste0('Figures/Profiles/temp/',name,'b.png'),height=4.5,width=6.5,units='in',dpi=1200)
+
+
+tmp3 +
+  plot_annotation(title = name) 
+
+ggsave(paste0('Figures/Profiles/temp/',name,'c.png'),height=4.5,width=6.5,units='in',dpi=1200)
+
+tmp4 +
+  plot_annotation(title = name) 
+
+ggsave(paste0('Figures/Profiles/temp/',name,'d.png'),height=4.5,width=6.5,units='in',dpi=1200)
 
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
 
@@ -129,7 +149,10 @@ for(name in WaterbodyName) {
                param=pH) |>
         filter(WaterbodyName==location) |>
         select(WaterbodyName, sampledate, depth, param) |>
-        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', 'Summer 2021')) |>
+        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', NA)) |>
+        mutate(summer=ifelse(year(sampledate)==2021, 'Summer 2021',
+                             ifelse(year(sampledate)==2022, 'Summer 2022',
+                                    ifelse(year(sampledate)==2023,'Summer 2023',summer)))) |>
         filter(summer==season)
       
       # 2. Write function to interpolate between sampled points ####
@@ -195,6 +218,10 @@ for(name in WaterbodyName) {
     tmp2 <- interp_plot_ph(location=name,season='Summer 2021',legend='pH')
     
     
+    tmp1=3 <- interp_plot_ph(location=name,season='Summer 2022',legend='pH')
+    
+    tmp2=4 <- interp_plot_ph(location=name,season='Summer 2023',legend='pH')
+    
     
     tmp1 +
       plot_annotation(title = name) 
@@ -205,6 +232,16 @@ for(name in WaterbodyName) {
       plot_annotation(title = name) 
     
     ggsave(paste0('Figures/Profiles/ph/',name,'b.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    tmp3 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/ph/',name,'c.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    tmp4 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/ph/',name,'d.png'),height=4.5,width=6.5,units='in',dpi=1200)
     
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
   
@@ -235,9 +272,11 @@ for(name in WaterbodyName) {
                param=cond_ugL) |>
         filter(WaterbodyName==location) |>
         select(WaterbodyName, sampledate, depth, param) |>
-        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', 'Summer 2021')) |>
+        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', NA)) |>
+        mutate(summer=ifelse(year(sampledate)==2021, 'Summer 2021',
+                             ifelse(year(sampledate)==2022, 'Summer 2022',
+                                    ifelse(year(sampledate)==2023,'Summer 2023',summer)))) |>
         filter(summer==season)
-      
       # 2. Write function to interpolate between sampled points ####
       ## Simple vertical linear interpolation of water column concentrations function ####
       # see more at https://github.com/hdugan/NTLlakeloads/tree/master
@@ -300,6 +339,10 @@ for(name in WaterbodyName) {
     
     tmp2 <- interp_plot_cond(location=name,season='Summer 2021',legend='SpC '~(µS~cm^-1))
     
+    tmp3 <- interp_plot_cond(location=name,season='Summer 2022',legend='SpC'~(µS~cm^-1))
+    
+    tmp4 <- interp_plot_cond(location=name,season='Summer 2023',legend='SpC '~(µS~cm^-1))
+    
     
     
     tmp1 +
@@ -311,6 +354,18 @@ for(name in WaterbodyName) {
       plot_annotation(title = name) 
     
     ggsave(paste0('Figures/Profiles/cond/',name,'b.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    
+    
+    tmp3 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/cond/',name,'c.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    tmp4 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/cond/',name,'d.png'),height=4.5,width=6.5,units='in',dpi=1200)
     
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
   
@@ -337,7 +392,10 @@ for(name in WaterbodyName) {
                param=DO_mgL) |>
         filter(WaterbodyName==location) |>
         select(WaterbodyName, sampledate, depth, param) |>
-        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', 'Summer 2021')) |>
+        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', NA)) |>
+        mutate(summer=ifelse(year(sampledate)==2021, 'Summer 2021',
+                             ifelse(year(sampledate)==2022, 'Summer 2022',
+                                    ifelse(year(sampledate)==2023,'Summer 2023',summer)))) |>
         filter(summer==season)
       
       # 2. Write function to interpolate between sampled points ####
@@ -402,6 +460,10 @@ for(name in WaterbodyName) {
     
     tmp2 <- interp_plot_do(location=name,season='Summer 2021',legend='DO'~(mg~L^-1))
     
+    tmp3 <- interp_plot_do(location=name,season='Summer 2022',legend='DO'~(mg~L^-1))
+    
+    tmp4 <- interp_plot_do(location=name,season='Summer 2023',legend='DO'~(mg~L^-1))
+    
     
     
     tmp1 +
@@ -413,6 +475,18 @@ for(name in WaterbodyName) {
       plot_annotation(title = name) 
     
     ggsave(paste0('Figures/Profiles/DO/',name,'b.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    
+    
+    tmp3 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/DO/',name,'c.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    tmp4 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/DO/',name,'d.png'),height=4.5,width=6.5,units='in',dpi=1200)
     
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
   
@@ -448,7 +522,10 @@ for(name in WaterbodyName) {
                param=ORP) |>
         filter(WaterbodyName==location) |>
         select(WaterbodyName, sampledate, depth, param) |>
-        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', 'Summer 2021')) |>
+        mutate(summer=ifelse(year(sampledate)==2020, 'Summer 2020', NA)) |>
+        mutate(summer=ifelse(year(sampledate)==2021, 'Summer 2021',
+                             ifelse(year(sampledate)==2022, 'Summer 2022',
+                                    ifelse(year(sampledate)==2023,'Summer 2023',summer)))) |>
         filter(summer==season)
       
       # 2. Write function to interpolate between sampled points ####
@@ -514,6 +591,10 @@ for(name in WaterbodyName) {
     tmp2 <- interp_plot_orp(location=name,season='Summer 2021',legend='ORP')
     
     
+    tmp3 <- interp_plot_orp(location=name,season='Summer 2022',legend='ORP')
+    
+    tmp4 <- interp_plot_orp(location=name,season='Summer 2023',legend='ORP')
+    
     
     tmp1 +
       plot_annotation(title = name) 
@@ -524,6 +605,18 @@ for(name in WaterbodyName) {
       plot_annotation(title = name) 
     
     ggsave(paste0('Figures/Profiles/ORP/',name,'b.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    
+    
+    tmp3 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/ORP/',name,'c.png'),height=4.5,width=6.5,units='in',dpi=1200)
+    
+    tmp4 +
+      plot_annotation(title = name) 
+    
+    ggsave(paste0('Figures/Profiles/ORP/',name,'d.png'),height=4.5,width=6.5,units='in',dpi=1200)
     
   }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
   

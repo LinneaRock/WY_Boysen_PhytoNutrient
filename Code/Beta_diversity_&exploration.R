@@ -26,13 +26,13 @@ ggplot(BoysenPhyto_A) +
   labs(x='',y='H diversity index')
 
 
-ggplot(BoysenPhyto_A) +
+ggplot(BoysenPhyto_A |> select(month, WaterbodyName, H) |> distinct()) +
   geom_boxplot(aes(month, H)) 
 
 
 
 
-  h <- aov(H~month, BoysenPhyto_A)
+  h <- aov(H~month, BoysenPhyto_A|> select(month, WaterbodyName, H) |> distinct())
   tukey <- TukeyHSD(h)
   library(multcompView)
   cld <- multcompLetters4(h, tukey)
@@ -44,11 +44,13 @@ ggplot(BoysenPhyto_A) +
 sig.letters <- sig.letters |>
   drop_na(letters) 
 
-means <- left_join(BoysenPhyto_A, sig.letters) |>
+means <- left_join(BoysenPhyto_A |> select(month, WaterbodyName, H) |> distinct(), sig.letters) |>
   group_by(month, letters) |>
   summarise(max.result = max(H, na.rm = TRUE)) |>
   distinct()
 BoysenPhyto_A |>
+  select(month, WaterbodyName, H) |> 
+  distinct() |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot() +
   geom_boxplot(aes(month, H)) +
@@ -912,12 +914,12 @@ BoysenTribs |>
 # 8/9 TRIB loading presentation plot ####
 trib_colors <- c('#117733','#DDCC77','#882255','#332288')
 
-N<- ggplot(TribLoadFlux |> 
+N<-ggplot(TribLoadFlux |> 
          mutate(TN_load_kg=ifelse(WaterbodyName=='Wind River Outlet', -1*TN_load_kg, TN_load_kg)) |>
          mutate(fakedate = as.Date(paste0(Year,'-',month,'-01'), format='%Y-%b-%d'))) +
   geom_point(aes(fakedate, TN_load_kg, color=WaterbodyName),size=3) +
   geom_abline(slope=0, intercept=0) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
@@ -933,7 +935,7 @@ P<-ggplot(TribLoadFlux |>
          filter(TP_load_kg>-50000)) +
   geom_point(aes(fakedate, TP_load_kg, color=WaterbodyName),size=3) +
   geom_abline(slope=0, intercept=0) +
-  theme_minimal() +
+  dark_theme_minimal() +
   annotate("rect", xmin = as.Date('2020-01-01'), xmax = as.Date('2020-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2020-11-01'), xmax = as.Date('2021-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
   annotate("rect", xmin = as.Date('2021-11-01'), xmax = as.Date('2022-04-30'), ymin = -Inf, ymax = Inf, alpha = 0.5, color = "grey") +
