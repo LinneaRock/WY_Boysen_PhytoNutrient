@@ -60,7 +60,7 @@ ggplot() +
                              max.result+0.5, label = letters), 
           size=4) +
   labs(x='',y='Shannon-Weiner diversity index') +
-  dark_theme_minimal() +
+  theme_minimal() +
   theme(legend.position='none')
 ggsave('Figures/ASLO24/H_diversity.png',height=4.5,width=6.5,units='in',dpi=1200)
 
@@ -182,14 +182,14 @@ scores |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot(aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(fill=WaterbodyName),shape=21,size=2) +
-  dark_theme_minimal() +
-  scale_fill_viridis_d('', option='turbo') +
-  theme(legend.position = 'none')
+  theme_minimal() +
+  scale_fill_viridis_d('', option='turbo') #+
+  #theme(legend.position = 'none')
 ggsave('Figures/ASLO24/nmds_site.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(fill=month),shape=21,size=2) +
-  dark_theme_minimal() +
+  theme_minimal() +
   facet_wrap(~Year) +
   scale_fill_viridis_d('',option='magma')
 ggsave('Figures/ASLO24/nmds_month.png',height=4.5, width=6.5,units='in',dpi=1200)
@@ -265,6 +265,9 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=month, shape=as.character(Year))) +
   geom_line(aes(group=WaterbodyName), alpha=0.25)
+
+
+
 
 #You can also investigate the species which may be driving the site distribution pattern, referred to as intrinsic variables.
 spp.fit <- envfit(nmds, dist_phyto, permutations=999)

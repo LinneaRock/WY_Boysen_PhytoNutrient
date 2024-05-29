@@ -261,7 +261,7 @@ rf_default <- train(Cyanobacteria ~.,
                     ntree=500,
                     trControl=trainControl(method='cv', number=10))
 
-rf_default #rmse 25.12346
+rf_default #rmse 20.55073
 
 
 
@@ -278,7 +278,7 @@ rf_mtry <- train(Cyanobacteria~.,
 
 print(rf_mtry) 
 plot(rf_mtry) 
-# mtry=8, with RMSE of  25.06891 
+# mtry=9, with RMSE of   24.91031
 
 
 # find best ntrees
@@ -313,7 +313,7 @@ BIOMASS_fit_rf <- randomForest(Cyanobacteria~.,
                        trControl = trainControl(method = "cv",
                                                 number = 10),
                        importance = TRUE,
-                       mtry = 8,
+                       mtry = 9,
                        ntree = 100)
 # get predicted values
 testing.dat$prediction <- predict(BIOMASS_fit_rf, testing.dat)
@@ -323,13 +323,13 @@ testing.dat$prediction <- predict(BIOMASS_fit_rf, testing.dat)
 BIOMASS_fit_rf
 
 # Call:
-#   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 8, ntree = 100) 
+#   randomForest(formula = Cyanobacteria ~ ., data = training.dat,      method = "rf", metric = "RMSE", tuneGrid = expand.grid(.mtry = c(1:10)),      trControl = trainControl(method = "cv", number = 10), importance = TRUE,      mtry = 9, ntree = 100) 
 # Type of random forest: regression
 # Number of trees: 100
-# No. of variables tried at each split: 8
+# No. of variables tried at each split: 9
 # 
-# Mean of squared residuals: 621.9576
-# % Var explained: 59.4
+# Mean of squared residuals: 660.9417
+# % Var explained: 56.86
 
 varImpPlot(BIOMASS_fit_rf)
 plot(BIOMASS_fit_rf)
@@ -617,7 +617,7 @@ rf.data <- sd_data  |>
   mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
   mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))|>
   # time is too important, so get rid of it to assess other variables
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA)
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude)
 
 
 
@@ -737,7 +737,7 @@ plt.dat<-cbind(rownames(plt.dat), plt.dat) |>
 
 ggplot(plt.dat) +
   geom_bar(aes(x=MeanDecreaseAccuracy,y=reorder(var, MeanDecreaseAccuracy)), stat='identity') +
-  theme_minimal() +
+  theme_classic() +
   labs(y='',x='Mean decrease accuracy', title='Variable Importance')
 
 ggsave('Figures/RandomForest/beforeduringaftertoxin/Var_importance_bda.png', height=4.5, width=6.5, dpi=1200)
@@ -827,23 +827,6 @@ cmplot+rocplot
 ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
 
-### 3D-gpt ideas #### - pdp not working 
-# librayr(pdp)
-# # Partial Dependence Plot for specific conductivity
-# pdp_spc<- partial(bda_fit_rf, pred.var = "SpC", plot = TRUE, rug = TRUE)
-# # PDP for specific conductivity
-# pdp_conductivity <- partial(bda_fit_rf, pred.var = "SpC", train = training.dat)
-# p1 <- autoplot(pdp_conductivity) +
-#   labs(title = "Partial Dependence of Specific Conductivity", x = "Specific Conductivity", y = "Predicted Response")
-# 
-# 
-# 
-# # Partial Dependence Plot for pH
-# pdp_ph <- partial(rf_model, pred.var = "pH", plot = TRUE, rug = TRUE)
-# # Partial Dependence Plot for water temperature
-# pdp_temp <- partial(rf_model, pred.var = "water_temperature", plot = TRUE, rug = TRUE)
-
-
 
 
 ### 3D - variables ####
@@ -870,13 +853,13 @@ bda_cyano <- rbind(BoysenChem, BoysenNutrient) |>
   filter(ShortName_Revised %in% c(top10$var)) |>
   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var)))
 
-#library(ggpubr)
+library(ggpubr)
 ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
   scale_color_viridis_d('',option='turbo') +
-  # stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  # scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+   stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
   facet_wrap(~ShortName_Revised, scales='free',ncol=3) +
   theme_bw() +
   labs(x='',y='')
@@ -886,7 +869,7 @@ bda_cyano |>
   filter(ShortName_Revised %in% c((top10 |> slice(6:9))$var)) |>
   data.frame() |>
   # this madness is just making pretty labels
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
+  # mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
 
 ggplot(aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
@@ -933,7 +916,7 @@ ggsave('Figures/ASLO24/nutrient_predictors.png',height=4.5,width=6.5,units='in',
 bda_cyano |>
   filter(ShortName_Revised %in% c((top10 |> slice(1:5, 10))$var)) |>
   data.frame() |>
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)), expression('Secchi depth'~(m)), expression('DO'~(mg~L^-1)), expression('pH'), expression('Temp'~(degree*C)),'x','x','x','x', expression('Schmidt Stability Index'~(J~m^-2))))) |>
+   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)),expression('DO'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('pH'), expression('Temp'~(degree*C)),expression('Phosphate'~(mg~L^-1)),'x','x','x','x'))) |>
   # this madness is just making pretty labels
   
   ggplot(aes(toxinpresent, ChemValue)) +
@@ -953,16 +936,16 @@ ggsave('Figures/RandomForest/beforeduringaftertoxin/non_nutrient_predictors.png'
 
 # dark theme for aslo
 bda_cyano |>
-  filter(ShortName_Revised %in% c((top10 |> slice(1:5, 10))$var)) |>
+  filter(ShortName_Revised %in% c((top10 |> slice(1:5))$var)) |>
   data.frame() |>
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)), expression('Secchi depth'~(m)), expression('DO'~(mg~L^-1)), expression('pH'), expression('Temp'~(degree*C)),'x','x','x','x', expression('Schmidt Stability Index'~(J~m^-2))))) |>
+   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)), expression('DO'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('pH'), expression('Temp'~(degree*C)),'x','x','x','x','x'))) |>
   # this madness is just making pretty labels
   
   ggplot(aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
   geom_jitter(aes(fill=WaterbodyName), alpha=0.5,shape=21) +
   scale_fill_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  stat_compare_means(fontface='bold',color='white',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
   facet_wrap(~ShortName_Revised, scales='free',ncol=3,labeller=label_parsed) +
   dark_theme_bw() +
