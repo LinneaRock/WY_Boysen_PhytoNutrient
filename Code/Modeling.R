@@ -865,76 +865,76 @@ ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   labs(x='',y='')
   
 library(ggpubr)
-bda_cyano |>
-  filter(ShortName_Revised %in% c((top10 |> slice(6:9))$var)) |>
-  data.frame() |>
-  # this madness is just making pretty labels
-  # mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
+# bda_cyano |>
+#   filter(ShortName_Revised %in% c((top10 |> slice(6:9))$var)) |>
+#   data.frame() |>
+#   # this madness is just making pretty labels
+#   # mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
+# 
+# ggplot(aes(toxinpresent, ChemValue)) +
+#   geom_boxplot() +
+#   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+#   scale_color_viridis_d('',option='turbo') +
+#   stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+#   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+#   facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
+#   theme_bw() +
+#   labs(x='',y='') +
+#   theme(legend.position='none')
+# 
+# ggsave('Figures/RandomForest/beforeduringaftertoxin/nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
 
-ggplot(aes(toxinpresent, ChemValue)) +
-  geom_boxplot() +
-  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
-  scale_color_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
-  facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
-  theme_bw() +
-  labs(x='',y='') +
-  theme(legend.position='none')
-
-ggsave('Figures/RandomForest/beforeduringaftertoxin/nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
-
-
-# dark theme for aslo
-bda_cyano |>
-  filter(ShortName_Revised %in% c((top10 |> slice(6:9))$var)) |>
-  data.frame() |>
-  # this madness is just making pretty labels
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
-  
-  ggplot(aes(toxinpresent, ChemValue)) +
-  geom_boxplot() +
-  geom_jitter(aes(fill=WaterbodyName), alpha=0.5,shape=21) +
-  scale_fill_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
-  facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
-  dark_theme_bw() +
-  labs(x='',y='') +
-  theme(legend.position='none')
-
-ggsave('Figures/ASLO24/nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
-
-
-
+# 
+# # dark theme for aslo
+# bda_cyano |>
+#   filter(ShortName_Revised %in% c((top10 |> slice(6:9))$var)) |>
+#   data.frame() |>
+#   # this madness is just making pretty labels
+#   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)),'TN:TP~ratio',expression('IN:IP'~'ratio'), expression('Nitrate'~(mg~L^-1)), 'x'))) |>
+#   
+#   ggplot(aes(toxinpresent, ChemValue)) +
+#   geom_boxplot() +
+#   geom_jitter(aes(fill=WaterbodyName), alpha=0.5,shape=21) +
+#   scale_fill_viridis_d('',option='turbo') +
+#   stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+#   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+#   facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
+#   dark_theme_bw() +
+#   labs(x='',y='') +
+#   theme(legend.position='none')
+# 
+# ggsave('Figures/ASLO24/nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
+# 
 
 
 
 
 
 
-bda_cyano |>
-  filter(ShortName_Revised %in% c((top10 |> slice(1:5, 10))$var)) |>
-  data.frame() |>
-   mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)),expression('DO'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('pH'), expression('Temp'~(degree*C)),expression('Phosphate'~(mg~L^-1)),'x','x','x','x'))) |>
-  # this madness is just making pretty labels
-  
-  ggplot(aes(toxinpresent, ChemValue)) +
-  geom_boxplot() +
-  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
-  scale_color_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
-  facet_wrap(~ShortName_Revised, scales='free',ncol=3,labeller=label_parsed) +
-  theme_bw() +
-  labs(x='',y='') +
-  theme(legend.position='none')
 
-ggsave('Figures/RandomForest/beforeduringaftertoxin/non_nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
+# 
+# bda_cyano |>
+#   filter(ShortName_Revised %in% c((top10 |> slice(1:5, 10))$var)) |>
+#   data.frame() |>
+#    mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('SpC'~(µS~cm^-1)),expression('DO'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('pH'), expression('Temp'~(degree*C)),expression('Phosphate'~(mg~L^-1)),'x','x','x','x'))) |>
+#   # this madness is just making pretty labels
+#   
+#   ggplot(aes(toxinpresent, ChemValue)) +
+#   geom_boxplot() +
+#   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+#   scale_color_viridis_d('',option='turbo') +
+#   stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+#   scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+#   facet_wrap(~ShortName_Revised, scales='free',ncol=3,labeller=label_parsed) +
+#   theme_bw() +
+#   labs(x='',y='') +
+#   theme(legend.position='none')
+# 
+# ggsave('Figures/RandomForest/beforeduringaftertoxin/non_nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
+# 
 
 
-
-# dark theme for aslo
+# dark theme for aslo top 5
 bda_cyano |>
   filter(ShortName_Revised %in% c((top10 |> slice(1:5))$var)) |>
   data.frame() |>
@@ -952,5 +952,27 @@ bda_cyano |>
   labs(x='',y='') +
   theme(legend.position='none')
 
-ggsave('Figures/ASLO24/non_nutrient_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
+ggsave('Figures/ASLO24/top5_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
+
+
+# dark theme for aslo top 6-10
+bda_cyano |>
+  filter(ShortName_Revised %in% c((top10 |> slice(6:10))$var)) |>
+  data.frame() |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x', 'x', 'x', 'x',expression('TP'~(mg~L^-1)), expression('Schmidt Stability Index'~(J~m^-2)),'TN:TP~ratio', expression('Nitrate'~(mg~L^-1)), expression('Phosphate'~(mg~L^-1))))) |>
+  
+  # this madness is just making pretty labels
+  
+  ggplot(aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(fill=WaterbodyName), alpha=0.5,shape=21) +
+  scale_fill_viridis_d('',option='turbo') +
+  stat_compare_means(fontface='bold',color='white',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=3,labeller=label_parsed) +
+  dark_theme_bw() +
+  labs(x='',y='') +
+  theme(legend.position='none')
+
+ggsave('Figures/ASLO24/top6_10_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
 
