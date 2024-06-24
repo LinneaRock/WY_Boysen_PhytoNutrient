@@ -192,9 +192,12 @@ Phyto <- read_csv("Data/RawData_WYDEQ/Phytoplankton_2013-2021.csv",
   filter(Division != 'Copepoda',
                    !`Genus/Species/Variety` %in% c('Daphnia','Cladocera', '	
           Copepoda: nauplius')) |>
-  bind_rows(read_xlsx('Data/RawData_WYDEQ/2023_data/Boysen_2023_Chemistry_Phytoplankton.xlsx', sheet=2) |>
+  mutate(CollTime = as.character(CollTime)) |>
+  bind_rows(read_xlsx('Data/RawData_WYDEQ/2023_data/BoysenR_WDEQ_Phytoplankton_2023.xlsx', sheet=2) |>
           mutate(CollDate = as.Date(CollDate, format='%m/%d/%Y'),
-                 Year = year(CollDate)))
+                 Year = year(CollDate),
+                 HUC_12=as.numeric(HUC_12)) |>
+            rename(`Individuals (Raw Cnt)` = `Individuals (cells/colonies)`))
 
 
 # filter for Boysen phyto data
@@ -247,7 +250,7 @@ BoysenPhyto_A <- BoysenPhyto |>
   mutate(checkn = sum(percCount),
          checkbv=sum(percBiovolume)) |>
   ungroup() |>
-  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
+  select(WaterbodyName, CollDate, month, Year, Genus.Species.Variety, cat, indsum, totaln, percCount, checkn,biovolumeSum_cellsL, totalbiovolume_cellsL,percBiovolume,checkbv) |>
   # percent biovolume = percent count -- duh but needed to verify
   
   # Shannon-Weiner Diversity Index; <1.5 low diversity, >2.5 high diversity'
