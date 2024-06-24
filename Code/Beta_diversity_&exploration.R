@@ -799,7 +799,6 @@ ggplot(dens_biomass_wide) +
 cyano_density <- BoysenPhyto |>
   left_join(phyto_class) |>
   filter(RepNum == 0) |>
-  left_join(phyto_class)  |>
   distinct() |>
   group_by(WaterbodyName, CollDate, month, Year, cat) |>
   summarise(Density_cellsL=sum(`Density (cells/L)`)) |>
@@ -807,15 +806,38 @@ cyano_density <- BoysenPhyto |>
   distinct() |>
   pivot_wider(names_from = cat, values_from = Density_cellsL) 
 
-cyano_density<- replace(cyano_density, is.na(cyano_density), 0)
+cyano_density <- replace(cyano_density, is.na(cyano_density), 0)
 
 cyano_density_summarise <- cyano_density |>
-  group_by(CollDate, Year) |>
-  summarise(mean = mean(Cyanobacteria),
-            max = max(Cyanobacteria),
-            min = min(Cyanobacteria)) |>
+  group_by(CollDate,Year, WaterbodyName, Cyanobacteria) |>
+  summarise(`Other Phytoplankton` = sum(Diatom, `Green algae`, Dinoflagellate, `Golden algae`, Flagellate)) |>
+  pivot_longer(c(Cyanobacteria, `Other Phytoplankton`), names_to = 'type', values_to = 'density') |>
+  group_by(CollDate, Year, type) |>
+  summarise(mean=mean(density),
+            min=min(density),
+            max=max(density)) |>
   ungroup()
-# can't do this because there is no density data for 2023 - only counts
+  
+
+
+ggplot(cyano_density_summarise) +
+  geom_point(aes(CollDate, mean/1000, width=0.2, color=type)) +
+  geom_errorbar(aes(CollDate, mean/1000, ymin=min/1000, ymax=max/1000, width=0.2, color=type)) +
+  theme_minimal() +
+  labs(x='',y='Density'~(~1000~cells~L^-1))+
+  scale_color_manual('',values=c('#999933', '#44AA99'))
+  
+ggsave('Figures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
+
+ggplot(cyano_density|>
+         mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
+  geom_point(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
+  geom_line(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
+  scale_color_viridis_d('',option='turbo') +
+  facet_wrap(~Year, scales='free_y') +
+  theme_minimal() +
+  labs(x='',y='Cyanobacteria denisty'~(~1000~cells~L^-1))
+ggsave('Figures/cyano_density_raw.png', width=6.5,height=4.5,units='in',dpi=1200)
 
 
 # 8. Tributary Budget Plots ####
