@@ -13,7 +13,14 @@ n_phyto <- BoysenPhyto_A |>
   select(Genus.Species.Variety) |>
   distinct() # 76 species found
 
-
+monthly_storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
+  mutate(date = as.Date(Datetime..UTC.)) |>
+  filter(between(year(date), 2020,2023)) |>
+  mutate(month = month(date, label=TRUE),
+         Year= year(date)) |>
+  group_by(month, Year) |>
+  summarise(ave_storage_AF = mean(Result))
+  
 
 
 ## look at H and stability ####
@@ -112,8 +119,9 @@ library(vegan)
 sd_data <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
+  left_join(monthly_storage) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-   dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+   dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) 
  
 
@@ -128,7 +136,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth, -ave_storage_AF)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -143,10 +151,10 @@ set.seed(06261993)
 adonis2(dist~Latitude, sd_data)
 adonis2(dist~WaterbodyName, sd_data, strata=sd_data$CollDate) #??
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
-adonis2(dist~month, sd_data) 
+adonis2(dist~month, sd_data)  # p=0.02
 adonis2(dist~julianday, sd_data) 
 adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
-adonis2(dist~TN, sd_data) 
+adonis2(dist~TN, sd_data) # p=0.09
 adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
 adonis2(dist~TN.TP, sd_data)
@@ -160,9 +168,10 @@ adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
 adonis2(dist~DO, sd_data) 
 adonis2(dist~Secchi, sd_data)
-adonis2(dist~H, sd_data)
-adonis2(dist~Stability, sd_data) # sig
+adonis2(dist~H, sd_data) # p=0.09
+adonis2(dist~Stability, sd_data) # sig p =0.014
 adonis2(dist~maxdepth, sd_data)
+adonis2(dist~ave_storage_AF, sd_data) # p=0.057
 
 
 psych::pairs.panels(sd_data |> select(-c(1:8)))
@@ -254,6 +263,12 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=Stability)) +
+  theme_minimal() +
+  scale_color_viridis_c()
+
+
+ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
+  geom_point(aes(color=ave_storage_AF)) +
   theme_minimal() +
   scale_color_viridis_c()
 
@@ -1071,11 +1086,13 @@ ggsave('Figures/ASLO24/totalPO4_loading.png',height = 4.5, width = 6.5, units='i
 
 
 # 10. Boysen storage  ####
+# points are average monthly storage
 read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   mutate(date = as.Date(Datetime..UTC.)) |>
-  filter(between(year(date), 2020,2022)) |>
+  filter(between(year(date), 2020,2023)) |>
   ggplot() +
   geom_line(aes(date, Result)) +
+  geom_point(monthly_storage, mapping=aes(as.Date(paste0(Year,'-',month,'-15'), format='%Y-%b-%d'), ave_storage_AF),size=2) +
   theme_minimal() +
   labs(x='',y='Reservoir storage (acre-ft)')
 

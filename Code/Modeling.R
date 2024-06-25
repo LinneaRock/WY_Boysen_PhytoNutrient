@@ -601,6 +601,16 @@ plot.getTree(presence_fit_rf)
 
 
 ## 3D. Categorical RF to predict before-during-after toxin ####
+cyano_prep <- cyanotoxin |>
+  mutate(month = month(CollDate,label=TRUE,abbr=TRUE),
+         Year=year(CollDate)) |>
+  select(-CollDate, -Advisory) |>
+  mutate(toxinpresent=as.character(toxinpresent)) |>
+  mutate(toxinpresent=ifelse(toxinpresent=='N',0,1)) |>
+  filter(toxinpresent != 0) |>
+  distinct()
+
+
 
 rf.data <- sd_data  |>
   left_join(cyano_prep) |>
@@ -615,9 +625,13 @@ rf.data <- sd_data  |>
   mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
   # 2023
   mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
-  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))|>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) |>
+  # add weight for each location, weighted by latitudinal distance to the toxin present location
+  # weight = gamma (Latitude of toxin - Latitude of sampling site); gamma = 0.5 (can choose any number?)
+  # use absolute value so weight is between 0 and 1 
+  mutate(weight = 0.1 ^ abs(Lat-Latitude)) |>
   # time is too important, so get rid of it to assess other variables
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude)
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long)
 
 
 

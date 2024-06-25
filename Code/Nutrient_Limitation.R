@@ -11,6 +11,7 @@ lim_dat <- BoysenNutrient |>
 
 
 # DIN:TP limitation ####
+# maybe not viable metric becuase of DIN detection limits though
 ggplot() +
   geom_jitter(lim_dat, mapping = aes(log10(TP), log10(DIN.TP), 
                                       color = WaterbodyName), size=2) +
