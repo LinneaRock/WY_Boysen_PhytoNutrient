@@ -35,6 +35,14 @@ mud <- BoysenTribs |>
   distinct() |>
   ungroup()
 
+# ggplot(mud |>
+#          mutate(fakedate = as.Date(paste0('1900-', month(CollDate), '-', day(CollDate))))) +
+#   geom_line(aes(fakedate, ChemValue, group=Year, color=Year)) +
+#   scale_color_viridis_c()
+# 
+# ggplot(mud) +
+#   geom_line(aes(CollDate, ChemValue))
+
 
 ## 1b. Wind River Inlet 2020 - missing Jan-Sep ####
 WRI <- BoysenTribs |>
@@ -52,6 +60,30 @@ WRI <- BoysenTribs |>
 ## 1c. Fill in data ####
 
 missingdatfill <- bind_rows(mud, WRI)
+
+ggplot(missingdatfill) +
+  geom_line(aes(month, average_dis, group=WaterbodyName)) +
+  facet_wrap(~WaterbodyName, scales='free_y')
+
+
+ggplot(BoysenTribs |>
+         filter(WaterbodyName %in% c('Muddy Creek', 'Wind River Inlet')) |>
+         filter(ShortName_Revised == 'Discharge') |>
+         filter(Year != 1983) |>
+         mutate(fakedate = as.Date(paste0('1900-', month(CollDate), '-', day(CollDate))))) +
+  geom_line(aes(fakedate, ChemValue, group=Year),color='lightgrey') +
+  geom_point(BoysenTribs |>
+               filter(WaterbodyName %in% c('Muddy Creek')) |>
+               filter(ShortName_Revised == 'Discharge') |>
+               filter(Year==1983) |>
+               mutate(fakedate = as.Date(paste0('1900-', month(CollDate), '-', day(CollDate)))), 
+             mapping=aes(fakedate, ChemValue),color='lightgrey') + # 1983 weird outlier, do not include in average calculation below
+  facet_wrap(~WaterbodyName, scales='free') +
+  geom_line(missingdatfill |>
+              mutate(fakedate = as.Date(paste0('1900-', month, '-01'), format='%Y-%b-%d')), mapping=aes(fakedate, average_dis))
+
+
+
 
 
 BoysenTribs_data <- BoysenTribs |>
