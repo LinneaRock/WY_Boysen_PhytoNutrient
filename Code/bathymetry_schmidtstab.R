@@ -72,7 +72,8 @@ depth_area_aggregated <- depth_area_df |>
   ungroup() |>
   mutate(depth_m_rounded = plyr::round_any(depth_m,0.5)) |>
   group_by(depth_m_rounded) |>
-  summarise(area_m2_rounded = sum(area_m2))
+  summarise(area_m2_rounded = sum(area_m2)) |>
+  ungroup()
 
 hypso <- depth_area_aggregated |>
   rename(depths=depth_m_rounded,
