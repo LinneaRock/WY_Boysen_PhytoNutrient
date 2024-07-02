@@ -153,7 +153,7 @@ adonis2(dist~WaterbodyName, sd_data, strata=sd_data$CollDate) #??
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? 
 adonis2(dist~month, sd_data)  # p=0.02
 adonis2(dist~julianday, sd_data) 
-adonis2(dist~CHLA, sd_data) # chla not collected 2021-05-18
+adonis2(dist~CHLA, sd_data, na.rm=TRUE) # chla not collected 2021-05-18
 adonis2(dist~TN, sd_data) # p=0.09
 adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
