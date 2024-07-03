@@ -1,5 +1,5 @@
 ## heatmaps of lake profile data ####
-library(patchwork)
+
 # some of these are not working for certain locations/seasons
 
 
