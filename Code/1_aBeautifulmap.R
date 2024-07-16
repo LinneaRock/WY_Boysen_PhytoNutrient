@@ -5,12 +5,13 @@
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
 library(sf)
-library(maps)
+#library(maps)
 library(ggspatial)
 library(raster)
+library(usmap)
 
 # lake shapefile 
-lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 st_crs(lake_shapefile)
 lake_shapefile <- st_transform(lake_shapefile, crs = 4326)
 
@@ -31,12 +32,15 @@ sites_sf <- read.csv('Data/RawData_WYDEQ/ChemPhysData_2002-2021.csv',
   st_as_sf(coords=c('Longitude','Latitude'), crs=4326) 
 st_crs(sites_sf)
 
-# WY state outline
-WY <- map_data('state', region='Wyoming')
+# # WY state outline
+# WY <- map_data('state', region='Wyoming')
+# # U.S. outline 
+# us <- map_data('usa') #|>
+#   #st_as_sf(coords=c('long','lat'), crs=4326) 
 
 
 # DEM 
-dem_raster <- raster('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
+dem_raster <- raster('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
 # Create a black-and-white color palette with darker colors for higher elevations
 bw_palette <- gray.colors(100, start = 0, end = 1, gamma = 2.2, rev = TRUE)
 plot(dem_raster, col = bw_palette, main = "Digital Elevation Model with Custom Colors")
@@ -50,7 +54,7 @@ ws_shp <- st_transform(ws_shp, crs=4326)
 
 
 # flowlines
-NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 st_crs(NHDflowline)
 NHDflowline <- st_transform(NHDflowline, crs=4326)
 
@@ -63,7 +67,7 @@ st_crs(tribs_sf)
 
 
 #bathymetry 
-boysen_bathy <- st_read("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen Shapefile/boysen_Shapefile.shp")
+boysen_bathy <- st_read("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen Shapefile/boysen_Shapefile.shp")
 st_crs(boysen_bathy)
 
 # 2. check projections ####
@@ -83,32 +87,63 @@ st_crs(cropped_dem)
 
 
 # cropping flowlines
-cropped_flowline <- st_crop(NHDflowline, ws_shp)
-croppe <- st_crop(NHDflowline, xmin=-108.339946,ymin=43.12895,xmax=-108.039283,ymax=43.427151)
+cropped_flowline <- st_intersection(NHDflowline, ws_shp)
 
+cropped_flowline_majors <- cropped_flowline |>
+  drop_na(GNIS_Name)
+
+
+# 4. check out objects with mapview ####
 library(mapview)
-mapview(croppe)
+mapview(ws_shp) + mapview(cropped_flowline_majors,color='black') + mapview(tribs_sf,color='red') + mapview(lake_shapefile, color='black')
 
-# need to do this in gis
+mapview(dem_raster) + mapview(ws_shp) + mapview(cropped_flowline_majors,color='black') + mapview(tribs_sf,color='red') + mapview(lake_shapefile, color='black')
 
-
-main_IDs <- c(23002600043697)
-
+mapview(cropped_dem) + mapview(ws_shp) + mapview(cropped_flowline_majors,color='black') + mapview(tribs_sf,color='red') + mapview(lake_shapefile, color='black')
 
 
+# 5. Part A - Watershed ####
+cropped_dem_spdf <- as(cropped_dem, "SpatialPixelsDataFrame")
+cropped_dem_df <- as.data.frame(cropped_dem_spdf)
+colnames(cropped_dem_df) <- c("value", "x", "y")
+
+trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+
+a <- ggplot() +
+  geom_tile(cropped_dem_df, mapping=aes(x,y, fill=value), alpha=0.5) +
+  scale_fill_viridis_c('Elevation (m)', option='rocket') +
+  geom_sf(ws_shp, mapping=aes(), color='black', fill=NA, linewidth=0.75) +
+  geom_sf(cropped_flowline_majors, mapping=aes(), color='black',linewidth=0.25) +
+  geom_sf(tribs_sf, mapping=aes(color=WaterbodyName),size=4,shape=18) +
+  scale_color_manual('',values =trib_colors) +
+  geom_sf(lake_shapefile, mapping=aes(), fill='black') +
+  theme_minimal() +
+  labs(x='',y='')
+
+# 6. Part A, inset ####
+ws_shp_transformed <- usmap_transform(ws_shp)
+
+ainsert <- plot_usmap(exclude = c("AK","HI"), color='gray50') +
+  geom_sf(ws_shp_transformed, mapping=aes(), color='black', fill='black')
 
 
+# 7. Part B - Lake ####
+b <- ggplot()+
+  geom_sf(lake_shapefile, mapping=aes(),fill='white',color='grey20') +
+  geom_sf(sites_sf,mapping=aes(color=WaterbodyName),size=4) +
+  theme_minimal() +
+  labs(x='',y='') +
+  scale_color_viridis_d('',option='turbo') +
+  theme(axis.text.x=element_text(angle=45))
 
-plot(dem_raster)
-#plot(cropped_flowline, col='grey',add=T, alpha=0.1)
-plot(ws_shp, col='transparent', add=T)
-plot(lake_shapefile, col='black', add=T)
-plot(sites_sf, col='red', add=T)
+# 8. Save plots and manually manipulate in PP :( ####  
+a
+ggsave('Figures/Fig1/watershed.png', width=4.5,height=6.5,units='in',dpi=1200)
+a + theme(legend.position = 'none')
+ggsave('Figures/Fig1/watershed_nolegend.png', width=4.5,height=6.5,units='in',dpi=1200)
 
+ainsert
+ggsave('Figures/Fig1/countryinsert.png', width=4.5,height=6.5,units='in',dpi=1200)
 
-plot(cropped_dem) 
-plot(ws_shp)
-plot(NHDflowline)
-
-ggplot() +
-  geom_sf(NHDflowline, mapping=aes())
+b
+ggsave('Figures/Fig1/boysen.png', width=4.5,height=6.5,units='in',dpi=1200)
