@@ -135,11 +135,11 @@ Trib_loading <- BoysenTribs_data |>
 loading <- Trib_loading|>
   filter(WaterbodyName != 'Wind River Outlet') |>
   group_by(month, Year) |>
-  mutate(TotalTrib_TN_kg = sum(TN_load_kg, na.rm=TRUE),
-         TotalTrib_TP_kg = sum(TP_load_kg, na.rm=TRUE),
-         TotalTrib_NH4_kg = sum(NH4_load_kg, na.rm=TRUE),
-         TotalTrib_NO3_kg = sum(NO3_load_kg, na.rm=TRUE),
-         TotalTrib_PO4_kg = sum(PO4_load_kg, na.rm=TRUE)) |>
+  mutate(TotalTrib_TN_kg = sum(TN_load_kg),
+         TotalTrib_TP_kg = sum(TP_load_kg),
+         TotalTrib_NH4_kg = sum(NH4_load_kg),
+         TotalTrib_NO3_kg = sum(NO3_load_kg),
+         TotalTrib_PO4_kg = sum(PO4_load_kg)) |>
   ungroup() 
 
 Trib_loading <- left_join(Trib_loading, loading)

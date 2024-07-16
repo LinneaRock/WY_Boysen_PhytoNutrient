@@ -5,7 +5,8 @@
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
 
-# 2. tidy formatting of data for beautiful plotting ####
+# TRIBUTARY LOADING ####
+## 2. tidy formatting of data for beautiful plotting ####
 # load formatting 
 Loading <- TribLoadFlux |> 
   mutate(IN_load_kg = NH4_load_kg + NO3_load_kg) |>
@@ -60,22 +61,83 @@ all_load_data <- left_join(Loading, Fluxing) |>
   mutate(nutrient=factor(nutrient, levels=c('TN','TP', 'Inorganic N', 'Phosphate')))
   
 
-# 3. Plot tribs! ####
+## 3. Plot tribs loading! ####
 trib_colors <- c('#117733','#DDCC77','#882255','#332288')
 
-ggplot(all_load_data) +
+a<-ggplot(all_load_data) +
   geom_point(aes(fakedate, load, color=WaterbodyName)) +
   geom_path(aes(fakedate, load, color=WaterbodyName)) +
   scale_color_manual('',values =trib_colors) +
   geom_point(aes(fakedate, TotalLoad),shape=21) +
   facet_wrap(~nutrient, scales='free_y') +
-  labs(x='',y='Monthly nutrient load (kg)') +
-  theme_minimal() +
-  theme(legend.position = 'bottom')
-  
-  
-# 4. What percent of nutrients into reservoir are retained? ####
-retention <- all_load_data |>
-  select(-c(1:6, 10, 12))
+  labs(x='',y='Nutrient mass (kg)',
+       title='Tributary loading and outlet export') +
+  theme_minimal() 
+
+
+## 4. Plot area-normalized flux differences ####
+ggplot(all_load_data) +
+  geom_boxplot(aes(WaterbodyName, flux, color=WaterbodyName)) +
+  scale_color_manual('',values =trib_colors) +
+  facet_wrap(~nutrient, scales='free_y')
   
 
+
+## 5. What percent of nutrients into reservoir are retained? ####
+tmp <- all_load_data |>
+  select(-c(1:6, 10, 12)) |>
+  mutate(load=ifelse(!is.na(TotalLoad), NA, load)) |>
+  distinct() 
+
+tot.tmp <- tmp |>
+  select(-load) |>
+  distinct() |>
+  drop_na()
+
+out.tmp <- tmp |>
+  select(-TotalLoad) |>
+  distinct() |>
+  drop_na()
+
+
+retention <- left_join(tot.tmp, out.tmp) |> # left join is fine since we will only report on data we can actual calculate something
+  mutate(subtraction = TotalLoad + load) |> # how much entering reservoir does not exit
+  mutate(perc_ret = ifelse(subtraction > 0, abs(load)/TotalLoad * 100, load/TotalLoad *100)) |>
+  group_by(nutrient) |>
+  mutate(median_perc_ret = median(perc_ret, na.rm=TRUE)) |>
+  ungroup()
+  
+
+# IN-RESERVOIR NUTRIENT CONCENTRATIONS ####
+## 6. Tidy data for beautiful plotting ####
+reservoir_nutrients <- BoysenNutrient |>
+  filter(ShortName_Revised %in% c('TN', 'TP', 'NO3', 'NH4', 'PO4')) |>
+  pivot_wider(names_from = ShortName_Revised, values_from='ChemValue') |>
+  mutate(`Inorganic N` = NH4 + NO3) |>
+  select(-NH4, -NO3) |>
+  rename(Phosphate=PO4) |>
+  pivot_longer(cols=c(Phosphate, TP, TN, `Inorganic N`), names_to = 'nutrient', values_to = 'concentration') |>
+  group_by(CollDate, nutrient) |>
+  mutate(meanConc = mean(concentration)) |>
+  ungroup() |>
+  mutate(nutrient=factor(nutrient, levels=c('TN','TP', 'Inorganic N', 'Phosphate'))) |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))
+
+
+## 7. Plot in-reservoir nutrients ####
+b<-ggplot(reservoir_nutrients) +
+  geom_point(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
+  #geom_path(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d('', option='turbo') +
+  geom_point(aes(CollDate, meanConc),shape=22, size=2) +
+  geom_line(aes(CollDate, meanConc, group=Year)) +
+  facet_wrap(~nutrient, scales='free_y') +
+  labs(x='',y='Nutrient concentration'~(mg~L^-1),
+       title='In-reservoir Concentrations') +
+  theme_minimal() 
+
+# 8. Put plots together ####
+a/b +
+  plot_annotation(tag_levels = 'a', tag_suffix = ')')
+ggsave('Figures/Fig2_nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
+  
