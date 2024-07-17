@@ -122,7 +122,7 @@ Trib_loading <- BoysenTribs_data |>
          NH4_load_kg = NH4*Discharge*q_interval/1e6,
          NO3_load_kg = NO3*Discharge*q_interval/1e6,
          PO4_load_kg = PO4*Discharge*q_interval/1e6) |>
-  select(-TN, -TP, -NH4, -NO3, -PO4, - Discharge) |>
+ # select(-TN, -TP, -NH4, -NO3, -PO4, - Discharge) |>
   # Mass flux kg/ha/month: nutrint concentration (mg/L) * discharge (L/s) * interval(s/month) / convert mg to kg / DrainageArea (ha)
   mutate(TN_flux_kg_ha =  TN_load_kg/DrainageArea_ha,
          TP_flux_kg_ha =  TP_load_kg/DrainageArea_ha,
