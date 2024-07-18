@@ -49,7 +49,7 @@ abundances <- inner_join(phyto_rel_abund, taxon_pool) |>
   drop_na(taxa)
 
 #Taxonomy Line Plot - aggregated over all time within each samping location
-abundances |>
+ab<- abundances |>
   drop_na()|>
   arrange(desc(mean)) |>
   mutate(taxa=factor(taxa)) |>
@@ -64,7 +64,7 @@ abundances |>
        x="Relative Abundance (%)") +
   scale_color_viridis_d('',option='turbo') +
   theme(legend.position = c(0.8,0.35))
-ggsave('Figures/Fig4/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
+# ggsave('Figures/Fig4/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
 
@@ -201,14 +201,14 @@ sig.spp.fit <- subset(spp.fit_df, pval<=0.001) #subset data to show variables si
 sig.spp.fit
 
 #Now we have the relevant information for plotting the ordination!
-ggplot() +
+intr<-ggplot() +
   geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=month)) +
   theme_minimal() +
   scale_color_viridis_d('', option='magma') +
   geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1, y=NMDS2, label = spp.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
   geom_text(label='dist~month \np = 0.024', mapping = aes(x = 1, y = 2))
-ggsave('Figures/fig4/intrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
+# ggsave('Figures/fig4/intrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
 
 
@@ -233,7 +233,7 @@ sig.envbio.fit
 
 #Now we have the relevant information for plotting the ordination!
 
-ggplot() +
+ext<-ggplot() +
   geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=Cyanobacteria)) +
   theme_minimal() +
   scale_color_viridis_c('% Cyanobacteria of \ncommunity biomass') +
@@ -241,9 +241,12 @@ ggplot() +
   geom_segment(sig.envbio.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.envbio.fit, mapping=aes(x=NMDS1, y=NMDS2, label = envbio.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
   geom_text(label='dist~%cyano \np = 0.036', mapping = aes(x = 1, y = 2)) 
-ggsave('Figures/fig4/extrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
+#ggsave('Figures/fig4/extrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
 
+intr + ext +
+  plot_annotation(tag_levels = 'a', tag_suffix = ')')
+ggsave('Figures/Fig4intrinsicextrinsicNMDS.png',height = 4.5,width=10.5,units='in',dpi=1200)
 
 
 # 4. Cyano biomass timeseries ####
@@ -260,10 +263,10 @@ cyano_density <- BoysenPhyto |>
 cyano_density <- replace(cyano_density, is.na(cyano_density), 0)
 
 cyano_density_summarise <- cyano_density |>
-  group_by(CollDate,Year, WaterbodyName, Cyanobacteria) |>
+  group_by(CollDate,month, Year, WaterbodyName, Cyanobacteria) |>
   summarise(`Other Phytoplankton` = sum(Diatom, `Green algae`, Dinoflagellate, `Golden algae`, Flagellate)) |>
   pivot_longer(c(Cyanobacteria, `Other Phytoplankton`), names_to = 'type', values_to = 'density') |>
-  group_by(CollDate, Year, type) |>
+  group_by(CollDate,month, Year, type) |>
   summarise(mean=mean(density),
             min=min(density),
             max=max(density)) |>
@@ -272,26 +275,31 @@ cyano_density_summarise <- cyano_density |>
 
 
 ggplot() +
-  geom_point(cyano_density_summarise, mapping=aes(CollDate, mean/1000, width=0.2, color=type)) +
-  geom_errorbar(cyano_density_summarise,mapping=aes(CollDate, mean/1000, ymin=min/1000, ymax=max/1000, width=0.2, color=type)) +
+  geom_point(cyano_density_summarise, mapping=aes(month, mean/1000, width=0.2, color=type),
+             position = position_dodge(width = 0.75)) +
+  geom_errorbar(cyano_density_summarise,mapping=aes(month, mean/1000, ymin=min/1000, ymax=max/1000, width=0.2, color=type),
+                position = position_dodge(width = 0.75)) +
   theme_minimal() +
+  facet_wrap(~Year, scales='free_y') +
   labs(x='',y='Density'~(~1000~cells~L^-1))+
   scale_color_manual('',values=c('#999933', '#44AA99'))
 
-ggsave('Figures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/SupplementalFigures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
 
-ggplot(cyano_density|>
+cy_ts <- ggplot(cyano_density|>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_jitter(aes(CollDate, Cyanobacteria/1000, fill=WaterbodyName),shape= alpha=0.5) +
-  geom_point(cyano_density_summarise, mapping=aes(CollDate, mean/1000, width=0.2, color=type)) +
-  geom_errorbar(cyano_density_summarise,mapping=aes(CollDate, mean/1000, ymin=min/1000, ymax=max/1000, width=0.2, color=type)) +
-  scale_fill_viridis_d('',option='turbo') +
-  facet_wrap(~Year, scales='free') +
-  scale_color_manual('',values=c('#999933', '#44AA99'))
+  geom_point(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
+  geom_path(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
+  scale_color_viridis_d('',option='turbo') +
+  facet_wrap(~Year, scales='free_y') +
   theme_minimal() +
-  labs(x='',y='Cyanobacteria denisty'~(~1000~cells~L^-1))
-ggsave('Figures/cyano_density_raw.png', width=6.5,height=4.5,units='in',dpi=1200)
+  labs(x='',y='Cyanobacteria denisty'~(~1000~cells~L^-1)) +
+  theme(legend.position='none')
+#ggsave('Figures/Fig4/cyano_density_raw.png', width=6.5,height=4.5,units='in',dpi=1200)
 
+cy_ts + ab +
+  plot_annotation(tag_levels = 'a', tag_suffix = ')')
+ggsave('Figures/Fig5_cyanoPhyto.png', width=11.5,height=4.5,units='in',dpi=1200)
 
 library(ggridges)
 ggplot(cyano_density |>
