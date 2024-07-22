@@ -990,3 +990,87 @@ bda_cyano |>
 
 ggsave('Figures/ASLO24/top6_10_predictors.png',height=4.5,width=6.5,units='in',dpi=1200)
 
+
+## 3E - same as 3D, but using only closest location to toxin production as predictor ####
+
+### find closest locations ####
+library(gdistance)
+library(terra)
+library(sf)
+
+cyano_prep <- cyanotoxin |>
+  mutate(month = month(CollDate,label=TRUE,abbr=TRUE),
+         Year=year(CollDate)) |>
+  select(-CollDate, -Advisory) |>
+  mutate(toxinpresent=as.character(toxinpresent)) |>
+  mutate(toxinpresent=ifelse(toxinpresent=='N',0,1)) |>
+  filter(toxinpresent != 0) |>
+  distinct() 
+
+cyano_prep_sf <- st_as_sf(cyano_prep, coords =c('Long', 'Lat'), crs=4326)
+
+
+xy <- sd_data |> select(WaterbodyName, Longitude, Latitude, Year, month) |> as.data.frame() |> distinct() |>
+  st_as_sf(coords=c('Longitude','Latitude'),crs=4326)
+
+lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+st_crs(lake_shapefile)
+lake_shapefile <- st_transform(lake_shapefile, crs = 4326)
+
+
+r <- rast(vect(lake_shapefile),res=0.001)
+r_B <- rasterize(vect(lake_shapefile), r)
+plot(r_B,col="red")
+
+#make all sea = -999
+r_B[is.na(r_B)] <- -999
+#this turns all landmass to missing
+r_B[r_B>-999] <- NA
+#assign unit cost to all grid cells in water
+r_B[r_B==-999] <- 1
+
+distance <- shortestPath(r_B, xy[1,], cyano_prep_sf[1,], output = "SpatialLines")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+rf.data <- sd_data  |>
+  left_join(cyano_prep) |>
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  # i wish i could figure out how to code this instead of manually, but idk how
+  # 2020
+  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
+                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
+  # 2021
+  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2022
+  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
+  # 2023
+  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) |>
+  # add weight for each location, weighted by latitudinal distance to the toxin present location
+  # weight = gamma (Latitude of toxin - Latitude of sampling site); gamma = 0.5 (can choose any number?)
+  # use absolute value so weight is between 0 and 1 
+  mutate(weight = 0.1 ^ abs(Lat-Latitude)) |>
+  # time is too important, so get rid of it to assess other variables
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long)
+
+
+
+
+
+
+
+
