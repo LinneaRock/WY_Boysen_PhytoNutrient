@@ -994,79 +994,136 @@ ggsave('Figures/ASLO24/top6_10_predictors.png',height=4.5,width=6.5,units='in',d
 ## 3E - same as 3D, but using only closest location to toxin production as predictor ####
 
 ### find closest locations ####
-library(gdistance)
-library(terra)
-library(sf)
 
+library(sf)
+library(sp)
+library(raster)
+library(gdistance)
+
+
+# read shapefile
+lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+st_crs(lake_shapefile)
+lake_shapefile <- st_transform(lake_shapefile, crs = 3738)
+st_crs(lake_shapefile)$units # feet, weird
+
+# convert shapefile to raster grid
+lake_raster <-raster(extent(lake_shapefile),res=100)
+lake_raster <- rasterize(lake_shapefile, lake_raster, field=1)
+plot(lake_raster)
+
+
+# create transition layer
+lake_transition <- transition(lake_raster, transitionFunction = function(x) 1/mean(x), directions = 8)
+lake_transition <- geoCorrection(lake_transition, type = "c", multpl = FALSE)
+
+
+
+# define points
 cyano_prep <- cyanotoxin |>
   mutate(month = month(CollDate,label=TRUE,abbr=TRUE),
          Year=year(CollDate)) |>
-  select(-CollDate, -Advisory) |>
+  dplyr::select(-CollDate, -Advisory) |>
   mutate(toxinpresent=as.character(toxinpresent)) |>
   mutate(toxinpresent=ifelse(toxinpresent=='N',0,1)) |>
   filter(toxinpresent != 0) |>
-  distinct() 
+  distinct() |>
+  mutate(ID = paste0(Year, month, row_number()))
 
-cyano_prep_sf <- st_as_sf(cyano_prep, coords =c('Long', 'Lat'), crs=4326)
+cyano_locations <- cyano_prep |>
+  dplyr::select(ID, Long, Lat)
+
+coordinates(cyano_locations) <- ~Long+Lat
+proj4string(cyano_locations) <- CRS("+init=epsg:4326")
+
+cyano_locations <- spTransform(cyano_locations, CRS(st_crs(lake_shapefile)$proj4string))
 
 
-xy <- sd_data |> select(WaterbodyName, Longitude, Latitude, Year, month) |> as.data.frame() |> distinct() |>
-  st_as_sf(coords=c('Longitude','Latitude'),crs=4326)
 
-lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
-st_crs(lake_shapefile)
-lake_shapefile <- st_transform(lake_shapefile, crs = 4326)
+sample_locations_prep <- sd_data |>
+  dplyr::select(Longitude, Latitude, WaterbodyName) |>
+  distinct()
 
+sample_locations <- sample_locations_prep
 
-r <- rast(vect(lake_shapefile),res=0.001)
-r_B <- rasterize(vect(lake_shapefile), r)
-plot(r_B,col="red")
+coordinates(sample_locations) <- ~Longitude+Latitude
+proj4string(sample_locations) <- CRS("+init=epsg:4326")
 
-#make all sea = -999
-r_B[is.na(r_B)] <- -999
-#this turns all landmass to missing
-r_B[r_B>-999] <- NA
-#assign unit cost to all grid cells in water
-r_B[r_B==-999] <- 1
-
-distance <- shortestPath(r_B, xy[1,], cyano_prep_sf[1,], output = "SpatialLines")
+sample_locations <- spTransform(sample_locations, CRS(st_crs(lake_shapefile)$proj4string))
 
 
 
 
+# calculate shortest paths
+# Extract coordinates
+toxin_spots <- as.vector(as.data.frame(cyano_prep) |> dplyr::select(ID) |> distinct())[["ID"]]
+
+sites <- as.vector(as.data.frame(sample_locations_prep) |> dplyr::select(WaterbodyName) |> distinct())[["WaterbodyName"]]
+
+distance_df <- data.frame(ID=NA,
+                          WaterbodyName=NA,
+                          distance_m = NA)
+
+
+for(t in toxin_spots) {
+  for(s in sites) {
+    tryCatch({ # continues running loop, but gives error message where problem(s) are occurring
+    
+    # subset sites
+    coord_A <- coordinates(cyano_locations[cyano_locations$ID==t, ])
+    coord_B <- coordinates(sample_locations[sample_locations$WaterbodyName==s, ])
+    
+    
+    # Calculate the shortest path distance
+    shortest_path <- shortestPath(lake_transition, coord_A, coord_B, output = "SpatialLines")
+    
+    # # Plot the lake, points, and shortest path
+    # plot(st_geometry(lake_shapefile), col = "yellow", main = "Lake with Shortest Path between Points A and B")
+    # plot(shortest_path, add = TRUE, col = "blue", lwd = 2)
+    # plot(cyano_locations, add = TRUE, col = "red", pch = 20)
+    # plot(sample_locations, add = TRUE, col = "green", pch = 20)
+    
+    distance <- SpatialLinesLengths(shortest_path)*0.0003048 # convert feet to km
+    
+    tmp <- data.frame(ID=t,
+             WaterbodyName=s,
+             distance_m=distance)
+    
+    distance_df <- distance_df |>
+      rbind(tmp)
+    
+    }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
+    
+  }
+}
+
+# minimize distances and manually check locations of errors
+distance_minimized_df <- distance_df |>
+  group_by(ID) |>
+  mutate(minDist = min(distance_m)) |>
+  ungroup() |>
+  drop_na() |>
+  filter(distance_m == minDist) |>
+  dplyr::select(-minDist)
+
+error_toxin_locations <- cyano_prep |>
+  anti_join(distance_minimized_df) |>
+  st_as_sf(coords=c('Long','Lat'), crs=4326)
 
 
 
+library(ggsflabel)
+ggplot() +
+  geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
+  geom_sf(error_toxin_locations, mapping=aes()) +
+  geom_sf_text_repel(error_toxin_locations, mapping=aes(label=ID))
 
 
-
-
-
-
-
-
-
-rf.data <- sd_data  |>
-  left_join(cyano_prep) |>
-  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
-  # i wish i could figure out how to code this instead of manually, but idk how
-  # 2020
-  mutate(toxinpresent=if_else(Year==2020 & month%in%c('May','Jun'),'Before',
-                              ifelse(Year==2020 & is.na(toxinpresent), 'After', toxinpresent))) |>
-  # 2021
-  mutate(toxinpresent=if_else(Year==2021 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
-  # 2022
-  mutate(toxinpresent=if_else(Year==2022 & month%in%c('May','Jun'),'Before',toxinpresent)) |>
-  # 2023
-  mutate(toxinpresent=if_else(Year==2023 & month%in%c('May','Jun','Jul'),'Before',toxinpresent)) |>
-  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) |>
-  # add weight for each location, weighted by latitudinal distance to the toxin present location
-  # weight = gamma (Latitude of toxin - Latitude of sampling site); gamma = 0.5 (can choose any number?)
-  # use absolute value so weight is between 0 and 1 
-  mutate(weight = 0.1 ^ abs(Lat-Latitude)) |>
-  # time is too important, so get rid of it to assess other variables
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long)
-
+toxin_distance_mins <- cyano_prep |>
+  left_join(distance_minimized_df) |>
+  mutate(WaterbodyName=ifelse(ID%in%c('2023Sep25','2022Oct19'),'Lacustrine Pelagic: Dam', WaterbodyName)) |>
+  mutate(WaterbodyName=ifelse(ID%in%c('2021Aug3','2021Jul2'),'Tough Creek Campground', WaterbodyName))
+                              
 
 
 
