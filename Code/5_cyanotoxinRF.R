@@ -446,13 +446,95 @@ cmplot+rocplot
 ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
 # 6. look at top 12 variables ####
+
+
 # top 4 have MDA>2 - present separately
 top12 <- plt.dat |>
   slice(1:12)
 
+bda_cyano <- sd_data  |>
+  # we only want to keep data for RF that corresponds to the location and year a bloom occurred
+  right_join(toxin_distance_mins |> dplyr::select(WaterbodyName, Year)) |>
+  left_join(toxin_distance_mins) |>
+  distinct() |>
+  mutate(toxinpresent=ifelse(toxinpresent==1,'During',NA)) |>
+  # i wish i could figure out how to code this instead of manually, but idk how
+  mutate(toxinpresent=ifelse(WaterbodyName=='Cottonwood Creek Bay' &
+                               is.na(toxinpresent),'Before',toxinpresent),
+         toxinpresent=ifelse(WaterbodyName=='Fremont Bay' &
+                               is.na(toxinpresent) &
+                               month %in% c('May','Jun'),'Before', toxinpresent),
+         toxinpresent=ifelse(WaterbodyName=='Fremont Bay' &
+                               is.na(toxinpresent), 'After',toxinpresent),
+         toxinpresent=ifelse(WaterbodyName=='Lacustrine Pelagic: Dam' &
+                               is.na(toxinpresent) &
+                               month %in% c('May','Jun', 'Jul'), 'Before', toxinpresent),
+         toxinpresent=ifelse(WaterbodyName=='Lacustrine Pelagic: Dam' &
+                               is.na(toxinpresent), 'After', toxinpresent),
+         toxinpresent=ifelse(WaterbodyName=='Tough Creek Campground' &
+                               is.na(toxinpresent), 'Before', toxinpresent)) |>
+  # get rid of variables we don't need
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_m) |>
+  distinct() |>
+  pivot_longer(cols=c(2:17), names_to = 'ShortName_Revised', values_to='ChemValue') |>
+  filter(ShortName_Revised %in% c(top12$var)) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var))) |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))
 
 
-#  ####
+
+library(ggpubr)
+scales::viridis_pal(option='turbo')(7)
+#"#30123BFF" "#4686FBFF" "#1AE4B6FF" "#A2FC3CFF" "#FABA39FF" "#E4460AFF" "#7A0403FF"
+
+ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d('',option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=4) +
+  theme_bw() +
+  labs(x='',y='')
+
+## top 4 vars ####
+bda_cyano |>
+  filter(ShortName_Revised %in% c((top12 |> slice(1:4))$var)) |>
+  data.frame() |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var), labels=c(expression('SpC'~(µS~cm^-1)), expression('TN'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('DO'~(mg~L^-1)), 'x','x','x','x','x','x','x','x'))) |>
+  # this madness is just making pretty labels
+  ggplot(aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d('',option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
+  theme_bw() +
+  labs(x='',y='')
+ggsave('Figures/RandomForest/beforeduringaftertoxin/top4boxplots.png', height=4.5, width=6.5, dpi=1200)
+
+## next 8 vars ####
+bda_cyano |>
+  filter(ShortName_Revised %in% c((top12 |> slice(5:12))$var)) |>
+  data.frame() |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var), labels=c('x','x','x','x', expression('Phosphate'~(mg~L^-1)), expression('Inorganic N'~(mg~L^-1)), expression('Temp'~(degree*C)), 'IN:PO4~ratio', 'Phyto~Diversity~(H)', 'pH', expression('Schmidt Stability Index'~(J~m^-2)), 'TN:TP~ratio'))) |>
+  # this madness is just making pretty labels
+  ggplot(aes(toxinpresent, ChemValue)) +
+  geom_boxplot() +
+  geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
+  scale_color_viridis_d('',option='turbo') +
+  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=4,labeller=label_parsed) +
+  theme_bw() +
+  labs(x='',y='')+
+  theme(legend.position = 'bottom')
+ggsave('Figures/RandomForest/beforeduringaftertoxin/last8boxplots.png', height=4.5, width=8.5, dpi=1200)
+
+
+# 7. ID where/when are toxins occurring ####
 cyano_checks <- cyano_prep |>
   st_as_sf(coords=c('Long','Lat'),crs=4326)
 
