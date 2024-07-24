@@ -248,7 +248,7 @@ ext<-ggplot() +
 
 intr + ext +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/Fig4intrinsicextrinsicNMDS.png',height = 4.5,width=10.5,units='in',dpi=1200)
+ggsave('Figures/Fig4intrinsicextrinsicNMDS.png',height = 4.5,width=8.5,units='in',dpi=1200)
 
 
 # 4. Cyano biomass timeseries ####

@@ -5,7 +5,7 @@ library(tidyverse)
 
 # Call in bathy data made by Sean ####
 
-#If using the tif DEM
+#If using the tif DEM -- too big to keep in GitHub
 boysen_bathy <- rast("C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/BoysenRaster.tif")
 
 #To plot contours easily all you have to do is:
@@ -17,24 +17,24 @@ depth_raster <- 1463.04 - boysen_bathy
 depth_raster[depth_raster < 0.25] <- NA
 
 
-ggplot() +
-  geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
-  scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
-  theme_minimal() + 
-  guides(fill= guide_colorbar(reverse=T)) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-ggsave('Figures/ASLO24/bathymetry.png',height=6.5,width=4.5,units='in',dpi=1200)
-
-#dark theme 
-ggplot() +
-  geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
-  scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
-  dark_theme_minimal() + 
-  guides(fill= guide_colorbar(reverse=T)) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
-
-ggsave('Figures/ASLO24/bathymetry_dark.png',height=6.5,width=4.5,units='in',dpi=1200)
+# ggplot() +
+#   geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
+#   scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
+#   theme_minimal() + 
+#   guides(fill= guide_colorbar(reverse=T)) +
+#   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+# 
+# ggsave('Figures/ASLO24/bathymetry.png',height=6.5,width=4.5,units='in',dpi=1200)
+# 
+# #dark theme 
+# ggplot() +
+#   geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
+#   scale_fill_viridis_c('Depth (m)', na.value = "transparent") +
+#   dark_theme_minimal() + 
+#   guides(fill= guide_colorbar(reverse=T)) +
+#   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+# 
+# ggsave('Figures/ASLO24/bathymetry_dark.png',height=6.5,width=4.5,units='in',dpi=1200)
 
 
 #If using the contour lines shapefile
