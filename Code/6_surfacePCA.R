@@ -273,6 +273,12 @@ tidy(step.modelBIC) %>%
 summary(lm(Latitude~PC3+PC1, test_dat))
 # not great - but could be worse, r2 = 0.467
 
+ggplot(test_dat) +
+  geom_point(aes(PC1, PC3, color=Latitude))
+ggplot(test_dat) +
+  geom_point(aes(PC1, PC3, color=WaterbodyName))
+
+
 ggplot(test_dat |>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
   geom_point(aes(PC1, PC3, color=WaterbodyName)) +
@@ -280,6 +286,3 @@ ggplot(test_dat |>
   theme_bw() + 
   scale_color_viridis_d('', option = 'turbo')
   
-
-ggplot(test_dat) +
-  geom_point(aes(PC1, PC3, color=Latitude))
