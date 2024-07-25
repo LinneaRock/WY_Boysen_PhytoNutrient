@@ -4,12 +4,13 @@
 
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
-library(gstats)
+library(gstat)
 library(sp)
 library(sf)
 
 
 # 2. read in lake shapefile ####
+# shapefile too big to be stored on github
 lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 st_crs(lake_shapefile)
 lake_shapefile <- st_transform(lake_shapefile, crs = 3738) # https://epsg.io/3738
@@ -71,11 +72,21 @@ for(y in years) {
                            newdata = grid,
                            idp = 3)
       
+      minlim <- (raw_dat |>
+                   filter(ShortName_Revised == v) |>
+                   summarise(min=min(ChemValue)))[[1]]
+      
+      maxlim <- (raw_dat |>
+                   filter(ShortName_Revised == v) |>
+                   summarise(max=max(ChemValue)))[[1]]
+        
+      
       #plot the idw data
     p <- ggplot()+
         ggtitle(paste0(y,': ', m, '-', v))+
         geom_sf(data=lake_shapefile, aes()) +
         geom_sf(data = idw_dat, aes(color = var1.pred))+
+        scale_color_gradient(paste0(v), high='grey90', low='grey10',limits=c(minlim, maxlim)) +
         theme_bw() +
         theme(axis.text.x=element_text(angle=45))
       
@@ -86,14 +97,3 @@ for(y in years) {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
