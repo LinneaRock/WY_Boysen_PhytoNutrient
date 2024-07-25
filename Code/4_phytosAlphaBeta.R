@@ -174,7 +174,7 @@ ggplot(aes(x=NMDS1, y=NMDS2)) +
   theme_minimal() +
   scale_fill_viridis_d('', option='turbo') +
   geom_text(label='dist~location \np = 0.97', mapping = aes(x = 1, y = 2)) 
-ggsave('Figures/SupplementalFigures/nmds_space.png',height=4.5,width=6.5,units='in',dpi=1200)
+ggsave('Figures/nmds_space.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 # however, both space and the % cyanobacteria biomass in the community were significant contributors 
 # cyanos are consistent through time 
@@ -248,7 +248,7 @@ ext<-ggplot() +
 
 intr + ext +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/Fig4intrinsicextrinsicNMDS.png',height = 4.5,width=8.5,units='in',dpi=1200)
+ggsave('Figures/intrinsicextrinsicNMDS.png',height = 4.5,width=8.5,units='in',dpi=1200)
 
 
 # 4. Cyano biomass timeseries ####
@@ -286,7 +286,7 @@ ggplot() +
   labs(x='',y='Density'~(~1000~cells~L^-1))+
   scale_color_manual('',values=c('#999933', '#44AA99'))
 
-ggsave('Figures/SupplementalFigures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
 
 cy_ts <- ggplot(cyano_density|>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
@@ -301,7 +301,7 @@ cy_ts <- ggplot(cyano_density|>
 
 cy_ts + ab +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/Fig5_cyanoPhyto.png', width=11.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/cyanoPhyto.png', width=11.5,height=4.5,units='in',dpi=1200)
 
 library(ggridges)
 ggplot(cyano_density |>

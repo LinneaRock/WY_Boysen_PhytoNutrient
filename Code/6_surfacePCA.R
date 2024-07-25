@@ -16,7 +16,7 @@ metadat <- BoysenNutrient |>
   mutate(IN = NO3+NH4)
 
 pca_dat <- metadat |>
-  select(-c(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria))
+  select(-c(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, NO3, NH4)) # getting rid of NO3 and NH4 to reduce redundancy 
 
 rownames(pca_dat) <- metadat$Group
 
@@ -67,27 +67,27 @@ abline(h = mean(EigenProp),
        col = "red")
 
 EigenProp[1] + EigenProp[2]
-# the first two explain about 40% of the variance..
+# the first two explain about 43% of the variance..
 EigenProp[1] + EigenProp[2] + EigenProp[3]
-# the first two explain about 53% of the variance..
+# the first two explain about 56% of the variance..
 
 # not great var explained stats, but maybe useful in some way still
 
 ## evaluate loadings ####
 # only keep those which have variance explained >0.3
-for (i in 1:16){
+for (i in 1:14){
   print(paste0("Principal component",i))
   print(loadings[which(abs(loadings[,i])>0.3),i])
 }
 
-# PC1: higher PO4, TP, IN + lower IN:PO4, Temp, Stability
+# PC1: higher PO4, TP + lower TN:TP, IN:PO4, Temp, Stability
 # PC2: higher SpC, DO + lower TP, Temp
-# PC3: lower NO3, Secchi, maxdepth, IN
-# PC4: higher H + lower TN, pH
-# PC5: lower NH4, IN:PO4, H
-# PC6: higher NO3, H + lower TN, Stability, maxdepth
+# PC3: lower Secchi, maxdepth, IN
+# PC4: higher TN, pH, lower H
+# PC5: lower TP, IN:PO4, DO, maxdepth + higher temp
 
-# ..... more through PC 16: 
+
+# ..... more through PC 14: 
 
 #   [1] "Principal component1"
 # PO4         TP     IN.PO4       Temp  Stability         IN 
@@ -143,7 +143,7 @@ for (i in 1:16){
 loadings.p <- as.data.frame(loadings)
 loadings.p <- tibble::rownames_to_column(loadings.p, 'var') 
 loadings.p <- loadings.p |>
-  pivot_longer(c(2:17), names_to = 'EOF', values_to = 'Loading') |>
+  pivot_longer(c(2:15), names_to = 'EOF', values_to = 'Loading') |>
   mutate(EOF = gsub('PC', 'EOF', EOF))
 
 ggplot(loadings.p |> filter(EOF %in% c('EOF1', 'EOF2', 'EOF3'))) +
@@ -168,8 +168,8 @@ pca_dat.reg <- scale(pca_dat) |>
   bind_cols(PC2=PC2) |>
   bind_cols(PC3=PC3) |>
   # choose the vars with >3 var explained from PC1 & PC2
-  select(PC1, PC2, PC3, PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO, NO3, Secchi, maxdepth) |>
-  pivot_longer(c(PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO, NO3, Secchi, maxdepth), names_to = 'var', values_to = 'Scaled data') |>
+  select(PC1, PC2, PC3, PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO, Secchi, maxdepth) |>
+  pivot_longer(c(PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO,  Secchi, maxdepth), names_to = 'var', values_to = 'Scaled data') |>
   pivot_longer(c('PC1','PC2','PC3'), names_to = 'PC', values_to = 'PC values') |>
   mutate(PC=case_when(PC=='PC1'~paste0('PC1 (', round(EigenProp[1] * 100,1),
                                      '% variance explained)'),
@@ -237,6 +237,7 @@ tidy(step.modelBIC) %>%
 #   |:-----------|------:|-----:|------:|-------:|
 #   |(Intercept) | 67.838| 2.872| 23.618| <0.0001|
 #   |PC2         | -6.688| 1.871| -3.575|  0.0005|
+
 summary(lm(Cyanobacteria ~ PC2, test_dat))
 # pretty bad model
 
@@ -271,7 +272,7 @@ tidy(step.modelBIC) %>%
 #   |PC1         | -0.006| 0.001|     -4.414| <0.0001|
 
 summary(lm(Latitude~PC3+PC1, test_dat))
-# not great - but could be worse, r2 = 0.467
+# not great - but could be worse, r2 = 0.5169, p<2.2e-16
 
 ggplot(test_dat) +
   geom_point(aes(PC1, PC3, color=Latitude))
@@ -285,4 +286,7 @@ ggplot(test_dat |>
   facet_wrap(~month) +
   theme_bw() + 
   scale_color_viridis_d('', option = 'turbo')
-  
+ggsave('Figures/PCA/pca_fig.png', width=6.5, height=4.5, units = 'in',dpi=1200) 
+
+EigenProp[1] + EigenProp[3]
+# the first two explain about 39% of the variance..

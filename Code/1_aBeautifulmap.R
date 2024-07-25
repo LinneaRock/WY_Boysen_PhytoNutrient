@@ -1,6 +1,6 @@
-############################
-# Figure 1 a beautiful map 
-############################
+#~~~~~~~~~~~~~~~~#
+# A beautiful map 
+#~~~~~~~~~~~~~~~~#
 
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
@@ -138,12 +138,12 @@ b <- ggplot()+
 
 # 8. Save plots and manually manipulate in PP :( ####  
 a
-ggsave('Figures/Fig1/watershed.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/Map/watershed.png', width=4.5,height=6.5,units='in',dpi=1200)
 a + theme(legend.position = 'none')
-ggsave('Figures/Fig1/watershed_nolegend.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/Map/watershed_nolegend.png', width=4.5,height=6.5,units='in',dpi=1200)
 
 ainsert
-ggsave('Figures/Fig1/countryinsert.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/Map/countryinsert.png', width=4.5,height=6.5,units='in',dpi=1200)
 
 b
-ggsave('Figures/Fig1/boysen.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/Map/boysen.png', width=4.5,height=6.5,units='in',dpi=1200)

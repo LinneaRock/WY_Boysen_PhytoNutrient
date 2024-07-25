@@ -1,6 +1,6 @@
-###########################
-# Figure 3 nutrient ratios  
-###########################
+#~~~~~~~~~~~~~~~~#
+# Nutrient ratios  
+#~~~~~~~~~~~~~~~~#
 
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
@@ -82,7 +82,7 @@ ggplot() +
   theme_minimal() +
   labs(x='',y='TN:TP molar ratio')
 
-ggsave('Figures/Fig3/fig3_NPboxplots.png',width=6.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/Stoich/NPboxplots.png',width=6.5,height=4.5,units='in',dpi=1200)
 #~#  
 
 

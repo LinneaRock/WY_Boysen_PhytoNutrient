@@ -363,7 +363,7 @@ ggplot(plt.dat) +
   geom_bar(aes(x=MeanDecreaseAccuracy,y=reorder(var, MeanDecreaseAccuracy)), stat='identity') +
   theme_classic() +
   labs(y='',x='Mean decrease accuracy', title='Variable Importance')
-ggsave('Figures/RandomForest/beforeduringaftertoxin/Var_importance_bda.png', height=4.5, width=6.5, dpi=1200)
+ggsave('Figures/RandomForest/Var_importance_bda.png', height=4.5, width=6.5, dpi=1200)
 
 
 # 5. ROC and confustion matrix ####
@@ -443,7 +443,7 @@ cmplot<-ggplot(cm, aes(x = Observed, y = Predicted, fill=Freq)) +
 
 cmplot+rocplot
 
-ggsave('Figures/RandomForest/beforeduringaftertoxin/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
+ggsave('Figures/RandomForest/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
 # 6. look at top 12 variables ####
 
@@ -513,7 +513,7 @@ bda_cyano |>
   facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
   theme_bw() +
   labs(x='',y='')
-ggsave('Figures/RandomForest/beforeduringaftertoxin/top4boxplots.png', height=4.5, width=6.5, dpi=1200)
+ggsave('Figures/RandomForest/top4boxplots.png', height=4.5, width=6.5, dpi=1200)
 
 ## next 8 vars ####
 bda_cyano |>
@@ -531,7 +531,7 @@ bda_cyano |>
   theme_bw() +
   labs(x='',y='')+
   theme(legend.position = 'bottom')
-ggsave('Figures/RandomForest/beforeduringaftertoxin/last8boxplots.png', height=4.5, width=8.5, dpi=1200)
+ggsave('Figures/RandomForest/last8boxplots.png', height=4.5, width=8.5, dpi=1200)
 
 
 # 7. ID where/when are toxins occurring ####

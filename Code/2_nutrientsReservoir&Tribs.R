@@ -1,6 +1,6 @@
-##########################################################
-# Figure 2 nutrient loading and reservoir concentrations 
-##########################################################
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# Tributary nutrient loading and reservoir concentrations 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 # 1. load libraries, data ####
 source('Data/CALL_DATA_LIB.R')
@@ -139,5 +139,5 @@ b<-ggplot(reservoir_nutrients) +
 # 8. Put plots together ####
 a/b +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/Fig2_nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
+ggsave('Figures/nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
   
