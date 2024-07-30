@@ -542,7 +542,7 @@ ggplot() +
   geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
   geom_sf(cyano_checks |> filter(Year==2020), mapping=aes()) +
   geom_sf_text_repel(cyano_checks |> filter(Year==2020), mapping=aes(label=ID))
-# 1 toxin producing bloom verified near LPD (2020)
+# 1 toxin producing bloom verified near LPD (2020-july)
 
 ggplot() +
   geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
@@ -560,4 +560,4 @@ ggplot() +
   geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
   geom_sf(cyano_checks |> filter(Year==2023), mapping=aes()) +
   geom_sf_text_repel(cyano_checks |> filter(Year==2023), mapping=aes(label=ID))
-# 8 toxin producing blooms verified. 3 months Aug-Oct near LPD (2 in sep, 2 in Oct, 1 aug); 3 months nar CCB (1 ea.)  
+# 8 toxin producing blooms verified. 3 months Aug-Oct near LPD (2 in sep, 2 in Oct, 1 aug); 3 months near CCB (1 ea.)  
