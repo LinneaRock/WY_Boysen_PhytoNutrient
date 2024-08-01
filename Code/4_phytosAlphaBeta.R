@@ -80,7 +80,8 @@ sd_data <- BoysenNutrient |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
   dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
-  mutate(IN=NO3+NH4)
+  mutate(IN=NO3+NH4) |>
+  select(-c(NO3, NH4))# getting rid of NO3 and NH4 to reduce redundancy 
 
 
 # match up data for later
@@ -94,7 +95,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # create distance matrix of phytoplankton communities
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth, -ave_storage_AF,-IN)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -TP, -TN, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth, -ave_storage_AF,-IN)
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -133,8 +134,6 @@ adonis2(dist~TN, sd_data)
 adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
 adonis2(dist~TN.TP, sd_data)
-adonis2(dist~NO3, sd_data)
-adonis2(dist~NH4, sd_data) 
 adonis2(dist~IN, sd_data)
 set.seed(06261993)
 adonis2(dist~PO4, sd_data) #p=0.098
@@ -146,7 +145,7 @@ adonis2(dist~pH, sd_data)
 adonis2(dist~SpC, sd_data)
 adonis2(dist~DO, sd_data) 
 adonis2(dist~Secchi, sd_data)
-adonis2(dist~H, sd_data)
+adonis2(dist~H, sd_data) 
 set.seed(06261993)
 adonis2(dist~Stability, sd_data) # sig p =0.017
 adonis2(dist~maxdepth, sd_data)
@@ -248,7 +247,7 @@ ext<-ggplot() +
 
 intr + ext +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/intrinsicextrinsicNMDS.png',height = 4.5,width=8.5,units='in',dpi=1200)
+ggsave('Figures/intrinsicextrinsicNMDS.png',height = 6.5,width=10.5,units='in',dpi=1200)
 
 
 # 4. Cyano biomass timeseries ####
