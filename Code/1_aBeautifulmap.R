@@ -40,7 +40,7 @@ st_crs(sites_sf)
 
 
 # DEM 
-dem_raster <- raster('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
+dem_raster <- raster('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
 # Create a black-and-white color palette with darker colors for higher elevations
 bw_palette <- gray.colors(100, start = 0, end = 1, gamma = 2.2, rev = TRUE)
 plot(dem_raster, col = bw_palette, main = "Digital Elevation Model with Custom Colors")
@@ -54,7 +54,7 @@ ws_shp <- st_transform(ws_shp, crs=4326)
 
 
 # flowlines
-NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 st_crs(NHDflowline)
 NHDflowline <- st_transform(NHDflowline, crs=4326)
 
@@ -67,8 +67,8 @@ st_crs(tribs_sf)
 
 
 #bathymetry 
-boysen_bathy <- st_read("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen Shapefile/boysen_Shapefile.shp")
-st_crs(boysen_bathy)
+# boysen_bathy <- st_read("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen Shapefile/boysen_Shapefile.shp")
+# st_crs(boysen_bathy)
 
 # 2. check projections ####
 st_crs(lake_shapefile)==st_crs(sites_sf)
@@ -76,7 +76,7 @@ st_crs(sites_sf)==st_crs(dem_raster)
 st_crs(dem_raster)==st_crs(ws_shp)
 st_crs(ws_shp)==st_crs(NHDflowline)
 st_crs(NHDflowline)==st_crs(tribs_sf)
-st_crs(tribs_sf)==st_crs(boysen_bathy)
+#st_crs(tribs_sf)==st_crs(boysen_bathy)
 
 
 # 3. Crop any spatial opjects as necessary ####
@@ -109,13 +109,15 @@ colnames(cropped_dem_df) <- c("value", "x", "y")
 
 trib_colors <- c('#117733','#DDCC77','#882255','#332288')
 
-a <- ggplot() +
+library(ggnewscale)
+a<-ggplot() +
   geom_tile(cropped_dem_df, mapping=aes(x,y, fill=value), alpha=0.5) +
-  scale_fill_viridis_c('Elevation (m)', option='rocket') +
+  scale_fill_viridis_c('Elevation (m)', option='rocket', direction=-1) +
   geom_sf(ws_shp, mapping=aes(), color='black', fill=NA, linewidth=0.75) +
   geom_sf(cropped_flowline_majors, mapping=aes(), color='black',linewidth=0.25) +
-  geom_sf(tribs_sf, mapping=aes(color=WaterbodyName),size=4,shape=18) +
-  scale_color_manual('',values =trib_colors) +
+  new_scale_fill() +
+  geom_sf(tribs_sf, mapping=aes(fill=WaterbodyName),size=2,shape=23,color='white') +
+  scale_fill_manual('',values =trib_colors) +
   geom_sf(lake_shapefile, mapping=aes(), fill='black') +
   theme_minimal() +
   labs(x='',y='')

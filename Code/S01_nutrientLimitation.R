@@ -32,7 +32,7 @@ ggplot() +
            x = 0.5, y = 1.85, hjust = 0, size = 2.5) +
   annotate('text', label = 'Predicted N limitation below blue line \n (Forsberg, 1980; Rhee, 1980; \n Sakamoto, 1966; Smith, 1982)', x = -0.9, y = 1.1, hjust = 0, size = 2.5, color = '#336a98') +
   annotate('text', label = 'Predicted P limitation above blue line \n (Forsberg, 1980; Rhee, 1980; \n Sakamoto, 1966; Smith, 1982)', x = -1.8, y = 1.85, hjust = 0, size = 2.5, color = '#336a98') + 
-  annotate('text', label = 'Predicted N limitation \n left of black vertical line, \n below black horizontal line \n (Dodds & McCauley, 1992)', 
+  annotate('text', label = 'Predicted N limitation \n left of black vertical line, \n below black horizontal line \n (Downing & McCauley, 1992)', 
            x = -0.5, y = 0.75, hjust = 0, size = 2.5) +
   annotate('text', label = 'Predicted P limitation \n (Ptacnik et al., 2010)',
            x = 0.55, y = 2.05, hjust = 0, size = 2.5, color = "#ffc857") +

@@ -164,16 +164,16 @@ rm(replace_value_do)
 rm(replace_value_temp)
 
 # tributary and outlet data
-# BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
-#   mutate(CollDate = as.Date(CollDate, format='%Y-%m-%d'),
-#          Year = year(CollDate)) |>
-#   select(-X, -dec_coord_datum_cd, -StationID) |>
-#   mutate(WaterbodyName = case_when(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY'~'Wind River Outlet',
-#                                    WaterbodyName=='WIND RIVER AB BOYSEN RESERVOIR, NR SHOSHONI, WY'~'Wind River Inlet',
-#                                    WaterbodyName=='FIVEMILE CREEK NEAR SHOSHONI, WY'~'Fivemile Creek',
-#                                    WaterbodyName=='MUDDY CREEK NEAR SHOSHONI, WY'~'Muddy Creek')) |>
-#   mutate(DrainageArea_ha = DrainageArea * 258.999) |>
-#   select(-DrainageArea)
+BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
+  mutate(CollDate = as.Date(CollDate, format='%Y-%m-%d'),
+         Year = year(CollDate)) |>
+  select(-X, -dec_coord_datum_cd, -StationID) |>
+  mutate(WaterbodyName = case_when(WaterbodyName=='WIND RIVER BELOW BOYSEN RESERVOIR, WY'~'Wind River Outlet',
+                                   WaterbodyName=='WIND RIVER AB BOYSEN RESERVOIR, NR SHOSHONI, WY'~'Wind River Inlet',
+                                   WaterbodyName=='FIVEMILE CREEK NEAR SHOSHONI, WY'~'Fivemile Creek',
+                                   WaterbodyName=='MUDDY CREEK NEAR SHOSHONI, WY'~'Muddy Creek')) |>
+  mutate(DrainageArea_ha = DrainageArea * 258.999) |>
+  select(-DrainageArea)
 
 TribLoadFlux <- read.csv('Data/trib_load_flux.csv') |>
   select(-X)

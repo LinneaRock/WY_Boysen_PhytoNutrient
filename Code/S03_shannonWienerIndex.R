@@ -39,6 +39,6 @@ BoysenPhyto_A |>
   geom_text(means, mapping=aes(month, 
                                max.result+0.5, label = letters), 
             size=4) +
-  labs(x='',y='Shannon-Weiner diversity index') +
+  labs(x='',y='Shannon-Wiener diversity index') +
   theme_minimal() 
 ggsave('Figures/H_diversity.png',height=4.5,width=6.5,units='in',dpi=1200)

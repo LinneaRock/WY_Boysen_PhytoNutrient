@@ -25,7 +25,7 @@ sd_data <- BoysenNutrient |>
 # 2. Find nearest sampling locations to locations where cyanotoxins are confirmed ####
 ## format Boysen shapefile ####
 # read in Boysen shapefile, add crs, and check units 
-lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 st_crs(lake_shapefile)
 lake_shapefile <- st_transform(lake_shapefile, crs = 3738)
 st_crs(lake_shapefile)$units # feet, weird
@@ -78,7 +78,7 @@ sites <- as.vector(as.data.frame(sample_locations_prep) |> dplyr::select(Waterbo
 # create dataframe for distances
 distance_df <- data.frame(ID=NA,
                           WaterbodyName=NA,
-                          distance_m = NA)
+                          distance_km = NA)
 
 # run function over all sites and build dataframe
 for(t in toxin_spots) {
@@ -103,7 +103,7 @@ for(t in toxin_spots) {
       
       tmp <- data.frame(ID=t,
                         WaterbodyName=s,
-                        distance_m=distance)
+                        distance_km=distance)
       
       distance_df <- distance_df |>
         rbind(tmp)
@@ -116,10 +116,10 @@ for(t in toxin_spots) {
 # minimize distances
 distance_minimized_df <- distance_df |>
   group_by(ID) |>
-  mutate(minDist = min(distance_m)) |>
+  mutate(minDist = min(distance_km)) |>
   ungroup() |>
   drop_na() |>
-  filter(distance_m == minDist) |>
+  filter(distance_km == minDist) |>
   dplyr::select(-minDist)
 
 error_toxin_locations <- cyano_prep |>
@@ -134,6 +134,12 @@ ggplot() +
   geom_sf(error_toxin_locations, mapping=aes()) +
   geom_sf_text_repel(error_toxin_locations, mapping=aes(label=ID))
 
+
+cyano <- cyano_prep |>
+  st_as_sf(coords=c('Long','Lat'), crs=4326)
+ggplot() +
+  geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
+  geom_sf(st_geometry(cyano), mapping=aes())
 
 
 # create dataframe with locations to use in Random Forest
@@ -171,7 +177,7 @@ rf.data <- sd_data  |>
          toxinpresent=ifelse(WaterbodyName=='Tough Creek Campground' &
                                is.na(toxinpresent), 'Before', toxinpresent)) |>
   # get rid of variables we don't need
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_m) |>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km) |>
   distinct() |>
   mutate(toxinpresent=as.factor(toxinpresent))
 
@@ -474,7 +480,7 @@ bda_cyano <- sd_data  |>
          toxinpresent=ifelse(WaterbodyName=='Tough Creek Campground' &
                                is.na(toxinpresent), 'Before', toxinpresent)) |>
   # get rid of variables we don't need
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_m) |>
+  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km) |>
   distinct() |>
   pivot_longer(cols=c(2:17), names_to = 'ShortName_Revised', values_to='ChemValue') |>
   filter(ShortName_Revised %in% c(top12$var)) |>

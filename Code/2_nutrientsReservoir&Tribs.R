@@ -64,15 +64,15 @@ all_load_data <- left_join(Loading, Fluxing) |>
 ## 3. Plot tribs loading! ####
 trib_colors <- c('#117733','#DDCC77','#882255','#332288')
 
-a<-ggplot(all_load_data) +
+ggplot(all_load_data) +
   geom_point(aes(fakedate, load, color=WaterbodyName)) +
   geom_path(aes(fakedate, load, color=WaterbodyName)) +
   scale_color_manual('',values =trib_colors) +
   geom_point(aes(fakedate, TotalLoad),shape=21) +
   facet_wrap(~nutrient, scales='free_y') +
-  labs(x='',y='Nutrient mass (kg)',
-       title='Tributary loading and outlet export') +
+  labs(x='',y='Nutrient mass (kg)') +
   theme_minimal() 
+ggsave('Figures/nutrientdynamics_tribs.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 
 ## 4. Plot area-normalized flux differences ####
@@ -125,19 +125,19 @@ reservoir_nutrients <- BoysenNutrient |>
 
 
 ## 7. Plot in-reservoir nutrients ####
-b<-ggplot(reservoir_nutrients) +
+ggplot(reservoir_nutrients) +
   geom_point(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
   #geom_path(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
   scale_color_viridis_d('', option='turbo') +
   geom_point(aes(CollDate, meanConc),shape=22, size=2) +
   geom_line(aes(CollDate, meanConc, group=Year)) +
   facet_wrap(~nutrient, scales='free_y') +
-  labs(x='',y='Nutrient concentration'~(mg~L^-1),
-       title='In-reservoir Concentrations') +
+  labs(x='',y='Nutrient concentration'~(mg~L^-1)) +
   theme_minimal() 
+ggsave('Figures/nutrientdynamics_boysen.png', height=4.5, width=6.5, units='in',dpi=1200)
 
-# 8. Put plots together ####
-a/b +
-  plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
+# # 8. Put plots together ####
+# a/b +
+#   plot_annotation(tag_levels = 'a', tag_suffix = ')')
+# ggsave('Figures/nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
   

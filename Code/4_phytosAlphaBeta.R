@@ -170,9 +170,9 @@ scores <- scores(nmds) |>
 scores |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot(aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(fill=WaterbodyName),shape=21,size=2) +
+  geom_point(aes(color=WaterbodyName),size=2) +
   theme_minimal() +
-  scale_fill_viridis_d('', option='turbo') +
+  scale_color_viridis_d('', option='turbo') +
   geom_text(label='dist~location \np = 0.97', mapping = aes(x = 1, y = 2)) 
 ggsave('Figures/nmds_space.png',height=4.5,width=6.5,units='in',dpi=1200)
 
