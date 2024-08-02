@@ -18,14 +18,14 @@ sd_data <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
+  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(IN = NO3+NH4)
 
 # 2. Find nearest sampling locations to locations where cyanotoxins are confirmed ####
 ## format Boysen shapefile ####
 # read in Boysen shapefile, add crs, and check units 
-lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 st_crs(lake_shapefile)
 lake_shapefile <- st_transform(lake_shapefile, crs = 3738)
 st_crs(lake_shapefile)$units # feet, weird
@@ -177,7 +177,7 @@ rf.data <- sd_data  |>
          toxinpresent=ifelse(WaterbodyName=='Tough Creek Campground' &
                                is.na(toxinpresent), 'Before', toxinpresent)) |>
   # get rid of variables we don't need
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km) |>
+  dplyr::select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-WaterbodyName,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km, -NO3, -NH4) |>
   distinct() |>
   mutate(toxinpresent=as.factor(toxinpresent))
 
@@ -198,11 +198,11 @@ rf_default <- train(toxinpresent ~.,
                     ntree=500,
                     trControl=trainControl(method='cv', number=10))
 
-rf_default #accuracy=   0.655
+rf_default 
 # Random Forest 
 # 
 # 42 samples
-# 16 predictors
+# 14 predictors
 # 3 classes: 'After', 'Before', 'During' 
 # 
 # No pre-processing
@@ -211,9 +211,9 @@ rf_default #accuracy=   0.655
 # Resampling results:
 #   
 #   Accuracy  Kappa    
-# 0.655     0.3772727
+# 0.595     0.2772727
 # 
-# Tuning parameter 'mtry' was held constant at a value of 5.666667
+# Tuning parameter 'mtry' was held constant at a value of 5
 
 # find best mtry
 set.seed(06261993)
@@ -228,12 +228,10 @@ rf_mtry <- train(toxinpresent~.,
 
 print(rf_mtry) 
 plot(rf_mtry) 
-# mtry=8
-
 # Random Forest 
 # 
 # 42 samples
-# 16 predictors
+# 14 predictors
 # 3 classes: 'After', 'Before', 'During' 
 # 
 # No pre-processing
@@ -242,19 +240,18 @@ plot(rf_mtry)
 # Resampling results across tuning parameters:
 #   
 #   mtry  Accuracy  Kappa    
-# 1    0.590     0.2433333
-# 2    0.610     0.2766667
+# 1    0.615     0.2933333
+# 2    0.590     0.2433333
 # 3    0.590     0.2433333
-# 4    0.615     0.2933333
+# 4    0.635     0.3266667
 # 5    0.635     0.3266667
 # 6    0.635     0.3266667
-# 7    0.610     0.2766667
-# 8    0.660     0.3722222
-# 9    0.660     0.3766667
-# 10    0.610     0.2766667
-# 
-# Accuracy was used to select the optimal model using the largest value.
-# The final value used for the model was mtry = 8.
+# 7    0.635     0.3266667
+# 8    0.610     0.2766667
+# 9    0.610     0.2722222
+# 10    0.635     0.3266667
+#Accuracy was used to select the optimal model using the largest value.
+#The final value used for the model was mtry = 4.
 
 
 # find best ntrees
@@ -284,32 +281,33 @@ summary(results_tree) # 150
 # Number of resamples: 10 
 # 
 # Accuracy 
-# Min. 1st Qu. Median  Mean 3rd Qu. Max. NA's
-# 100   0.4   0.525  0.675 0.660    0.75    1    0
-# 150   0.4   0.500  0.675 0.665    0.75    1    0
-# 250   0.4   0.525  0.675 0.660    0.75    1    0
-# 300   0.4   0.525  0.675 0.660    0.75    1    0
-# 350   0.4   0.525  0.675 0.660    0.75    1    0
-# 400   0.4   0.525  0.675 0.660    0.75    1    0
-# 450   0.4   0.525  0.675 0.660    0.75    1    0
-# 500   0.4   0.525  0.675 0.660    0.75    1    0
-# 800   0.4   0.525  0.675 0.660    0.75    1    0
-# 1000  0.4   0.500  0.600 0.635    0.75    1    0
-# 2000  0.4   0.500  0.600 0.635    0.75    1    0
+# Min. 1st Qu.    Median      Mean 3rd Qu. Max. NA's
+# 100   0.4   0.525 0.6333333 0.6516667    0.75    1    0
+# 150   0.4   0.525 0.6750000 0.6600000    0.75    1    0
+# 250   0.4   0.525 0.6750000 0.6600000    0.75    1    0
+# 300   0.4   0.525 0.6750000 0.6600000    0.75    1    0
+# 350   0.4   0.500 0.6000000 0.6350000    0.75    1    0
+# 400   0.4   0.500 0.6000000 0.6350000    0.75    1    0
+# 450   0.4   0.500 0.6000000 0.6350000    0.75    1    0
+# 500   0.4   0.500 0.6000000 0.6350000    0.75    1    0
+# 800   0.4   0.525 0.6750000 0.6600000    0.75    1    0
+# 1000  0.4   0.525 0.6750000 0.6600000    0.75    1    0
+# 2000  0.4   0.500 0.6000000 0.6350000    0.75    1    0
 # 
 # Kappa 
-#      Min.    1st Qu.    Median      Mean   3rd Qu. Max. NA's
-# 100     0 0.08333333 0.4166667 0.3766667 0.5000000    1    0
-# 150     0 0.00000000 0.4166667 0.3888889 0.5416667    1    0
-# 250     0 0.08333333 0.4166667 0.3766667 0.5000000    1    0
-# 300     0 0.08333333 0.4166667 0.3766667 0.5000000    1    0
-# 350     0 0.08333333 0.4166667 0.3722222 0.5000000    1    0
-# 400     0 0.08333333 0.4166667 0.3722222 0.5000000    1    0
-# 450     0 0.08333333 0.4166667 0.3766667 0.5000000    1    0
-# 500     0 0.08333333 0.4166667 0.3722222 0.5000000    1    0
-# 800     0 0.08333333 0.4166667 0.3722222 0.5000000    1    0
-# 1000    0 0.00000000 0.3333333 0.3266667 0.5000000    1    0
-# 2000    0 0.00000000 0.3333333 0.3266667 0.5000000    1    0
+#      Min.    1st Qu.    Median      Mean 3rd Qu. Max. NA's
+# 100     0 0.08333333 0.3666667 0.3666667     0.5    1    0
+# 150     0 0.08333333 0.4166667 0.3766667     0.5    1    0
+# 250     0 0.08333333 0.4166667 0.3766667     0.5    1    0
+# 300     0 0.08333333 0.4166667 0.3766667     0.5    1    0
+# 350     0 0.00000000 0.3333333 0.3266667     0.5    1    0
+# 400     0 0.00000000 0.3333333 0.3266667     0.5    1    0
+# 450     0 0.00000000 0.3333333 0.3266667     0.5    1    0
+# 500     0 0.00000000 0.3333333 0.3266667     0.5    1    0
+# 800     0 0.08333333 0.4166667 0.3766667     0.5    1    0
+# 1000    0 0.08333333 0.4166667 0.3722222     0.5    1    0
+# 2000    0 0.00000000 0.3333333 0.3266667     0.5    1    0
+
 
 ## run best model ####
 set.seed(06261993)
@@ -322,7 +320,7 @@ bda_fit_rf <- randomForest(toxinpresent~.,
                            trControl = trainControl(method = "cv",
                                                     number = 10),
                            importance = TRUE,
-                           mtry = 8,
+                           mtry = 4,
                            ntree = 150)
 
 # get predicted values
@@ -330,17 +328,17 @@ testing.dat$prediction <- predict(bda_fit_rf, testing.dat)
 
 bda_fit_rf
 # Call:
-#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 8, ntree = 150) 
+#   randomForest(formula = toxinpresent ~ ., data = training.dat,      method = "rf", tuneGrid = expand.grid(.mtry = c(1:10)), trControl = trainControl(method = "cv",          number = 10), importance = TRUE, mtry = 4, ntree = 150) 
 # Type of random forest: classification
 # Number of trees: 150
-# No. of variables tried at each split: 8
+# No. of variables tried at each split: 4
 # 
-# OOB estimate of  error rate: 42.86%
+# OOB estimate of  error rate: 35.71%
 # Confusion matrix:
 #   After Before During class.error
 # After      0      0      4   1.0000000
 # Before     0     14      6   0.3000000
-# During     0      8     10   0.4444444
+# During     0      5     13   0.2777778
 
 # 4. Variable importance plots ####
 varImpPlot(bda_fit_rf)
@@ -451,12 +449,12 @@ cmplot+rocplot
 
 ggsave('Figures/RandomForest/cm_roc_bda.png', height=4.5, width=6.5, dpi=1200)
 
-# 6. look at top 12 variables ####
+# 6. look at top 10 variables ####
 
 
 # top 4 have MDA>2 - present separately
-top12 <- plt.dat |>
-  slice(1:12)
+top10 <- plt.dat |>
+  slice(1:10)
 
 bda_cyano <- sd_data  |>
   # we only want to keep data for RF that corresponds to the location and year a bloom occurred
@@ -480,14 +478,23 @@ bda_cyano <- sd_data  |>
          toxinpresent=ifelse(WaterbodyName=='Tough Creek Campground' &
                                is.na(toxinpresent), 'Before', toxinpresent)) |>
   # get rid of variables we don't need
-  select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km) |>
+  dplyr::select(-Group, -CollDate,-Year,-month,-julianday,-Diatom,-`Green algae`,-Dinoflagellate, -`Golden algae`, -Flagellate, -Cyanobacteria, -CHLA,-Latitude,-Longitude, - Lat, - Long, -ID, -distance_km,-NO3, -NH4) |>
   distinct() |>
-  pivot_longer(cols=c(2:17), names_to = 'ShortName_Revised', values_to='ChemValue') |>
-  filter(ShortName_Revised %in% c(top12$var)) |>
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var))) |>
+  pivot_longer(cols=c(2:15), names_to = 'ShortName_Revised', values_to='ChemValue') |>
+  filter(ShortName_Revised %in% c(top10$var)) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var))) |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
-  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After')))
+  mutate(toxinpresent=factor(toxinpresent, levels=c('Before','During','After'))) 
 
+
+# Calculate median_before separately
+median_before_df <- bda_cyano %>%
+  filter(toxinpresent == 'Before') %>%
+  group_by(ShortName_Revised) %>%
+  summarize(median_before = median(ChemValue, na.rm = TRUE)) %>%
+  ungroup()
+
+bda_cyano <- left_join(bda_cyano, median_before_df)
 
 
 library(ggpubr)
@@ -505,39 +512,44 @@ ggplot(bda_cyano, aes(toxinpresent, ChemValue)) +
   labs(x='',y='')
 
 ## top 4 vars ####
-bda_cyano |>
-  filter(ShortName_Revised %in% c((top12 |> slice(1:4))$var)) |>
+plotdata4 <- bda_cyano |>
+  filter(ShortName_Revised %in% c((top10 |> slice(1:4))$var)) |>
   data.frame() |>
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var), labels=c(expression('SpC'~(µS~cm^-1)), expression('TN'~(mg~L^-1)), expression('Secchi depth'~(m)), expression('DO'~(mg~L^-1)), 'x','x','x','x','x','x','x','x'))) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c(expression('Secchi depth'~(m)~'VI=4'),expression('SpC'~(µS~cm^-1)~'VI=3'), expression('DO'~(mg~L^-1)~'VI=2'),expression('TP'~(mg~L^-1~'VI=2')), 'x','x','x','x','x','x'))) 
   # this madness is just making pretty labels
-  ggplot(aes(toxinpresent, ChemValue)) +
+
+  ggplot(plotdata4, aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
   scale_color_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  geom_hline(aes(yintercept = median_before), color='grey60') +
+  #scale_y_log10() +
+  #stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+ # scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
   facet_wrap(~ShortName_Revised, scales='free',ncol=2,labeller=label_parsed) +
   theme_bw() +
   labs(x='',y='')
 ggsave('Figures/RandomForest/top4boxplots.png', height=4.5, width=6.5, dpi=1200)
 
-## next 8 vars ####
-bda_cyano |>
-  filter(ShortName_Revised %in% c((top12 |> slice(5:12))$var)) |>
+## next 6 vars ####
+plotdata6 <-bda_cyano |>
+  filter(ShortName_Revised %in% c((top10 |> slice(5:10))$var)) |>
   data.frame() |>
-  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top12$var), labels=c('x','x','x','x', expression('Phosphate'~(mg~L^-1)), expression('Inorganic N'~(mg~L^-1)), expression('Temp'~(degree*C)), 'IN:PO4~ratio', 'Phyto~Diversity~(H)', 'pH', expression('Schmidt Stability Index'~(J~m^-2)), 'TN:TP~ratio'))) |>
+  mutate(ShortName_Revised = factor(ShortName_Revised, levels=c(top10$var), labels=c('x','x','x','x',expression('IN:PO4 ratio'~'VI=1'), expression('TN:TP ratio'~'VI=1'), expression('Schmidt Stability Index'~(J~m^-2)~'VI=1'), expression('Inorganic N'~(mg~L^-1)~'VI=1'), expression('Temp'~(degree*C)~'VI=1'), expression('Maximum depth (m)'~'VI=1')))) 
   # this madness is just making pretty labels
-  ggplot(aes(toxinpresent, ChemValue)) +
+
+ggplot(plotdata6, aes(toxinpresent, ChemValue)) +
   geom_boxplot() +
   geom_jitter(aes(color=WaterbodyName), alpha=0.5) +
   scale_color_viridis_d('',option='turbo') +
-  stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
-  scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
-  facet_wrap(~ShortName_Revised, scales='free',ncol=4,labeller=label_parsed) +
+  geom_hline(aes(yintercept=median_before), color='grey60') +
+  #stat_compare_means(fontface='bold',label = 'p.signif',comparisons = list(c('Before','During'), c('During','After'), c('Before','After'))) +   #  Kruskal-Wallis test 
+  #scale_y_continuous(expand = expansion(mult = c(0.05, 0.1))) + # expands y-axis so we can see all results of kruskal-wallis comparisons
+  facet_wrap(~ShortName_Revised, scales='free',ncol=3,labeller=label_parsed) +
   theme_bw() +
   labs(x='',y='')+
   theme(legend.position = 'bottom')
-ggsave('Figures/RandomForest/last8boxplots.png', height=4.5, width=8.5, dpi=1200)
+ggsave('Figures/RandomForest/last6boxplots.png', height=4.5, width=8.5, dpi=1200)
 
 
 # 7. ID where/when are toxins occurring ####
