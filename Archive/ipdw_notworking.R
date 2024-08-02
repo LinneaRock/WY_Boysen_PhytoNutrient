@@ -100,3 +100,64 @@ final.ipdw <- ipdw(raw_dat1, costras, range = mean.neighdist * 10, paramlist,
                    overlapped = TRUE)
 plot(final.ipdw)
 ?ipdw()
+
+
+library(ipdw)
+
+library(sf)
+pols <- st_read(system.file("extdata/kattegat_coast.gpkg", package = "ipdw"))
+pnts <- st_read(system.file("extdata/kattegat_pnts.gpkg", package = "ipdw"))
+
+costras <- costrasterGen(pnts, pols, extent = "pnts",
+                         projstr = projection(pols))
+# insert contiguous barrier
+costras[160:170, 1:80] <- 10000
+
+costras <- costrasterGen(pnts, pols, extent = "pnts",
+                         projstr = projection(pols))
+# insert contiguous barrier
+costras[160:170, 1:80] <- 10000
+
+# find average nearest neighbor
+library(spatstat)
+
+W              <- owin(range(c(st_bbox(pnts)["xmin"], st_bbox(pnts)["xmax"])),
+                       range(c(st_bbox(pnts)["ymin"], st_bbox(pnts)["ymax"])))
+kat.pp         <- ppp(st_coordinates(pnts)[,1], st_coordinates(pnts)[,2], window = W)
+mean.neighdist <- mean(nndist(kat.pp))
+
+# grid building
+gridsize       <- mean.neighdist * 2
+grainscale.fac <- gridsize / res(costras)[1]
+gridras        <- aggregate(costras, fact = grainscale.fac)
+gridpol        <- rasterToPolygons(gridras)
+gridpol$value  <- row.names(gridpol)
+
+# spatial join
+fulldataset.over <- sf::st_join(pnts, st_as_sf(gridpol))
+
+# grid selection
+set.seed(2)
+gridlev <- unique(fulldataset.over$value)
+for (i in seq_along(gridlev)) {
+  activesub <- subset(fulldataset.over, fulldataset.over$value == gridlev[i])
+  selectnum <- gdata::resample(seq_len(nrow(activesub)), 1)
+  if (i == 1) {
+    training <- activesub[selectnum, ]
+  } else {
+    training <- rbind(training, activesub[selectnum, ])
+  }
+}
+
+validate             <- fulldataset.over[!(row.names(fulldataset.over) %in%
+                                             row.names(training)), ]
+
+plot(costras)
+plot(st_geometry(training), add = TRUE)
+plot(st_geometry(validate), col = "red", add = TRUE)
+
+
+paramlist <- c("salinity")
+final.ipdw <- ipdw(training, costras, range = mean.neighdist * 10, paramlist,
+                   overlapped = TRUE)
+plot(final.ipdw, main = "Kattegat salinity (ppt)")
