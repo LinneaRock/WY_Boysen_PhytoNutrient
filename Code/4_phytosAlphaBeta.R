@@ -15,9 +15,29 @@ monthly_storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   group_by(month, Year) |>
   summarise(ave_storage_AF = mean(Result))
 
+# create metadata 
+sd_data <- BoysenNutrient |>
+  bind_rows(BoysenChem) |>
+  left_join(BoysenPhyto_cat) |>
+  left_join(monthly_storage) |>
+  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
+  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF) |>
+  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
+  mutate(IN=NO3+NH4) |>
+  select(-c(NO3, NH4))# getting rid of NO3 and NH4 to reduce redundancy 
+
+
+# match up data for later
+phyto_data <- BoysenPhyto_A |>
+  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
+  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month) |>
+  left_join(sd_data) |>
+  pivot_wider(names_from = Genus.Species.Variety, values_from = indsum) |>
+  as.data.frame() 
+
 # 2. ALPHA DIVERSITY ANALYSIS ####
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -NH4,-TP, -TN, -NO3, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth,-ave_storage_AF) |>
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4,-TP, -TN, -IN, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth,-ave_storage_AF) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -53,7 +73,7 @@ ab<- abundances |>
   drop_na()|>
   arrange(desc(mean)) |>
   mutate(taxa=factor(taxa)) |>
-  filter(mean>5) |> # annoying filter just to make plot less complicated by removeing the lowest taxa
+  filter(mean>5) |> # annoying filter just to make plot less complicated by removing the lowest taxa
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
   ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
   stat_summary(fun.data=median_hilow, geom = "pointrange",
@@ -71,26 +91,6 @@ ab<- abundances |>
 
 
 # 3. BETA DIVERSITY ANALYSIS ####
-
-# create metadata 
-sd_data <- BoysenNutrient |>
-  bind_rows(BoysenChem) |>
-  left_join(BoysenPhyto_cat) |>
-  left_join(monthly_storage) |>
-  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF) |>
-  pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
-  mutate(IN=NO3+NH4) |>
-  select(-c(NO3, NH4))# getting rid of NO3 and NH4 to reduce redundancy 
-
-
-# match up data for later
-phyto_data <- BoysenPhyto_A |>
-  mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, Genus.Species.Variety, indsum, WaterbodyName, CollDate, Year, month) |>
-  left_join(sd_data) |>
-  pivot_wider(names_from = Genus.Species.Variety, values_from = indsum) |>
-  as.data.frame() 
 
 
 # create distance matrix of phytoplankton communities
