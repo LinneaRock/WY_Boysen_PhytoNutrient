@@ -125,28 +125,60 @@ ggplot(all_load_data) +
 
 ## 5. What percent of nutrients into reservoir are retained? ####
 tmp <- all_load_data |>
-  select(-c(1:6, 10, 12)) |>
+  #select(-c(1:6, 10, 12)) |>
   mutate(load=ifelse(!is.na(TotalLoad), NA, load)) |>
   distinct() 
 
 tot.tmp <- tmp |>
-  select(-load) |>
+  select(TotalLoad, fakedate, nutrient) |>
   distinct() |>
   drop_na()
 
 out.tmp <- tmp |>
-  select(-TotalLoad) |>
+  select(load, fakedate, nutrient) |>
+  filter(load<0) |>
   distinct() |>
   drop_na()
 
 
-retention <- left_join(tot.tmp, out.tmp) |> # left join is fine since we will only report on data we can actual calculate something
+retention <- left_join(tot.tmp, out.tmp) |> # we will only report on data we can actual calculate something
   mutate(subtraction = TotalLoad + load) |> # how much entering reservoir does not exit
   mutate(perc_ret = ifelse(subtraction > 0, abs(load)/TotalLoad * 100, load/TotalLoad *100)) |>
   group_by(nutrient) |>
   mutate(median_perc_ret = median(perc_ret, na.rm=TRUE)) |>
-  ungroup()
+  ungroup() |>
+  mutate(m = month(fakedate)) |>
+  mutate(month=month(fakedate, label=TRUE))
+
+ggplot(retention) +
+  geom_boxplot(aes(month, perc_ret, group=month)) +
+  geom_smooth(aes(m, perc_ret), method='lm') +
+  theme_bw() +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~nutrient) +
+  labs(x='',y='Nutrient retention (%)')
+ggsave('Figures/retentionTimeFig.png', height=4.5, width=6.5, units='in',dpi=1200)
+
+summary(lm(perc_ret~m, retention |> filter(nutrient=='TN')))
+#slope=17.52
+#p-value: 0.0007671
+#Adjusted R-squared:  0.6267 
   
+summary(lm(perc_ret~m, retention |> filter(nutrient=='TP')))
+#slope=-8.924
+#p-value: 0.4045
+#Adjusted R-squared:  -0.00957 
+
+summary(lm(perc_ret~m, retention |> filter(nutrient=='Inorganic N')))
+#slope=0.1973 
+#p-value: 0.9614
+#Adjusted R-squared:  -0.4978 
+
+summary(lm(perc_ret~m, retention |> filter(nutrient=='Phosphate')))
+#slope=-10.057
+#p-value: 0.5918
+#Adjusted R-squared:  -0.04298 
+
 
 # IN-RESERVOIR NUTRIENT CONCENTRATIONS ####
 ## 6. Tidy data for beautiful plotting ####
