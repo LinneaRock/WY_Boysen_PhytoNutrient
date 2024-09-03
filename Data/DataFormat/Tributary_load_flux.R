@@ -103,12 +103,13 @@ BoysenTribs_data <- BoysenTribs |>
   mutate(Discharge = mean(Discharge)) |>
   ungroup() |>
   filter(!if_all(c(TN, NH4, TP, PO4, NO3), is.na)) |>
+  mutate(estimated = ifelse(is.na(Discharge), 'Y', NA)) |>
   # fill in missing data with long-term averages
   left_join(missingdatfill) |>
   mutate(Discharge = ifelse(is.na(Discharge), average_dis, Discharge)) |>
   select(-average_dis, - ShortName_Revised, -ChemUnits, -CollDate) # all nutrients mg/L, Discharge L/s
 
-
+write.csv(BoysenTribs_data, 'Data/estimated_discharge.csv')
 
 
 # 2. Monthly mass loading, flux loading ####

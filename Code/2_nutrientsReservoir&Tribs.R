@@ -62,6 +62,8 @@ all_load_data <- left_join(Loading, Fluxing) |>
   
 
 ## 3. Plot tribs loading! ####
+options(scipen = 999)
+
 trib_colors <- c('#117733','#DDCC77','#882255','#332288')
 
 ggplot(all_load_data) +
@@ -74,6 +76,44 @@ ggplot(all_load_data) +
   theme_minimal() 
 ggsave('Figures/nutrientdynamics_tribs.png', height=4.5, width=6.5, units='in',dpi=1200)
 
+### 3a. discharge fig ####
+discharge <- BoysenTribs |>
+  filter(between(year(CollDate), 2020, 2023)) |>
+  filter(ShortName_Revised=='Discharge') |>
+  mutate(ChemValue=ifelse(WaterbodyName=='Wind River Outlet', ChemValue*-1, ChemValue))
+
+estimated_dis <- estimated_discharge |> 
+  filter(estimated=='Y') |>
+  mutate(CollDate = as.Date(paste(month, '15', Year, sep='-'), format='%b-%d-%Y'))
+
+ggplot() + 
+  geom_line(discharge, mapping=aes(CollDate, ChemValue, color=WaterbodyName)) +
+  geom_line(estimated_dis, mapping=aes(CollDate, Discharge, color=WaterbodyName), linetype=2) +
+  scale_color_manual('',values =trib_colors) +
+  labs(x='',y='Discharge '~(L~s^-1)) +
+  theme_minimal() +
+  theme(legend.position = 'inside',
+        legend.position.inside = c(0.1, 0.85)) +
+  annotate('text', x=as.Date('2020-01-01'), y= 200000, label='- - Estimated discharge', hjust=0.15, size=3.3)
+ggsave('Figures/discharge.png', height=4.5, width=6.5, units='in',dpi=1200)
+
+
+### 3a. nutrient concentration fig ####
+trib_nuts <- BoysenTribs_data |>
+  mutate(`Inorganic N`=NO3 + NH4) |>
+  rename(Phosphate=PO4) |>
+  mutate(CollDate = as.Date(paste(month, '15', Year, sep='-'), format='%b-%d-%Y')) |>
+  pivot_longer(cols=c('TN', `Inorganic N`, 'TP', 'Phosphate')) |>
+  mutate(name = factor(name, levels=c('TN','TP','Inorganic N', 'Phosphate')))
+
+ggplot(trib_nuts) + 
+  geom_point(aes(CollDate, value, color=WaterbodyName)) +
+  geom_line(aes(CollDate, value, color=WaterbodyName)) +
+  scale_color_manual('',values =trib_colors) +
+  facet_wrap(~name, scales = 'free') +
+  labs(x='',y='Concentration '~(mg~L^-1)) +
+  theme_minimal() 
+ggsave('Figures/tribs_nutrientConcentrations.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 ## 4. Plot area-normalized flux differences ####
 ggplot(all_load_data) +

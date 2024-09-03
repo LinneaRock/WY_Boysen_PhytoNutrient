@@ -178,6 +178,9 @@ BoysenTribs <- read.csv('Data/BoysenTribs.csv') |>
 TribLoadFlux <- read.csv('Data/trib_load_flux.csv') |>
   select(-X)
 
+estimated_discharge <- read.csv('Data/estimated_discharge.csv') |>
+  select(-X)
+
 
 library(readr)
 # all WY phyto data
