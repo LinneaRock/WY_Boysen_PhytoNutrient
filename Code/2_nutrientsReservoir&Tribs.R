@@ -150,20 +150,12 @@ retention <- left_join(tot.tmp, out.tmp) |> # we will only report on data we can
   mutate(m = month(fakedate)) |>
   mutate(month=month(fakedate, label=TRUE))
 
-ggplot(retention) +
-  geom_boxplot(aes(month, perc_ret, group=month)) +
-  geom_smooth(aes(m, perc_ret), method='lm') +
-  theme_bw() +
-  geom_hline(yintercept = 0) +
-  facet_wrap(~nutrient) +
-  labs(x='',y='Nutrient retention (%)')
-ggsave('Figures/retentionTimeFig.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 summary(lm(perc_ret~m, retention |> filter(nutrient=='TN')))
 #slope=17.52
 #p-value: 0.0007671
 #Adjusted R-squared:  0.6267 
-  
+
 summary(lm(perc_ret~m, retention |> filter(nutrient=='TP')))
 #slope=-8.924
 #p-value: 0.4045
@@ -178,6 +170,18 @@ summary(lm(perc_ret~m, retention |> filter(nutrient=='Phosphate')))
 #slope=-10.057
 #p-value: 0.5918
 #Adjusted R-squared:  -0.04298 
+
+
+ggplot(retention) +
+  geom_boxplot(aes(month, perc_ret, group=month)) +
+  geom_smooth(aes(m, perc_ret), method='lm', se=FALSE) +
+  theme_minimal() +
+  geom_hline(yintercept = 0) +
+  facet_wrap(~nutrient) +
+  labs(x='',y='Nutrient retention (%)')
+ggsave('Figures/retentionTimeFig.png', height=4.5, width=6.5, units='in',dpi=1200)
+
+
 
 
 # IN-RESERVOIR NUTRIENT CONCENTRATIONS ####
