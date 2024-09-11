@@ -26,7 +26,7 @@ sites_sf <- sites |>
   st_as_sf(coords=c('Longitude','Latitude'), crs=4326) 
 
 
-
+# custom legend
 ggplot()+
   geom_sf(shapefile, mapping=aes(),fill='white',color='grey20') +
   geom_sf(sites_sf,mapping=aes(color=WaterbodyName),size=5) +
@@ -49,3 +49,45 @@ ggplot()+
   scale_fill_viridis_d('',option='turbo') +
   theme(legend.position='none') +
   expand_limits(x=-108)
+
+
+# tribs custom legend
+tribs_sf <- read.csv('Data/trib_load_flux.csv') |>
+  dplyr::select(WaterbodyName, Longitude, Latitude) |>
+  distinct() |>
+  st_as_sf(coords=c('Longitude','Latitude'), crs=4326) 
+
+tribs <- read.csv('Data/trib_load_flux.csv') |>
+  dplyr::select(WaterbodyName, Longitude, Latitude) |>
+  distinct() 
+
+trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+
+# flowlines
+NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+st_crs(NHDflowline)
+NHDflowline <- st_transform(NHDflowline, crs=4326)
+
+st_crs(NHDflowline)==st_crs(tribs_sf)
+
+tribs_flowline <- NHDflowline |>
+  filter(GNIS_Name %in% c('Fivemile Creek', 'Muddy Creek', 'Wind River'))
+
+# Drop the Z and M dimensions from the geometries
+tribs_flowline <- st_zm(tribs_flowline, drop = TRUE)
+
+ggplot()+
+  geom_sf(tribs_flowline, mapping=aes()) +
+  geom_sf(shapefile, mapping=aes(),fill='white',color='grey20') +
+  geom_sf(tribs_sf, mapping=aes(fill=WaterbodyName),size=5,shape=23,color='white') +
+  geom_text(tribs, mapping=aes(Longitude, Latitude, label=WaterbodyName),vjust=-1, hjust=1,size=5) +
+  scale_fill_manual('',values =trib_colors) +
+  theme_void() +
+  labs(x='',y='') +
+  theme(legend.position = 'none') +
+  coord_sf(xlim = c(-108.5, -108), ylim = c(43.1, 43.5)) 
+
+library(export)
+graph2ppt(file='Figures/custom_legend_tribs.pptx', append=TRUE)
+
+

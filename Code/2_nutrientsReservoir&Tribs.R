@@ -73,7 +73,8 @@ ggplot(all_load_data) +
   geom_point(aes(fakedate, TotalLoad),shape=21) +
   facet_wrap(~nutrient, scales='free_y') +
   labs(x='',y='Nutrient mass (kg)') +
-  theme_minimal() 
+  theme_minimal() +
+  theme(legend.position = 'none')
 ggsave('Figures/nutrientdynamics_tribs.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 ### 3a. discharge fig ####
