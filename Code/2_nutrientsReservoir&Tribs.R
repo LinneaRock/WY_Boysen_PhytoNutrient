@@ -210,7 +210,8 @@ ggplot(reservoir_nutrients) +
   geom_line(aes(CollDate, meanConc, group=Year)) +
   facet_wrap(~nutrient, scales='free_y') +
   labs(x='',y='Nutrient concentration'~(mg~L^-1)) +
-  theme_minimal() 
+  theme_minimal() +
+  theme(legend.position = 'none')
 ggsave('Figures/nutrientdynamics_boysen.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 # # 8. Put plots together ####
