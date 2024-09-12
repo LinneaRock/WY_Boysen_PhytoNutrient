@@ -175,10 +175,10 @@ summary(lm(perc_ret~m, retention |> filter(nutrient=='Phosphate')))
 
 ggplot(retention) +
   geom_boxplot(aes(month, perc_ret, group=month)) +
-  geom_smooth(aes(m, perc_ret), method='lm', se=FALSE) +
+  #geom_smooth(aes(m, perc_ret), method='reml', se=FALSE) +
   theme_minimal() +
   geom_hline(yintercept = 0) +
-  facet_wrap(~nutrient) +
+  facet_wrap(~nutrient, scales='free_y') +
   labs(x='',y='Nutrient retention (%)')
 ggsave('Figures/retentionTimeFig.png', height=4.5, width=6.5, units='in',dpi=1200)
 
