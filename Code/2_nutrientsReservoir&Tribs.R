@@ -93,14 +93,13 @@ ggplot() +
   scale_color_manual('',values =trib_colors) +
   labs(x='',y='Discharge '~(L~s^-1)) +
   theme_minimal() +
-  theme(legend.position = 'inside',
-        legend.position.inside = c(0.1, 0.85)) +
-  annotate('text', x=as.Date('2020-01-01'), y= 200000, label='- - Estimated discharge', hjust=0.15, size=3.3)
+  theme(legend.position = 'none') +
+  annotate('text', x=as.Date('2020-01-01'), y= 250000, label='- - Estimated discharge', hjust=0.15, size=3.3)
 ggsave('Figures/discharge.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 
 ### 3a. nutrient concentration fig ####
-trib_nuts <- BoysenTribs_data |>
+trib_nuts <- TribLoadFlux |>
   mutate(`Inorganic N`=NO3 + NH4) |>
   rename(Phosphate=PO4) |>
   mutate(CollDate = as.Date(paste(month, '15', Year, sep='-'), format='%b-%d-%Y')) |>
@@ -113,7 +112,8 @@ ggplot(trib_nuts) +
   scale_color_manual('',values =trib_colors) +
   facet_wrap(~name, scales = 'free') +
   labs(x='',y='Concentration '~(mg~L^-1)) +
-  theme_minimal() 
+  theme_minimal() +
+  theme(legend.position = 'none')
 ggsave('Figures/tribs_nutrientConcentrations.png', height=4.5, width=6.5, units='in',dpi=1200)
 
 ## 4. Plot area-normalized flux differences ####

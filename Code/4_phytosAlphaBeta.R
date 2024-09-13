@@ -83,7 +83,8 @@ ab<- abundances |>
   labs(y=NULL,
        x="Relative Abundance (%)") +
   scale_color_viridis_d('',option='turbo') +
-  theme(legend.position = c(0.8,0.35))
+  theme(legend.position = c(0.8,0.35)) +
+  theme(legend.position = 'none')
 # ggsave('Figures/Fig4/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -172,7 +173,8 @@ ggplot(aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(color=WaterbodyName),size=2) +
   theme_minimal() +
   scale_color_viridis_d('', option='turbo') +
-  geom_text(label='dist~location \np = 0.97', mapping = aes(x = 1, y = 2)) 
+  geom_text(label='dist~location \np = 0.97', mapping = aes(x = 1, y = 2)) +
+  theme(legend.position = 'none')
 ggsave('Figures/nmds_space.png',height=4.5,width=6.5,units='in',dpi=1200)
 
 # however, both space and the % cyanobacteria biomass in the community were significant contributors 
@@ -208,7 +210,8 @@ intr<-ggplot() +
   scale_color_viridis_d('', option='magma') +
   geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1, y=NMDS2, label = spp.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-  geom_text(label='dist~month \np = 0.024', mapping = aes(x = 1, y = 2))
+  geom_text(label='dist~month \np = 0.024', mapping = aes(x = 1, y = 2)) +
+  theme(legend.position= 'none')
 # ggsave('Figures/fig4/intrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -241,7 +244,8 @@ ext<-ggplot() +
   theme_minimal() +
   geom_segment(sig.envbio.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
   ggrepel::geom_text_repel(sig.envbio.fit, mapping=aes(x=NMDS1, y=NMDS2, label = envbio.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-  geom_text(label='dist~%cyano \np = 0.036', mapping = aes(x = 1, y = 2)) 
+  geom_text(label='dist~%cyano \np = 0.036', mapping = aes(x = 1, y = 2))  +
+  theme(legend.position='none')
 #ggsave('Figures/fig4/extrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
 
@@ -300,7 +304,7 @@ cy_ts <- ggplot(cyano_density|>
 
 cy_ts + ab +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-ggsave('Figures/cyanoPhyto.png', width=11.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/cyanoPhyto.png', width=11.5,height=6.5,units='in',dpi=1200)
 
 library(ggridges)
 ggplot(cyano_density |>
