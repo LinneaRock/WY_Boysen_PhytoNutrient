@@ -76,13 +76,14 @@ boxplot_df <- bind_rows(lake_stoich, river_stoich)  |>
 
 #~#
 ggplot() +
+  annotate('rect', ymin=30, ymax=53, xmin=-Inf, xmax=Inf, alpha=0.5, fill='grey') +
   geom_boxplot(boxplot_df, 
                mapping=aes(type, TN.TP,fill=month))  +
   scale_fill_viridis_d('',option='magma') +
   theme_minimal() +
-  labs(x='',y='TN:TP molar ratio')
+    labs(x='',y='TN:TP molar ratio')
 
-ggsave('Figures/Stoich/NPboxplots.png',width=6.5,height=4.5,units='in',dpi=1200)
+ggsave('Figures/NPboxplots.png',width=6.5,height=4.5,units='in',dpi=1200)
 #~#  
 
 
