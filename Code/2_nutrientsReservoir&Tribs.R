@@ -20,7 +20,8 @@ Loading <- TribLoadFlux |>
                             grepl('IN', nutrient)~'Inorganic N')) |>
   select(-c(7:12)) |>
   distinct() |>
-  mutate(load=ifelse(grepl('Outlet', WaterbodyName), -1*load, load))
+  mutate(load=ifelse(grepl('Outlet', WaterbodyName), -1*load, load)) |>
+  distinct()
 
 # flux formatting 
 Fluxing <- TribLoadFlux |> 
@@ -219,3 +220,17 @@ ggsave('Figures/nutrientdynamics_boysen.png', height=4.5, width=6.5, units='in',
 #   plot_annotation(tag_levels = 'a', tag_suffix = ')')
 # ggsave('Figures/nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
   
+loadQ <- TribLoadFlux |>
+  mutate(fakedate = paste0(Year, '-', month, '-01'),
+         fakedate = as.Date(fakedate, format='%Y-%b-%d')) |>
+  filter(!grepl('Outlet', WaterbodyName)) |>
+  group_by(fakedate) |>
+  summarise(discharge = sum(Discharge, na.rm=TRUE)) |>
+  ungroup () |>
+  left_join(TotLoad |>
+              select(fakedate, nutrient, TotalLoad) |>
+              filter(nutrient %in% c('TN','TP')) |>
+              distinct())
+
+ggplot(loadQ) +
+  geom_point(aes(discharge,TotalLoad, color =nutrient))
