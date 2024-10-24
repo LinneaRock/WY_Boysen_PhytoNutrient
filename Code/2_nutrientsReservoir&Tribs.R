@@ -230,7 +230,38 @@ loadQ <- TribLoadFlux |>
   left_join(TotLoad |>
               select(fakedate, nutrient, TotalLoad) |>
               filter(nutrient %in% c('TN','TP')) |>
-              distinct())
+              distinct()) |>
+  bind_rows(BoysenTribs |>
+          filter(ShortName_Revised=='Discharge',
+                 Year==2023,
+                 !grepl('Outlet', WaterbodyName)) |>
+          mutate(month=month(CollDate)) |>
+          group_by(WaterbodyName, month, Year) |>
+          summarise(Discharge=mean(ChemValue)) |>
+          ungroup() |>
+          filter(month==9) |>
+          mutate(fakedate=as.Date('2023-09-01')) |>
+          group_by(fakedate) |>
+          summarise(discharge=sum(Discharge)) |>
+          ungroup()) 
 
-ggplot(loadQ) +
-  geom_point(aes(discharge,TotalLoad, color =nutrient))
+
+
+  
+
+options(scipen = 999)
+ggplot(loadQ, aes(discharge,TotalLoad, color =nutrient)) +
+  geom_point() +
+  geom_smooth(method='lm') +
+  theme_minimal() +
+  labs(x='Discharge'~(m^3~s^-1),
+       y='Total nutrient load (kg)') +
+  theme(legend.title=element_blank()) 
+
+ggsave('Figures/dischargeNutrientLoad.png',width=6.5, height=4.5, units='in', dpi=1200)
+
+n<-lm(TotalLoad~discharge, loadQ|>filter(nutrient=='TN'))
+summary(n)
+
+p<-lm(TotalLoad~discharge, loadQ|>filter(nutrient=='TP'))
+summary(p)
