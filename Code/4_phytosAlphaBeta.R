@@ -15,13 +15,51 @@ monthly_storage <- read.csv('Data/reservoir_storage_af.csv',skip=7) |>
   group_by(month, Year) |>
   summarise(ave_storage_AF = mean(Result))
 
+# monthly discharge as proxy for nutrient loading (see 2_nutrientsReservoir&Tribs.R)
+loadQ <- TribLoadFlux |>
+  mutate(fakedate = paste0(Year, '-', month, '-01'),
+         fakedate = as.Date(fakedate, format='%Y-%b-%d')) |>
+  filter(!grepl('Outlet', WaterbodyName)) |>
+  group_by(fakedate) |>
+  summarise(discharge = sum(Discharge, na.rm=TRUE)) |>
+  ungroup () |>
+  bind_rows(BoysenTribs |>
+              filter(ShortName_Revised=='Discharge',
+                     Year==2023,
+                     !grepl('Outlet', WaterbodyName)) |>
+              mutate(month=month(CollDate)) |>
+              group_by(WaterbodyName, month, Year) |>
+              summarise(Discharge=mean(ChemValue)) |>
+              ungroup() |>
+              filter(month==9) |>
+              mutate(fakedate=as.Date('2023-09-01')) |>
+              group_by(fakedate) |>
+              summarise(discharge=sum(Discharge)) |>
+              ungroup()) |>
+  mutate(Year=year(fakedate),
+         month=month(fakedate, label=TRUE)) |>
+  select(-fakedate)
+
+# hypolimnion WQ data
+hypo_dat <- BoysenProfile |>
+  filter(depth_m==maxdepth) |>
+  group_by(WaterbodyName, CollDate) |>
+  summarise(hypo_temp=mean(temp_C),
+            hypo_pH=mean(pH),
+            hypo_SpC=mean(cond_uScm),
+            hypo_DO=mean(DO_mgL)
+            ) |>
+  ungroup() 
+
 # create metadata 
 sd_data <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   left_join(monthly_storage) |>
+  left_join(loadQ) |>
+  left_join(hypo_dat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF) |>
+  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, ShortName_Revised, ChemValue, Diatom, `Green algae`,  Cyanobacteria, Dinoflagellate, `Golden algae`, Flagellate, ave_storage_AF, discharge, hypo_temp, hypo_pH, hypo_SpC, hypo_DO) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(IN=NO3+NH4) |>
   select(-c(NO3, NH4))# getting rid of NO3 and NH4 to reduce redundancy 
@@ -37,7 +75,7 @@ phyto_data <- BoysenPhyto_A |>
 
 # 2. ALPHA DIVERSITY ANALYSIS ####
 phyto_rel_abund <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4,-TP, -TN, -IN, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth,-ave_storage_AF) |>
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4,-TP, -TN, -IN, -CHLA, -TN.TP, -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Stability,-Temp,-maxdepth,-ave_storage_AF,-discharge, -c(hypo_temp, hypo_pH, hypo_SpC, hypo_DO)) |>
   pivot_longer(-Group, names_to = 'taxa', values_to = 'count') |>
   group_by(Group) |>
   mutate(rel_abund = count/sum(count, na.rm=TRUE)) |>
@@ -75,14 +113,15 @@ ab<- abundances |>
   mutate(taxa=factor(taxa)) |>
   filter(mean>5) |> # annoying filter just to make plot less complicated by removing the lowest taxa
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
-  ggplot(aes(rel_abund, reorder(taxa, rel_abund), color=WaterbodyName)) +
+  ggplot(aes(rel_abund, reorder(taxa, rel_abund), fill=WaterbodyName, color=WaterbodyName)) +
   stat_summary(fun.data=median_hilow, geom = "pointrange",
                fun.args=list(conf.int=0.5),
-               position = position_dodge(width=0.6)) +
+               position = position_dodge(width=0.6), shape=21) +
   theme_classic() +
   labs(y=NULL,
        x="Relative Abundance (%)") +
-  scale_color_viridis_d('',option='turbo') +
+  scale_fill_viridis_d('',option='magma') +
+  scale_color_viridis_d('',option='magma') +
   theme(legend.position = c(0.8,0.35)) +
   theme(legend.position = 'none')
 # ggsave('Figures/Fig4/rel_abundance.png',height=4.5,width=6.5,units='in',dpi=1200)
@@ -96,7 +135,7 @@ ab<- abundances |>
 
 # create distance matrix of phytoplankton communities
 dist_phyto <- phyto_data |>
-  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -TP, -TN, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth, -ave_storage_AF,-IN)
+  select(-WaterbodyName, -CollDate, -julianday, -Latitude, -Longitude, -PO4, -TP, -TN, -CHLA, -TN.TP,  -IN.PO4, -Year, -month, -Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, -DO, -Secchi, -pH, -SpC,-H, -Temp, -Stability,-maxdepth, -ave_storage_AF,-IN, -discharge, -c(hypo_temp, hypo_pH, hypo_SpC, hypo_DO))
 rownames(dist_phyto) <- dist_phyto$Group
 dist_phyto <- dist_phyto[,-1]
 dist_phyto <- as.matrix(dist_phyto)
@@ -125,10 +164,11 @@ dist
 # Multivariate: It can handle multiple variables at once, making it ideal for complex datasets like those involving multiple species of phytoplankton.
 
 adonis2(dist~Latitude, sd_data)
-set.seed(06261993)
+adonis2(dist~Longitude, sd_data)
+set.seed(69420)
 adonis2(dist~WaterbodyName, sd_data) # high p-value == sites are the same in terms of their beta diversity (i.e., comparing samples to each other and answers question 'how different')? p=0.97
-set.seed(06261993)
-adonis2(dist~month, sd_data)  # p=0.024
+set.seed(69420)
+adonis2(dist~month, sd_data)  # p=0.021
 adonis2(dist~julianday, sd_data) 
 adonis2(dist~CHLA, sd_data, na.rm=TRUE) # chla not collected 2021-05-18, permanova cannot run
 adonis2(dist~TN, sd_data) 
@@ -136,27 +176,36 @@ adonis2(dist~TP, sd_data)
 adonis2(dist~TN*TP, sd_data)
 adonis2(dist~TN.TP, sd_data)
 adonis2(dist~IN, sd_data)
-set.seed(06261993)
-adonis2(dist~PO4, sd_data) #p=0.098
-set.seed(06261993)
-adonis2(dist~IN.PO4, sd_data) # p=0.02
-set.seed(06261993)
-adonis2(dist~Cyanobacteria, sd_data) #p=0.036
+set.seed(69420)
+adonis2(dist~PO4, sd_data) #p=0.069
+set.seed(69420)
+adonis2(dist~IN.PO4, sd_data) # p=0.011
+set.seed(69420)
+adonis2(dist~Cyanobacteria, sd_data) #p=0.037
+set.seed(69420)
+adonis2(dist~Temp, sd_data) #p=0.028
+adonis2(dist~hypo_temp, sd_data)
 adonis2(dist~pH, sd_data)
+adonis2(dist~hypo_pH, sd_data)
 adonis2(dist~SpC, sd_data)
+adonis2(dist~hypo_SpC, sd_data)
 adonis2(dist~DO, sd_data) 
+set.seed(69420)
+adonis2(dist~hypo_DO, sd_data) #p=0.046
 adonis2(dist~Secchi, sd_data)
 adonis2(dist~H, sd_data) 
-set.seed(06261993)
-adonis2(dist~Stability, sd_data) # sig p =0.017
+set.seed(69420)
+adonis2(dist~Stability, sd_data) # sig p =0.026
 adonis2(dist~maxdepth, sd_data)
-set.seed(06261993)
-adonis2(dist~ave_storage_AF, sd_data) # p=0.058
+set.seed(69420)
+adonis2(dist~ave_storage_AF, sd_data) # p=0.044
+set.seed(69420)
+adonis2(dist~discharge, sd_data) # p=0.099
 
 psych::pairs.panels(sd_data |> select(-c(1:8)))
 
 ## 3B. NMDS - beta dispersion plots ####
-set.seed(06261993)
+set.seed(69420)
 nmds <- metaMDS(dist)
 nmds # make note of the stress value, this shows how easy it was to condense multidimensional data into two dimensional space, below 0.2 is generally good -- 0.18
 
@@ -170,9 +219,9 @@ scores <- scores(nmds) |>
 scores |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
 ggplot(aes(x=NMDS1, y=NMDS2)) +
-  geom_point(aes(color=WaterbodyName),size=2) +
+  geom_point(aes(fill=WaterbodyName),size=2,shape=21) +
   theme_minimal() +
-  scale_color_viridis_d('', option='turbo') +
+  scale_fill_viridis_d('', option='magma') +
   geom_text(label='dist~location \np = 0.97', mapping = aes(x = 1, y = 2)) +
   theme(legend.position = 'none')
 ggsave('Figures/nmds_space.png',height=4.5,width=6.5,units='in',dpi=1200)
@@ -183,7 +232,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(fill=month),shape=21,size=2) +
   theme_minimal() +
   facet_wrap(~Year) +
-  scale_fill_viridis_d('',option='magma')
+  scale_fill_viridis_d('',option='plasma')
 
 ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   geom_point(aes(fill=Cyanobacteria),shape=21,size=2) +
@@ -191,7 +240,7 @@ ggplot(scores, aes(x=NMDS1, y=NMDS2)) +
   theme_minimal()
 
 ## 3C. INTRINSIC VARIALBES - investigate the species which may be driving the site distribution pattern ####
-set.seed(06261993)
+set.seed(69420)
 spp.fit <- envfit(nmds, dist_phyto, permutations=999)
 head(spp.fit)
 
@@ -207,10 +256,10 @@ sig.spp.fit
 intr<-ggplot() +
   geom_point(scores, mapping=aes(x=NMDS1, y=NMDS2, color=month)) +
   theme_minimal() +
-  scale_color_viridis_d('', option='magma') +
-  geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
-  ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1, y=NMDS2, label = spp.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-  geom_text(label='dist~month \np = 0.024', mapping = aes(x = 1, y = 2)) +
+  scale_color_viridis_d('', option='plasma') +
+  geom_segment(sig.spp.fit, mapping=aes(x=0, xend=NMDS1*2, y=0, yend=NMDS2*2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.spp.fit, mapping=aes(x=NMDS1*2, y=NMDS2*2, label = spp.variables), cex = 4, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+  geom_text(label='dist~month \np = 0.021', mapping = aes(x = 1, y = 2)) +
   theme(legend.position= 'none')
 # ggsave('Figures/fig4/intrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
@@ -219,7 +268,7 @@ intr<-ggplot() +
 
 ## 3D EXTRINSIC VARIABLES ####
 #-- Environmental variables can also be used with envfit which are referred to as extrinsic variables. This works best with continuous variables.If you only want to fit vector variables (continuous variables) use vectorfit and if you only want to fit factor variables (categorical variables) use factorfit but envfit can do this automatically.
-set.seed(06261993)
+set.seed(69420)
 envbio.fit <- envfit(nmds, sd_data |> # get rid of these phyto groups here
                        select(-Diatom, -`Green algae`, -Flagellate, -`Golden algae`, -Cyanobacteria, -Dinoflagellate, - julianday) |>
                        # some renaming for nicer looking plots
@@ -242,9 +291,9 @@ ext<-ggplot() +
   theme_minimal() +
   scale_color_viridis_c('% Cyanobacteria of \ncommunity biomass') +
   theme_minimal() +
-  geom_segment(sig.envbio.fit, mapping=aes(x=0, xend=NMDS1, y=0, yend=NMDS2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
-  ggrepel::geom_text_repel(sig.envbio.fit, mapping=aes(x=NMDS1, y=NMDS2, label = envbio.variables), cex = 3, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
-  geom_text(label='dist~%cyano \np = 0.036', mapping = aes(x = 1, y = 2))  +
+  geom_segment(sig.envbio.fit, mapping=aes(x=0, xend=NMDS1*2, y=0, yend=NMDS2*2), arrow = arrow(length = unit(0.25, "cm")), colour = "grey10", lwd=0.3) + #add vector arrows of significant species
+  ggrepel::geom_text_repel(sig.envbio.fit, mapping=aes(x=NMDS1*2, y=NMDS2*2, label = envbio.variables), cex = 4, direction = "both", segment.size = 0.25) + #add labels, use ggrepel::geom_text_repel so that labels do not overlap
+  geom_text(label='dist~%cyano \np = 0.037', mapping = aes(x = 1, y = 2))  +
   theme(legend.position='none')
 #ggsave('Figures/fig4/extrinsicvariables.png',height = 4.5,width=6.5,units='in',dpi=1200)
 
@@ -252,6 +301,8 @@ ext<-ggplot() +
 intr + ext +
   plot_annotation(tag_levels = 'a', tag_suffix = ')')
 ggsave('Figures/intrinsicextrinsicNMDS.png',height = 6.5,width=10.5,units='in',dpi=1200)
+
+#ggsave('Figures/intrinsicextrinsic_LEGENDS.png',height = 6.5,width=10.5,units='in',dpi=1200)
 
 
 # 4. Cyano biomass timeseries ####
@@ -291,11 +342,144 @@ ggplot() +
 
 ggsave('Figures/cyano_density_mean.png', width=6.5,height=4.5,units='in',dpi=1200)
 
+## 4a. add toxins present to nearest sampling site ####
+library(sf)
+library(sp)
+library(raster)
+library(gdistance)
+cyano_prep <- cyanotoxin |>
+  mutate(month = month(CollDate,label=TRUE,abbr=TRUE),
+         Year=year(CollDate)) |>
+  dplyr::select(-CollDate, -Advisory) |>
+  mutate(toxinpresent=as.character(toxinpresent)) |>
+  mutate(toxinpresent=ifelse(toxinpresent=='N',0,1)) |>
+  filter(toxinpresent != 0) |>
+  distinct() |>
+  mutate(ID = paste0(Year, month, row_number()))
+
+# read in Boysen shapefile, add crs, and check units 
+lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+st_crs(lake_shapefile)
+lake_shapefile <- st_transform(lake_shapefile, crs = 3738)
+st_crs(lake_shapefile)$units # feet, weird
+
+# convert shapefile to raster grid
+lake_raster <-raster(extent(lake_shapefile),res=100)
+lake_raster <- rasterize(lake_shapefile, lake_raster, field=1)
+plot(lake_raster)
+
+# create transition layer
+lake_transition <- transition(lake_raster, transitionFunction = function(x) 1/mean(x), directions = 8)
+lake_transition <- geoCorrection(lake_transition, type = "c", multpl = FALSE)
+
+# convert for working with shortest path function
+cyano_locations <- cyano_prep |>
+  dplyr::select(ID, Long, Lat)
+coordinates(cyano_locations) <- ~Long+Lat
+proj4string(cyano_locations) <- CRS("+init=epsg:4326")
+cyano_locations <- spTransform(cyano_locations, CRS(st_crs(lake_shapefile)$proj4string))
+
+# 7 sampling locations along reservoir
+sample_locations_prep <- sd_data |>
+  dplyr::select(Longitude, Latitude, WaterbodyName) |>
+  distinct()
+
+# convert for working with shortest path function
+sample_locations <- sample_locations_prep
+coordinates(sample_locations) <- ~Longitude+Latitude
+proj4string(sample_locations) <- CRS("+init=epsg:4326")
+sample_locations <- spTransform(sample_locations, CRS(st_crs(lake_shapefile)$proj4string))
+
+## shortest path calculation ####
+# extract coordinates
+toxin_spots <- as.vector(as.data.frame(cyano_prep) |> dplyr::select(ID) |> distinct())[["ID"]]
+
+sites <- as.vector(as.data.frame(sample_locations_prep) |> dplyr::select(WaterbodyName) |> distinct())[["WaterbodyName"]]
+
+# create dataframe for distances
+distance_df <- data.frame(ID=NA,
+                          WaterbodyName=NA,
+                          distance_km = NA)
+
+# run function over all sites and build dataframe
+for(t in toxin_spots) {
+  for(s in sites) {
+    tryCatch({ # continues running loop, but gives error message where problem(s) are occurring
+      
+      # subset sites
+      coord_A <- coordinates(cyano_locations[cyano_locations$ID==t, ])
+      coord_B <- coordinates(sample_locations[sample_locations$WaterbodyName==s, ])
+      
+      
+      # Calculate the shortest path distance
+      shortest_path <- shortestPath(lake_transition, coord_A, coord_B, output = "SpatialLines")
+      
+      # # Plot the lake, points, and shortest path
+      # plot(st_geometry(lake_shapefile), col = "yellow", main = "Lake with Shortest Path between Points A and B")
+      # plot(shortest_path, add = TRUE, col = "blue", lwd = 2)
+      # plot(cyano_locations, add = TRUE, col = "red", pch = 20)
+      # plot(sample_locations, add = TRUE, col = "green", pch = 20)
+      
+      distance <- SpatialLinesLengths(shortest_path)*0.0003048 # convert feet to km
+      
+      tmp <- data.frame(ID=t,
+                        WaterbodyName=s,
+                        distance_km=distance)
+      
+      distance_df <- distance_df |>
+        rbind(tmp)
+      
+    }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")}) # end try catch
+    
+  }
+}
+
+# minimize distances
+distance_minimized_df <- distance_df |>
+  group_by(ID) |>
+  mutate(minDist = min(distance_km)) |>
+  ungroup() |>
+  drop_na() |>
+  filter(distance_km == minDist) |>
+  dplyr::select(-minDist)
+
+error_toxin_locations <- cyano_prep |>
+  anti_join(distance_minimized_df) |>
+  st_as_sf(coords=c('Long','Lat'), crs=4326)
+
+
+# manually check locations of errors
+library(ggsflabel)
+ggplot() +
+  geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
+  geom_sf(error_toxin_locations, mapping=aes()) +
+  geom_sf_text_repel(error_toxin_locations, mapping=aes(label=ID))
+
+
+cyano <- cyano_prep |>
+  st_as_sf(coords=c('Long','Lat'), crs=4326)
+ggplot() +
+  geom_sf(st_geometry(lake_shapefile), mapping=aes()) +
+  geom_sf(st_geometry(cyano), mapping=aes())
+
+
+# create dataframe with locations to use in Random Forest
+toxin_distance_mins <- cyano_prep |>
+  left_join(distance_minimized_df) |>
+  mutate(WaterbodyName=ifelse(ID%in%c('2023Sep25','2022Oct19'),'Lacustrine Pelagic: Dam', WaterbodyName)) |>
+  mutate(WaterbodyName=ifelse(ID%in%c('2021Aug3','2021Jul2'),'Tough Creek Campground', WaterbodyName)) |>
+  mutate(toxinpresent='Toxin present')
+
+
 cy_ts <- ggplot(cyano_density|>
+                  left_join(toxin_distance_mins) |>
+                  mutate(toxinpresent=ifelse(is.na(toxinpresent), 'No toxin', toxinpresent)) |>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_point(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
+  geom_point(aes(month, Cyanobacteria/1000, fill=WaterbodyName, group=WaterbodyName, shape=toxinpresent)) +
   geom_path(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
-  scale_color_viridis_d('',option='turbo') +
+  scale_color_viridis_d('',option='magma') +
+  scale_fill_viridis_d('',option='magma') +
+  scale_shape_manual(values=c(21, 8)) +
   facet_wrap(~Year, scales='free_y') +
   theme_minimal() +
   labs(x='',y='Cyanobacteria denisty'~(~1000~cells~L^-1)) +

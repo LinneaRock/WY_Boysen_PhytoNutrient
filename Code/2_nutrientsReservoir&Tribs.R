@@ -21,7 +21,8 @@ Loading <- TribLoadFlux |>
   select(-c(7:12)) |>
   distinct() |>
   mutate(load=ifelse(grepl('Outlet', WaterbodyName), -1*load, load)) |>
-  distinct()
+  distinct() |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
 
 # flux formatting 
 Fluxing <- TribLoadFlux |> 
@@ -36,7 +37,8 @@ Fluxing <- TribLoadFlux |>
                             grepl('IN', nutrient)~'Inorganic N')) |>
   select(-c(7:12)) |>  
   distinct() |>
-  mutate(flux=ifelse(grepl('Outlet', WaterbodyName), -1*flux, flux))
+  mutate(flux=ifelse(grepl('Outlet', WaterbodyName), -1*flux, flux)) |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
 
 
 # total trib load formatting 
@@ -50,7 +52,8 @@ TotLoad <- TribLoadFlux |>
                             grepl('TP', nutrient)~'TP',
                             grepl('PO4', nutrient)~'Phosphate',
                             grepl('IN', nutrient)~'Inorganic N')) |>
-  select(-c(6:12))
+  select(-c(6:12)) |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
   
 
 # combine data
@@ -59,13 +62,14 @@ all_load_data <- left_join(Loading, Fluxing) |>
   distinct() |>
   mutate(dummy = ifelse(is.na(load), 'a','b')) |>
   arrange(dummy,fakedate,WaterbodyName) |>
-  mutate(nutrient=factor(nutrient, levels=c('TN','TP', 'Inorganic N', 'Phosphate')))
+  mutate(nutrient=factor(nutrient, levels=c('TN','TP', 'Inorganic N', 'Phosphate'))) |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
   
 
 ## 3. Plot tribs loading! ####
 options(scipen = 999)
 
-trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+trib_colors <- c('#332288','#882255','#E6AA68','#DDCC77')
 
 ggplot(all_load_data) +
   geom_point(aes(fakedate, load, color=WaterbodyName)) +
@@ -82,7 +86,8 @@ ggsave('Figures/nutrientdynamics_tribs.png', height=4.5, width=6.5, units='in',d
 discharge <- BoysenTribs |>
   filter(between(year(CollDate), 2020, 2023)) |>
   filter(ShortName_Revised=='Discharge') |>
-  mutate(ChemValue=ifelse(WaterbodyName=='Wind River Outlet', ChemValue*-1, ChemValue))
+  mutate(ChemValue=ifelse(WaterbodyName=='Wind River Outlet', ChemValue*-1, ChemValue)) |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
 
 estimated_dis <- estimated_discharge |> 
   filter(estimated=='Y') |>
@@ -105,7 +110,8 @@ trib_nuts <- TribLoadFlux |>
   rename(Phosphate=PO4) |>
   mutate(CollDate = as.Date(paste(month, '15', Year, sep='-'), format='%b-%d-%Y')) |>
   pivot_longer(cols=c('TN', `Inorganic N`, 'TP', 'Phosphate')) |>
-  mutate(name = factor(name, levels=c('TN','TP','Inorganic N', 'Phosphate')))
+  mutate(name = factor(name, levels=c('TN','TP','Inorganic N', 'Phosphate'))) |>
+  mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
 
 ggplot(trib_nuts) + 
   geom_point(aes(CollDate, value, color=WaterbodyName)) +
@@ -204,9 +210,9 @@ reservoir_nutrients <- BoysenNutrient |>
 
 ## 7. Plot in-reservoir nutrients ####
 ggplot(reservoir_nutrients) +
-  geom_point(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
+  geom_point(aes(CollDate, concentration, fill=WaterbodyName), alpha=0.5, shape=21) +
   #geom_path(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
-  scale_color_viridis_d('', option='turbo') +
+  scale_fill_viridis_d('', option='magma') +
   geom_point(aes(CollDate, meanConc),shape=22, size=2) +
   geom_line(aes(CollDate, meanConc, group=Year)) +
   facet_wrap(~nutrient, scales='free_y') +
@@ -215,11 +221,10 @@ ggplot(reservoir_nutrients) +
   theme(legend.position = 'none')
 ggsave('Figures/nutrientdynamics_boysen.png', height=4.5, width=6.5, units='in',dpi=1200)
 
-# # 8. Put plots together ####
-# a/b +
-#   plot_annotation(tag_levels = 'a', tag_suffix = ')')
-# ggsave('Figures/nutrientdynamics.png', height=10.5, width=8.5, units='in',dpi=1200)
-  
+
+
+# 9. Can we use discharge as a proxy for nutrient loading? ####
+
 loadQ <- TribLoadFlux |>
   mutate(fakedate = paste0(Year, '-', month, '-01'),
          fakedate = as.Date(fakedate, format='%Y-%b-%d')) |>
@@ -231,6 +236,7 @@ loadQ <- TribLoadFlux |>
               select(fakedate, nutrient, TotalLoad) |>
               filter(nutrient %in% c('TN','TP')) |>
               distinct()) |>
+  # missing Sep 2023 discharge value from TribLoadFlux becuase there were no nutrient data that month. Add back in for use in PCA, NMDS later
   bind_rows(BoysenTribs |>
           filter(ShortName_Revised=='Discharge',
                  Year==2023,
@@ -265,3 +271,4 @@ summary(n)
 
 p<-lm(TotalLoad~discharge, loadQ|>filter(nutrient=='TP'))
 summary(p)
+# yes.

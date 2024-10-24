@@ -40,7 +40,7 @@ st_crs(sites_sf)
 
 
 # DEM 
-dem_raster <- raster('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
+dem_raster <- raster('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/WY_elevation')
 # Create a black-and-white color palette with darker colors for higher elevations
 bw_palette <- gray.colors(100, start = 0, end = 1, gamma = 2.2, rev = TRUE)
 plot(dem_raster, col = bw_palette, main = "Digital Elevation Model with Custom Colors")
@@ -54,7 +54,7 @@ ws_shp <- st_transform(ws_shp, crs=4326)
 
 
 # flowlines
-NHDflowline <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
+NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
 st_crs(NHDflowline)
 NHDflowline <- st_transform(NHDflowline, crs=4326)
 
@@ -65,6 +65,7 @@ tribs_sf <- BoysenTribs |>
   st_as_sf(coords=c('Longitude','Latitude'), crs=4326) 
 st_crs(tribs_sf)
 
+tribs_sf$WaterbodyName <- factor(tribs_sf$WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet'))
 
 #bathymetry 
 # boysen_bathy <- st_read("C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen_Bathy/Boysen Shapefile/boysen_Shapefile.shp")
@@ -107,16 +108,17 @@ cropped_dem_spdf <- as(cropped_dem, "SpatialPixelsDataFrame")
 cropped_dem_df <- as.data.frame(cropped_dem_spdf)
 colnames(cropped_dem_df) <- c("value", "x", "y")
 
-trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+trib_colors <- c('#332288','#882255','#E6AA68','#DDCC77')
 
 library(ggnewscale)
 a<-ggplot() +
-  geom_tile(cropped_dem_df, mapping=aes(x,y, fill=value), alpha=0.5) +
-  scale_fill_viridis_c('Elevation (m)', option='rocket', direction=-1) +
+  geom_tile(cropped_dem_df, mapping=aes(x,y, fill=value), alpha=0.85) +
+  scale_fill_gradientn('Elevation (m)', colors=bw_palette) +
+  #scale_fill_viridis_c('Elevation (m)', option='rocket', direction=-1) +
   geom_sf(ws_shp, mapping=aes(), color='black', fill=NA, linewidth=0.75) +
   geom_sf(cropped_flowline_majors, mapping=aes(), color='black',linewidth=0.25) +
   new_scale_fill() +
-  geom_sf(tribs_sf, mapping=aes(fill=WaterbodyName),size=2,shape=23,color='white') +
+  geom_sf(tribs_sf, mapping=aes(fill=WaterbodyName),size=2,shape=23,color='black') +
   scale_fill_manual('',values =trib_colors) +
   geom_sf(lake_shapefile, mapping=aes(), fill='black') +
   theme_minimal() +
@@ -132,20 +134,20 @@ ainsert <- plot_usmap(exclude = c("AK","HI"), color='gray50') +
 # 7. Part B - Lake ####
 b <- ggplot()+
   geom_sf(lake_shapefile, mapping=aes(),fill='white',color='grey20') +
-  geom_sf(sites_sf,mapping=aes(color=WaterbodyName),size=4) +
+  geom_sf(sites_sf,mapping=aes(fill=WaterbodyName),size=4, shape=21) +
   theme_minimal() +
   labs(x='',y='') +
-  scale_color_viridis_d('',option='turbo') +
+  scale_fill_viridis_d('',option='magma') +
   theme(axis.text.x=element_text(angle=45))
 
 # 8. Save plots and manually manipulate in PP :( ####  
-a
-ggsave('Figures/Map/watershed.png', width=4.5,height=6.5,units='in',dpi=1200)
+a 
+ggsave('Figures/watershed.png', width=4.5,height=6.5,units='in',dpi=1200)
 a + theme(legend.position = 'none')
-ggsave('Figures/Map/watershed_nolegend.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/watershed_nolegend.png', width=4.5,height=6.5,units='in',dpi=1200)
 
 ainsert
-ggsave('Figures/Map/countryinsert.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/countryinsert.png', width=4.5,height=6.5,units='in',dpi=1200)
 
 b
-ggsave('Figures/Map/boysen.png', width=4.5,height=6.5,units='in',dpi=1200)
+ggsave('Figures/boysen.png', width=4.5,height=6.5,units='in',dpi=1200)

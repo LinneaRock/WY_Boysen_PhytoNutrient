@@ -29,12 +29,12 @@ sites_sf <- sites |>
 # custom legend
 ggplot()+
   geom_sf(shapefile, mapping=aes(),fill='white',color='grey20') +
-  geom_sf(sites_sf,mapping=aes(color=WaterbodyName),size=5) +
+  geom_sf(sites_sf,mapping=aes(fill=WaterbodyName),size=5, shape=21) +
   # geom_text(sites_sf, mapping=aes(lon,lat, label=WaterbodyName),nudge_x=0,hjust=1.05) +
   geom_text(sites_sf, mapping=aes(lon,lat, label=WaterbodyName),vjust=2,size=5) +
   theme_void() +
   labs(x='',y='') +
-  scale_color_viridis_d('',option='turbo') +
+  scale_fill_viridis_d('',option='magma') +
   theme(legend.position='none') +
   expand_limits(x=-108)
 
@@ -46,7 +46,7 @@ ggplot()+
   geom_text(sites_sf, mapping=aes(lon,lat, label=WaterbodyName),vjust=2,size=5) +
   dark_theme_void() +
   labs(x='',y='') +
-  scale_fill_viridis_d('',option='turbo') +
+  scale_fill_viridis_d('',option='magma') +
   theme(legend.position='none') +
   expand_limits(x=-108)
 
@@ -61,7 +61,7 @@ tribs <- read.csv('Data/trib_load_flux.csv') |>
   dplyr::select(WaterbodyName, Longitude, Latitude) |>
   distinct() 
 
-trib_colors <- c('#117733','#DDCC77','#882255','#332288')
+trib_colors <- c('#332288','#882255','#E6AA68','#DDCC77')
 
 # flowlines
 NHDflowline <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/NHD/NHDPLUS_H_1008_HU4_GDB.gdb', layer = 'NHDFlowline')
@@ -76,6 +76,8 @@ tribs_flowline <- NHDflowline |>
 # Drop the Z and M dimensions from the geometries
 tribs_flowline <- st_zm(tribs_flowline, drop = TRUE)
 
+tribs_sf$WaterbodyName <- factor(tribs_sf$WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet'))
+
 ggplot()+
   geom_sf(tribs_flowline, mapping=aes()) +
   geom_sf(shapefile, mapping=aes(),fill='white',color='grey20') +
@@ -87,7 +89,7 @@ ggplot()+
   theme(legend.position = 'none') +
   coord_sf(xlim = c(-108.5, -108), ylim = c(43.1, 43.5)) 
 
-library(export)
-graph2ppt(file='Figures/custom_legend_tribs.pptx', append=TRUE)
+# library(export)
+# graph2ppt(file='Figures/custom_legend_tribs.pptx', append=TRUE)
 
 

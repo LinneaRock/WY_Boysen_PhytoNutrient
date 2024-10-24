@@ -41,21 +41,21 @@ ave_stoich <- lake_stoich |>
 ggplot(ave_stoich) +
   geom_point(aes(Tributary, Reservoir, color=month)) +
   geom_abline(slope=1,intercept=0) +
-  scale_color_viridis_d('',option='magma') +
+  scale_color_viridis_d('',option='plasma') +
   theme_minimal() 
 
 
 ggplot(ave_stoich) +
   geom_point(aes(Tributary, Outlet, color=month)) +
   geom_abline(slope=1,intercept=0) +
-  scale_color_viridis_d('',option='magma') +
+  scale_color_viridis_d('',option='plasma') +
   theme_minimal()
 
 
 ggplot(ave_stoich) +
   geom_point(aes(Reservoir, Outlet, color=month)) +
   geom_abline(slope=1,intercept=0) +
-  scale_color_viridis_d('',option='magma') +
+  scale_color_viridis_d('',option='plasma') +
   theme_minimal()
 
 
@@ -66,7 +66,7 @@ boxplot_ave_df <- ave_stoich |>
 
 ggplot() +
   geom_boxplot(boxplot_ave_df, mapping=aes(type, meanNP,fill=month))  +
-  scale_fill_viridis_d('',option='magma') +
+  scale_fill_viridis_d('',option='plasma') +
   theme_minimal()
 
 
@@ -79,7 +79,7 @@ ggplot() +
   annotate('rect', ymin=30, ymax=53, xmin=-Inf, xmax=Inf, alpha=0.5, fill='grey') +
   geom_boxplot(boxplot_df, 
                mapping=aes(type, TN.TP,fill=month))  +
-  scale_fill_viridis_d('',option='magma') +
+  scale_fill_viridis_d('',option='plasma') +
   theme_minimal() +
     labs(x='',y='TN:TP molar ratio')
 
@@ -91,13 +91,13 @@ ggplot() +
   geom_boxplot(boxplot_df |> 
                  filter(month %in% c('May','Jun','Jul','Aug','Sep','Oct')), 
                mapping=aes(type, TN.TP,fill=month))  +
-  scale_fill_viridis_d('',option='magma') +
+  scale_fill_viridis_d('',option='plasma') +
   theme_minimal()
 
 ggplot() +
   geom_boxplot(boxplot_df |> 
                  filter(!month %in% c('May','Jun','Jul','Aug','Sep','Oct')), 
                mapping=aes(type, TN.TP,fill=month))  +
-  scale_fill_viridis_d('',option='magma') +
+  scale_fill_viridis_d('',option='plasma') +
   theme_minimal()
 
