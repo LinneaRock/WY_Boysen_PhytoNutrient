@@ -34,8 +34,8 @@ BoysenPhyto_A |>
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |>
   ggplot() +
   geom_boxplot(aes(month, H)) +
-  geom_jitter(aes(month, H, color=WaterbodyName),alpha=0.5) +
-  scale_color_viridis_d('', option='turbo') +
+  geom_jitter(aes(month, H, fill=WaterbodyName),alpha=0.5,shape=21) +
+  scale_fill_viridis_d('', option='magma') +
   geom_text(means, mapping=aes(month, 
                                max.result+0.5, label = letters), 
             size=4) +

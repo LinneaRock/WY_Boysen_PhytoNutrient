@@ -36,7 +36,7 @@ ggplot() +
            x = -0.5, y = 0.75, hjust = 0, size = 2.5) +
   annotate('text', label = 'Predicted P limitation \n (Ptacnik et al., 2010)',
            x = 0.55, y = 2.05, hjust = 0, size = 2.5, color = "#ffc857") +
-  scale_color_viridis_d('',option='turbo') +
+  scale_color_viridis_d('',option='magma') +
   theme(legend.position = 'none')
 
 ggsave('Figures/nutrient_limitation.png', height=5,width=7,units='in',dpi=1200)

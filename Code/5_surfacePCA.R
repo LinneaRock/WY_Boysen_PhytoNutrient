@@ -8,13 +8,25 @@ source('Data/CALL_DATA_LIB.R')
 library(MASS)
 
 # 2. Format data ####
+# hypolimnion WQ data
+hypo_dat <- BoysenProfile |>
+  filter(depth_m==maxdepth) |>
+  group_by(WaterbodyName, CollDate) |>
+  summarise(hypo_temp=mean(temp_C),
+            hypo_pH=mean(pH),
+            hypo_SpC=mean(cond_uScm),
+            hypo_DO=mean(DO_mgL)
+  ) |>
+  ungroup() 
+
 metadat <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
   select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, ShortName_Revised, ChemValue) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
-  mutate(IN = NO3+NH4)
+  mutate(IN = NO3+NH4) |>
+  left_join(hypo_dat)
 
 pca_dat <- metadat |>
   select(-c(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, NO3, NH4)) # getting rid of NO3 and NH4 to reduce redundancy 
@@ -68,7 +80,7 @@ abline(h = mean(EigenProp),
        col = "red")
 
 EigenProp[1] + EigenProp[2]
-# the first two explain about 43% of the variance..
+# the first two explain about 44% of the variance..
 EigenProp[1] + EigenProp[2] + EigenProp[3]
 # the first two explain about 56% of the variance..
 
@@ -81,63 +93,57 @@ for (i in 1:14){
   print(loadings[which(abs(loadings[,i])>0.3),i])
 }
 
-# PC1: higher PO4, TP + lower TN:TP, IN:PO4, Temp, Stability
-# PC2: higher SpC, DO + lower TP, Temp
-# PC3: lower Secchi, maxdepth, IN
-# PC4: higher TN, pH, lower H
-# PC5: lower TP, IN:PO4, DO, maxdepth + higher temp
+# PC1: higher PO4, hypolimnion DO + lower IN:PO4, Temp, Stability
+# PC2: higher TP + lower SpC, hypolimnion pH, hypolimnion SpC
+# PC3: higher Secchi, stability, maxdepth + lower hypolimnion temp
+# PC4: higher DO + lower IN, hypolimnion temp
+# PC5: higher temp, secchi + lower TP, TN, pH
 
 
 # ..... more through PC 14: 
 
-#   [1] "Principal component1"
-# PO4         TP     IN.PO4       Temp  Stability         IN 
-# 0.3803084  0.3433609 -0.3782102 -0.3015427 -0.3156025  0.3215030 
+# [1] "Principal component1"
+# PO4     IN.PO4       Temp  Stability    hypo_DO 
+# 0.3524271 -0.3438655 -0.4070489 -0.3421449  0.3784427 
 # [1] "Principal component2"
-# TP        SpC         DO       Temp 
-# -0.3105176  0.5300010  0.4799849 -0.3405117 
+# TP        SpC    hypo_pH   hypo_SpC 
+# 0.3395137 -0.4198748 -0.3399444 -0.4005812 
 # [1] "Principal component3"
-# NO3     Secchi   maxdepth         IN 
-# -0.4364819 -0.4481414 -0.4688616 -0.4099500 
+# Secchi  Stability   maxdepth  hypo_temp 
+# 0.3277845  0.3026838  0.5304146 -0.3626276 
 # [1] "Principal component4"
-# TN         pH          H 
-# -0.3279613 -0.6109626  0.4075194 
+# DO         IN  hypo_temp 
+# 0.3277073 -0.4299712 -0.3555028 
 # [1] "Principal component5"
-# NH4     IN.PO4          H 
-# -0.6036331 -0.3247827 -0.4320130 
+# TP         TN         pH     Secchi          H 
+# -0.3145366 -0.4471863 -0.4014573  0.3477722  0.3159931 
 # [1] "Principal component6"
-# TN        NO3  Stability   maxdepth          H 
-# -0.3382248  0.3199319 -0.3369883 -0.4220135  0.3601932 
+# PO4      TN.TP     IN.PO4          H         IN 
+# 0.3085940  0.3008115 -0.3496151 -0.5511829 -0.3675495 
 # [1] "Principal component7"
-# NH4         TN     IN.PO4 
-# 0.5978342 -0.3120375 -0.3009485 
+# TN      TN.TP   hypo_SpC 
+# 0.5219078  0.5042315 -0.3458683 
 # [1] "Principal component8"
-# TN     TN.TP         H 
-# 0.5229421 0.6799276 0.3939246 
+# TN.TP     Secchi          H 
+# 0.3567446 -0.4927619  0.4233111 
 # [1] "Principal component9"
-# Secchi  Stability 
-# -0.5778705  0.5045720 
+# IN.PO4        SpC    hypo_pH 
+# -0.3155561 -0.4179708  0.5103013 
 # [1] "Principal component10"
-# TN.TP         pH     Secchi          H 
-# -0.3589684  0.4302473  0.3886359  0.5255346 
+# H         IN 
+# -0.4628964  0.6019804 
 # [1] "Principal component11"
-# SpC         DO     Secchi   maxdepth 
-# -0.5611803  0.4659381  0.3962784 -0.3517334 
+# TN.TP         DO         pH     Secchi 
+# 0.3087495 -0.3864807 -0.4263721 -0.3954036 
 # [1] "Principal component12"
-# SpC         pH  Stability   maxdepth 
-# 0.5058300 -0.4616193  0.4507610 -0.3609202 
+# TP  Stability   maxdepth   hypo_SpC 
+# -0.4133408 -0.3629318  0.5081991 -0.3932766 
 # [1] "Principal component13"
 # TP         TN      TN.TP 
-# 0.7496656 -0.3815696  0.3797196 
+# -0.6212835  0.4231918 -0.3375877 
 # [1] "Principal component14"
-# DO       Temp  Stability   maxdepth 
-# -0.4838949 -0.5879313  0.3615322 -0.4252600 
-# [1] "Principal component15"
-# PO4     IN.PO4 
-# -0.6998212 -0.6594160 
-# [1] "Principal component16"
-# NO3        IN 
-# -0.657133  0.706793 
+# DO         pH       Temp  Stability    hypo_pH 
+# 0.4751695 -0.4844963  0.3512732  0.3142548  0.3139925 
 
 
 # reformat the data for better plotting
@@ -236,10 +242,10 @@ tidy(step.modelBIC) %>%
 # 
 # |Predictor   |      B|    SE|      t|       p|
 #   |:-----------|------:|-----:|------:|-------:|
-#   |(Intercept) | 67.838| 2.872| 23.618| <0.0001|
-#   |PC2         | -6.688| 1.871| -3.575|  0.0005|
+#   |(Intercept) | 67.838| 2.761| 24.573| <0.0001|
+#   |PC1         | -7.035| 1.349| -5.215| <0.0001|
 
-summary(lm(Cyanobacteria ~ PC2, test_dat))
+summary(lm(Cyanobacteria ~ PC1, test_dat))
 # pretty bad model
 
 
@@ -268,12 +274,26 @@ tidy(step.modelBIC) %>%
 # 
 # |Predictor   |      B|    SE|          t|       p|
 #   |:-----------|------:|-----:|----------:|-------:|
-#   |(Intercept) | 43.327| 0.003| 15,007.953| <0.0001|
-#   |PC3         | -0.022| 0.002|    -11.194| <0.0001|
-#   |PC1         | -0.006| 0.001|     -4.414| <0.0001|
+#   |(Intercept) | 43.327| 0.003| 15,623.781| <0.0001|
+#   |PC3         |  0.021| 0.002|     11.015| <0.0001|
+#   |PC2         | -0.007| 0.001|     -5.027| <0.0001|
+#   |PC1         | -0.007| 0.001|     -4.981| <0.0001|
+
+summary(lm(Latitude~PC3, test_dat)) # r2=0.362
+summary(lm(Latitude~PC2, test_dat)) # r2=0.071
+summary(lm(Latitude~PC1, test_dat)) # r2=0.070
 
 summary(lm(Latitude~PC3+PC1, test_dat))
-# not great - but could be worse, r2 = 0.5169, p<2.2e-16
+#  r2 = 0.434 , p<2.2e-16
+
+summary(lm(Latitude~PC3+PC2, test_dat))
+#  r2 = 0.435 , p<2.2e-16
+
+summary(lm(Latitude~PC2+PC1, test_dat))
+# worst, r2 = 0.141 , p<2.2e-16
+
+
+
 
 ggplot(test_dat) +
   geom_point(aes(PC1, PC3, color=Latitude))
@@ -283,11 +303,11 @@ ggplot(test_dat) +
 
 ggplot(test_dat |>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_point(aes(PC1, PC3, color=WaterbodyName)) +
+  geom_point(aes(PC1, PC3, fill=WaterbodyName),shape=21) +
   facet_wrap(~month) +
   theme_bw() + 
-  scale_color_viridis_d('', option = 'turbo')
-ggsave('Figures/PCA/pca_fig.png', width=6.5, height=4.5, units = 'in',dpi=1200) 
+  scale_fill_viridis_d('', option = 'magma') 
+ggsave('Figures/pca_fig.png', width=6.5, height=4.5, units = 'in',dpi=1200) 
 
 EigenProp[1] + EigenProp[3]
-# the first two explain about 39% of the variance..
+# 1+3 explain about 35% of the variance..

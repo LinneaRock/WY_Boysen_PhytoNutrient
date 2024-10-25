@@ -40,8 +40,8 @@ ssplot <- SS |>
   mutate(month=factor(month, levels=c('May','Jun','Jul','Aug','Sep','Oct'))) |>
   ggplot() +
   geom_boxplot(aes(month, SS)) +
-  geom_jitter(aes(month, SS, color=WaterbodyName),alpha=0.5) +
-  scale_color_viridis_d('', option='turbo') +
+  geom_jitter(aes(month, SS, fill=WaterbodyName),alpha=0.5,shape=21) +
+  scale_fill_viridis_d('', option='magma') +
   geom_text(means, mapping=aes(month, 
                                max.result+100, label = letters), 
             size=4) +
@@ -81,7 +81,7 @@ bathy_plot <- ggplot() +
   geom_spatraster(data=depth_raster,aes(fill = lyr1)) +
   geom_sf(sites_sf, mapping=aes(color=WaterbodyName), size=3) +
   scale_fill_gradient('Depth (m)', na.value = "transparent", high='grey90', low='grey10') +
-  scale_color_viridis_d('', option='turbo') +
+  scale_color_viridis_d('', option='magma') +
   theme_void() +
   guides(fill= guide_colorbar(reverse=T)) 
 
