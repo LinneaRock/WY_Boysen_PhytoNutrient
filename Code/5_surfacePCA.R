@@ -23,19 +23,19 @@ metadat <- BoysenNutrient |>
   bind_rows(BoysenChem) |>
   left_join(BoysenPhyto_cat) |>
   mutate(Group = paste(WaterbodyName, CollDate, sep=' ')) |>
-  select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, ShortName_Revised, ChemValue) |>
+  dplyr::select(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, ShortName_Revised, ChemValue) |>
   pivot_wider(names_from=ShortName_Revised, values_from=ChemValue) |>
   mutate(IN = NO3+NH4) |>
   left_join(hypo_dat)
 
 pca_dat <- metadat |>
-  select(-c(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, NO3, NH4)) # getting rid of NO3 and NH4 to reduce redundancy 
+  dplyr::select(-c(Group, WaterbodyName, CollDate, Year, month, julianday, Latitude, Longitude, Cyanobacteria, NO3, NH4)) # getting rid of NO3 and NH4 to reduce redundancy 
 
 rownames(pca_dat) <- metadat$Group
 
 # unfortunately need to get rid of CHLA because of NAs
 pca_dat <- pca_dat |>
-  select(-CHLA)
+  dplyr::select(-CHLA)
 
 # 3. Run PCA ####
 PCA <- prcomp(pca_dat, scale=TRUE)
@@ -83,6 +83,8 @@ EigenProp[1] + EigenProp[2]
 # the first two explain about 44% of the variance..
 EigenProp[1] + EigenProp[2] + EigenProp[3]
 # the first two explain about 56% of the variance..
+EigenProp[1] + EigenProp[3]
+# the 1 and 3 explain about 35% of the variance..
 
 # not great var explained stats, but maybe useful in some way still
 
@@ -175,7 +177,7 @@ pca_dat.reg <- scale(pca_dat) |>
   bind_cols(PC2=PC2) |>
   bind_cols(PC3=PC3) |>
   # choose the vars with >3 var explained from PC1 & PC2
-  select(PC1, PC2, PC3, PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO, Secchi, maxdepth) |>
+  dplyr::select(PC1, PC2, PC3, PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO, Secchi, maxdepth) |>
   pivot_longer(c(PO4, TP, IN, IN.PO4, Temp, Stability, SpC, DO,  Secchi, maxdepth), names_to = 'var', values_to = 'Scaled data') |>
   pivot_longer(c('PC1','PC2','PC3'), names_to = 'PC', values_to = 'PC values') |>
   mutate(PC=case_when(PC=='PC1'~paste0('PC1 (', round(EigenProp[1] * 100,1),
@@ -206,7 +208,7 @@ ggbiplot(PCA, labels=rownames(pca_dat), obs.scale = 1, var.scale = 1,
 pc.scores <- as.data.frame(PCA[["x"]])
 
 test_dat <- metadat |>
-  bind_cols(pc.scores |> select(PC1, PC2, PC3))
+  bind_cols(pc.scores |> dplyr::select(PC1, PC2, PC3))
 
 ggplot(test_dat) +
   geom_boxplot(aes(WaterbodyName, PC1))
@@ -284,13 +286,13 @@ summary(lm(Latitude~PC2, test_dat)) # r2=0.071
 summary(lm(Latitude~PC1, test_dat)) # r2=0.070
 
 summary(lm(Latitude~PC3+PC1, test_dat))
-#  r2 = 0.434 , p<2.2e-16
+#  r2 = 0.43 , p<2.2e-16
 
 summary(lm(Latitude~PC3+PC2, test_dat))
-#  r2 = 0.435 , p<2.2e-16
+#  r2 = 0.44 , p<2.2e-16
 
 summary(lm(Latitude~PC2+PC1, test_dat))
-# worst, r2 = 0.141 , p<2.2e-16
+# worst, r2 = 0.14 , p=1.873e-06
 
 
 
