@@ -156,7 +156,10 @@ retention <- left_join(tot.tmp, out.tmp) |> # we will only report on data we can
   mutate(median_perc_ret = median(perc_ret, na.rm=TRUE)) |>
   ungroup() |>
   mutate(m = month(fakedate)) |>
-  mutate(month=month(fakedate, label=TRUE))
+  mutate(month=month(fakedate, label=TRUE)) |>
+  group_by(year(fakedate), nutrient) |>
+  mutate(sumpercRet=sum(perc_ret, na.rm=TRUE)) |>
+  ungroup()
 
 
 summary(lm(perc_ret~m, retention |> filter(nutrient=='TN')))
@@ -168,6 +171,12 @@ summary(lm(perc_ret~m, retention |> filter(nutrient=='TP')))
 #slope=-8.924
 #p-value: 0.4045
 #Adjusted R-squared:  -0.00957 
+
+summary(lm(perc_ret~m, retention |> filter(nutrient=='TP',
+                                           perc_ret>-600)))
+#slope=-17.110
+#p-value: 0.01095
+#Adjusted R-squared:0.1814 
 
 summary(lm(perc_ret~m, retention |> filter(nutrient=='Inorganic N')))
 #slope=0.1973 
@@ -272,3 +281,28 @@ summary(n)
 p<-lm(TotalLoad~discharge, loadQ|>filter(nutrient=='TP'))
 summary(p)
 # yes.
+
+
+
+
+
+
+
+
+ggplot(TribLoadFlux |>
+         mutate(month=factor(month, levels=c('Jan', 'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')))) +
+  geom_boxplot(aes(month, TP)) +
+
+ggplot(TribLoadFlux |>
+         mutate(month=factor(month, levels=c('Jan', 'Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec')))) +
+  geom_boxplot(aes(month, TN))
+
+
+
+
+
+
+
+
+
+
