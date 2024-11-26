@@ -1,6 +1,6 @@
-# Spatial and temporal heterogeneity in Boysen Reservoir phytoplankton dynamics and causes of poor water quality
+# Spatiotemporal drivers of water quality and phytoplankton communities in a cyanobacteria-dominated reservoir provide management insights
 
-Authors: Linnea A. Rock, Sarah M. Collins, Samuel J. Sillen
+Authors:   Linnea A. Rock, William W. Fetzer, Lindsay Patterson, Samuel J. Sillen, Ron Steg, Annika W. Walters, and Sarah M. Collins
 
 ## Folders:
 
