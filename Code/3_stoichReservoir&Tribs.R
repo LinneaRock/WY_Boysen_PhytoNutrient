@@ -76,7 +76,7 @@ boxplot_df <- bind_rows(lake_stoich, river_stoich)  |>
 
 #~#
 ggplot() +
-  annotate('rect', ymin=30, ymax=53, xmin=-Inf, xmax=Inf, alpha=0.5, fill='grey') +
+  annotate('rect', ymin=30, ymax=91, xmin=-Inf, xmax=Inf, alpha=0.5, fill='grey') +
   geom_boxplot(boxplot_df, 
                mapping=aes(type, TN.TP,fill=month))  +
   scale_fill_viridis_d('',option='plasma') +

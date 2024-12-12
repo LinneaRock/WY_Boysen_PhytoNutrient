@@ -7,7 +7,7 @@ source('Data/CALL_DATA_LIB.R')
 lim_dat <- BoysenNutrient |>
   select(-ChemUnits, -julianday, -SampleDepth) |>
   pivot_wider(names_from = ShortName_Revised, values_from = ChemValue) |>
-  mutate(DIN.TP = ((NO3+NH4)/TP) * 2.11306)  |> # multiply by constant to make molar ratio
+  mutate(DIN.TP = ((NO3+NH4)/TP) * 2.211353)  |> # multiply by constant to make molar ratio - nitrate adn ammonium are both 'as N'
   mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) 
 
 
@@ -15,8 +15,8 @@ lim_dat <- BoysenNutrient |>
 ggplot() +
   geom_jitter(lim_dat, mapping = aes(log10(TP), log10(TN.TP), 
                                     color = WaterbodyName), size=2) +
-  geom_abline(slope = 0, intercept = log10(41), linetype = "dashed") + # bergstrom P limitation line
-  geom_abline(slope = 0, intercept = log10(19), linetype = "dashed") +  # bergstrom N limitation line
+  geom_abline(slope = 0, intercept = log10(41* 2.211353), linetype = "dashed") + # bergstrom P limitation line
+  geom_abline(slope = 0, intercept = log10(19* 2.211353), linetype = "dashed") +  # bergstrom N limitation line
   geom_abline(slope = 0, intercept = log(16, base = 10), color = "red4") + # redfield
   geom_vline(xintercept = log(30, base = 10)) + # dodds mccauley N limitation P > 30
   geom_abline(slope = 0, intercept = log(32, base = 10)) + # dodds mccauley N limitation TN:TP < 14
@@ -54,8 +54,8 @@ ggsave('Figures/nutrient_limitation.png', height=5,width=7,units='in',dpi=1200)
 ggplot() +
   geom_jitter(lim_dat, mapping = aes(TP, TN.TP, 
                                      color = month), size=2) +
-  geom_abline(slope = 0, intercept = 41, linetype = "dashed") + # bergstrom P limitation line
-  geom_abline(slope = 0, intercept = 19, linetype = "dashed") +  # bergstrom N limitation line
+  geom_abline(slope = 0, intercept = 41* 2.211353, linetype = "dashed") + # bergstrom P limitation line
+  geom_abline(slope = 0, intercept = 19* 2.211353, linetype = "dashed") +  # bergstrom N limitation line
   geom_abline(slope = 0, intercept = 16, color = "red4") + # redfield
  # geom_vline(xintercept = 30) + # dodds mccauley N limitation P > 30
   geom_abline(slope = 0, intercept = 32) + # dodds mccauley N limitation TN:TP < 14
@@ -89,8 +89,8 @@ ggplot() +
 ggplot() +
   geom_jitter(lim_dat, mapping = aes(log10(TP), log10(DIN.TP), 
                                      color = WaterbodyName), size=2) +
-  geom_abline(slope = 0, intercept = log10(3.4), linetype = "dashed") + # bergstrom P limitation line
-  geom_abline(slope = 0, intercept = log10(1.5), linetype = "dashed") +  # bergstrom N limitation line
+  geom_abline(slope = 0, intercept = log10(3.4*2.211353), linetype = "dashed") + # bergstrom P limitation line
+  geom_abline(slope = 0, intercept = log10(1.5*2.211353), linetype = "dashed") +  # bergstrom N limitation line
   theme_minimal() +
   labs(y = "Log DIN:TP", x = "Log TP") +
   annotate('text', label = 'Predicted N limitation below dashed line \n (Bergström, 2010)', 
