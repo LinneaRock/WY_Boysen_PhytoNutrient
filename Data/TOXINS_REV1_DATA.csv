@@ -1,0 +1,37 @@
+Long,Lat,toxinpresent,month,Year,ID,toxins,concentration_ugL
+-108.1694,43.40081,1,Jul,2020,2020Jul1,anatoxin-a,0.97
+-108.1694,43.40081,1,Jul,2020,2020Jul1,total microcystins,162.00
+-108.1518,43.32872,1,Jul,2021,2021Jul2,total microcystins,0.16
+-108.1553,43.32945,1,Oct,2021,2021Oct8,anatoxin-a,0.29
+-108.1553,43.32945,1,Oct,2021,2021Oct8,total microcystins,57.70
+-108.1562,43.32937,1,Aug,2021,2021Aug3,total microcystins,6.21
+-108.1582,43.331,1,Sep,2021,2021Sep6,total microcystins,2.51
+-108.1736,43.40546,1,Aug,2021,2021Aug4,anatoxin-a,0.36
+-108.1736,43.40546,1,Aug,2021,2021Aug4,total microcystins,2.45
+-108.1737,43.40553,1,Oct,2021,2021Oct7,anatoxin-a,0.18
+-108.1737,43.40553,1,Oct,2021,2021Oct7,total microcystins,13.32
+-108.1739,43.40551,1,Sep,2021,2021Sep5,total microcystins,16.59
+-108.1523,43.33087,1,Sep,2022,2022Sep13,total microcystins,0.20
+-108.1523,43.33087,1,Oct,2022,2022Oct20,total microcystins,235.50
+-108.1544,43.32946,1,Sep,2022,2022Sep16,total microcystins,0.97
+-108.1558,43.32945,1,Aug,2022,2022Aug10,total microcystins,3.62
+-108.1729,43.40545,1,Oct,2022,2022Oct19,total microcystins,2.18
+-108.1738,43.40542,1,Sep,2022,2022Sep14,total microcystins,1.20
+-108.1739,43.40524,1,Aug,2022,2022Aug11,total microcystins,3.62
+-108.1739,43.40519,1,Sep,2022,2022Sep17,anatoxin-a,0.18
+-108.1739,43.40519,1,Sep,2022,2022Sep17,total microcystins,99.50
+-108.1817,43.21937,1,Jul,2022,2022Jul9,total microcystins,0.22
+-108.2266,43.34409,1,Oct,2022,2022Oct21,total microcystins,651.00
+-108.2272,43.34407,1,Sep,2022,2022Sep15,total microcystins,43.96
+-108.2333,43.3452,1,Oct,2022,2022Oct18,total microcystins,0.89
+-108.2334,43.34516,1,Sep,2022,2022Sep12,total microcystins,0.16
+-108.1696,43.40044,1,Sep,2023,2023Sep26,anatoxin-a,4.39
+-108.1696,43.40044,1,Sep,2023,2023Sep26,total microcystins,12370.00
+-108.1729,43.40545,1,Sep,2023,2023Sep25,anatoxin-a,20.17
+-108.1729,43.40545,1,Sep,2023,2023Sep25,total microcystins,8460.00
+-108.2266,43.34409,1,Sep,2023,2023Sep24,total microcystins,0.42
+-108.1693,43.40053,1,Oct,2023,2023Oct28,total microcystins,4.01
+-108.1738,43.40521,1,Oct,2023,2023Oct29,total microcystins,4.12
+-108.2333,43.34517,1,Oct,2023,2023Oct27,total microcystins,3.40
+-108.1696,43.40044,1,Aug,2023,2023Aug23,total microcystins,16.62
+-108.2334,43.34516,1,Aug,2023,2023Aug22,total microcystins,0.26

@@ -75,7 +75,7 @@ ggplot(all_load_data) +
   geom_point(aes(fakedate, load, color=WaterbodyName)) +
   geom_path(aes(fakedate, load, color=WaterbodyName)) +
   scale_color_manual('',values =trib_colors) +
-  geom_point(aes(fakedate, TotalLoad),shape=21) +
+  geom_point(aes(fakedate, TotalLoad),shape=21, size=2.5) +
   facet_wrap(~nutrient, scales='free_y') +
   labs(x='',y='Nutrient mass (kg)') +
   theme_minimal() +
@@ -114,7 +114,7 @@ trib_nuts <- TribLoadFlux |>
   mutate(WaterbodyName = factor(WaterbodyName, levels = c('Wind River Outlet', 'Muddy Creek', 'Fivemile Creek', 'Wind River Inlet')))
 
 ggplot(trib_nuts) + 
-  geom_point(aes(CollDate, value, color=WaterbodyName)) +
+  geom_point(aes(CollDate, value, color=WaterbodyName),size=2) +
   geom_line(aes(CollDate, value, color=WaterbodyName)) +
   scale_color_manual('',values =trib_colors) +
   facet_wrap(~name, scales = 'free') +
@@ -222,7 +222,7 @@ ggplot(reservoir_nutrients) +
   geom_point(aes(CollDate, concentration, fill=WaterbodyName), alpha=0.5, shape=21) +
   #geom_path(aes(CollDate, concentration, color=WaterbodyName), alpha=0.5) +
   scale_fill_viridis_d('', option='magma') +
-  geom_point(aes(CollDate, meanConc),shape=22, size=2) +
+  geom_point(aes(CollDate, meanConc),shape=22, size=2.5) +
   geom_line(aes(CollDate, meanConc, group=Year)) +
   facet_wrap(~nutrient, scales='free_y') +
   labs(x='',y='Nutrient concentration'~(mg~L^-1)) +

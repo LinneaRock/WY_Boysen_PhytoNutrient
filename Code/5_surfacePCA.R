@@ -305,10 +305,11 @@ ggplot(test_dat) +
 
 ggplot(test_dat |>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_point(aes(PC1, PC3, fill=WaterbodyName),shape=21) +
+  geom_point(aes(PC1, PC3, fill=WaterbodyName),shape=21, size=2) +
   facet_wrap(~month) +
   theme_bw() + 
-  scale_fill_viridis_d('', option = 'magma') 
+  scale_fill_viridis_d('', option = 'magma') +
+  theme(legend.position = 'none')
 ggsave('Figures/pca_fig.png', width=6.5, height=4.5, units = 'in',dpi=1200) 
 
 EigenProp[1] + EigenProp[3]

@@ -358,7 +358,7 @@ cyano_prep <- cyanotoxin |>
   mutate(ID = paste0(Year, month, row_number()))
 
 # read in Boysen shapefile, add crs, and check units 
-lake_shapefile <- st_read('C:/Users/lrock1/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 st_crs(lake_shapefile)
 lake_shapefile <- st_transform(lake_shapefile, crs = 3738)
 st_crs(lake_shapefile)$units # feet, weird
@@ -475,7 +475,7 @@ cy_ts <- ggplot(cyano_density|>
                   left_join(toxin_distance_mins) |>
                   mutate(toxinpresent=ifelse(is.na(toxinpresent), 'No toxin', toxinpresent)) |>
          mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_point(aes(month, Cyanobacteria/1000, fill=WaterbodyName, group=WaterbodyName, shape=toxinpresent)) +
+  geom_point(aes(month, Cyanobacteria/1000, fill=WaterbodyName, group=WaterbodyName, shape=toxinpresent),size=3) +
   geom_path(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
   scale_color_viridis_d('',option='magma') +
   scale_fill_viridis_d('',option='magma') +
@@ -499,4 +499,18 @@ ggplot(cyano_density |>
   theme_ridges(grid = TRUE, center_axis_labels = TRUE) +
   theme_minimal() +
   labs(y='',x='Cyanobacteria denisty'~(~1000~cells~L^-1))
+
+
+## 4b. real toxin locations and concentrations ####
+lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
+
+toxin <- read.csv('Data/TOXINS_REV1_DATA.csv') |>
+  st_as_sf(coords=c('Long','Lat'),crs=4326)
+
+ggplot() +
+geom_sf(lake_shapefile, mapping=aes(),fill='white',color='grey20') +
+  geom_sf(toxin,mapping=aes(shape=toxins), size=3, position = 'dodge') +
+  theme_void() +
+  labs(x='',y='') +
+  facet_wrap(~Year)
 
