@@ -282,7 +282,8 @@ envbio.fit_df <- cbind(envbio.fit_df, envbio.variables = rownames(envbio.fit_df)
 envbio.fit_df <- cbind(envbio.fit_df, pval = envbio.fit$vectors$pvals) # add pvalues to dataframe
 sig.envbio.fit <- subset(envbio.fit_df, pval<=0.05) #subset data to show variables significant at 0.05
 
-sig.envbio.fit
+sig.envbio.fit<-sig.envbio.fit |>
+  mutate(envbio.variables=ifelse(envbio.variables=='hypo_DO', 'Hypo DO', envbio.variables))
 
 #Now we have the relevant information for plotting the ordination!
 
@@ -471,11 +472,11 @@ toxin_distance_mins <- cyano_prep |>
   mutate(toxinpresent='Toxin present')
 
 
-cy_ts <- ggplot(cyano_density|>
-                  left_join(toxin_distance_mins) |>
-                  mutate(toxinpresent=ifelse(is.na(toxinpresent), 'No toxin', toxinpresent)) |>
-         mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay')))) +
-  geom_point(aes(month, Cyanobacteria/1000, fill=WaterbodyName, group=WaterbodyName, shape=toxinpresent),size=3) +
+cy_ts <- cyano_density|>
+  left_join(toxin_distance_mins) |>
+  mutate(toxinpresent=ifelse(is.na(toxinpresent), 'No toxin', toxinpresent)) |>
+  mutate(WaterbodyName=factor(WaterbodyName, levels=c('Lacustrine Pelagic: Dam', 'East Shore','Cottonwood Creek Bay','Tough Creek Campground','Transitional Pelagic: Sand Mesa','Riverine Pelagic: Freemont 1','Fremont Bay'))) |> ggplot() +
+  geom_point(aes(month, Cyanobacteria/1000, fill=WaterbodyName, group=WaterbodyName, shape=toxinpresent,size=ifelse(toxinpresent == 'No toxin', 0.75, 1))) +
   geom_path(aes(month, Cyanobacteria/1000, color=WaterbodyName, group=WaterbodyName)) +
   scale_color_viridis_d('',option='magma') +
   scale_fill_viridis_d('',option='magma') +
@@ -502,15 +503,32 @@ ggplot(cyano_density |>
 
 
 ## 4b. real toxin locations and concentrations ####
+toxin <- read.csv('Data/TOXINS_REV1_DATA.csv') |>
+  mutate(fakedate = paste(Year, month, '15', sep='-')) |>
+  mutate(fakedate = as.Date(fakedate, format='%Y-%b-%d')) |>
+  mutate(toxins=case_when(toxins=='anatoxin-a'~'Anatoxin-a',
+                          toxins=='total microcystins'~'Total microcystins'))
+
+ggplot(toxin) +
+  geom_point(aes(fakedate, concentration_ugL)) +
+  facet_wrap(~toxins, scales='free_y') +
+  scale_y_log10() +
+  theme_minimal() +
+  labs(x='', y='Concentration'~(log~scale~mu*g~L^-1))
+ggsave('Figures/toxin_concentration.png', width=6.5, height=4.5, units='in', dpi=1200)
+
 lake_shapefile <- st_read('C:/Users/linne/OneDrive - University of Wyoming/Data/Spatial_Data/Boysen/Boysen Shapefile/Boysen_Shape.shp')
 
-toxin <- read.csv('Data/TOXINS_REV1_DATA.csv') |>
-  st_as_sf(coords=c('Long','Lat'),crs=4326)
+toxin_sf <- read.csv('Data/TOXINS_REV1_DATA.csv') |>
+  mutate(month=factor(month, levels=c('May', 'Jun','Jul','Aug','Sep','Oct'))) 
 
 ggplot() +
 geom_sf(lake_shapefile, mapping=aes(),fill='white',color='grey20') +
-  geom_sf(toxin,mapping=aes(shape=toxins), size=3, position = 'dodge') +
+  geom_jitter(toxin_sf,mapping=aes(Long, Lat, shape=toxins, color=month), size=2.5, width=0.001) +
   theme_void() +
+  scale_shape_manual('', values=c(15,16)) +
+  scale_color_viridis_d('', option='plasma', begin=0.3) +
   labs(x='',y='') +
-  facet_wrap(~Year)
+  facet_wrap(~Year, nrow=1)
+ggsave('Figures/toxin_location.png', width=6.5, height=4.5, units='in', dpi=1200)
 
